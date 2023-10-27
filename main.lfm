@@ -1,0 +1,93 @@
+object App: TApp
+  Left = 1959
+  Height = 679
+  Top = -696
+  Width = 988
+  Caption = 'Smart Data Viewer'
+  ClientHeight = 679
+  ClientWidth = 988
+  Color = clWhite
+  OnCreate = FormCreate
+  LCLVersion = '2.2.4.0'
+  object PageControl1: TPageControl
+    Left = 0
+    Height = 679
+    Top = 0
+    Width = 988
+    ActivePage = ChartPage
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 0
+    object ChartPage: TTabSheet
+      Caption = 'Chart'
+      ClientHeight = 651
+      ClientWidth = 980
+      object CloseApp: TBitBtn
+        Left = 904
+        Height = 25
+        Top = 0
+        Width = 75
+        Anchors = [akTop, akRight]
+        Caption = 'Close'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clMaroon
+        Font.Name = 'Segoe UI Semibold'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        OnClick = CloseAppClick
+        ParentFont = False
+        TabOrder = 0
+      end
+      object LoadFile: TBitBtn
+        Left = 0
+        Height = 25
+        Top = 0
+        Width = 75
+        Caption = 'Load file'
+        OnClick = LoadFileClick
+        TabOrder = 1
+      end
+      object Indicator: TLabel
+        Left = 728
+        Height = 15
+        Top = 632
+        Width = 47
+        Anchors = [akLeft, akBottom]
+        Caption = 'Indicator'
+        ParentColor = False
+      end
+      object ProcessProgress: TProgressBar
+        Left = 80
+        Height = 15
+        Top = 632
+        Width = 320
+        Anchors = [akLeft, akBottom]
+        TabOrder = 2
+      end
+      object ProcessLabel: TLabel
+        Left = 0
+        Height = 15
+        Top = 632
+        Width = 68
+        Anchors = [akLeft, akBottom]
+        Caption = 'ProcessLabel'
+        ParentColor = False
+      end
+      object ScrollBox1: TScrollBox
+        Left = 0
+        Height = 590
+        Top = 32
+        Width = 979
+        HorzScrollBar.Page = 1
+        VertScrollBar.Page = 1
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        TabOrder = 3
+      end
+    end
+  end
+  object OpenDialog: TOpenDialog
+    Left = 952
+    Top = 640
+  end
+end
