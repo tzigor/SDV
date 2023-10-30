@@ -5,7 +5,7 @@ unit UserTypes;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, Graphics;
 
 Const
   NewLine = #13#10;
@@ -13,11 +13,14 @@ Const
   MIN_FILE_LENGTH = 100;
   DATA_MAX_SIZE = 4294967295;
 
+  ChartColors: array of TColor = (clRed, clBlue, clGreen, clPurple, clHighLight, clTeal, clFuchsia, clMaroon);
+
   { Error codes }
-  NO_ERROR = 0;
-  FILE_NOT_FOUND = 1;
-  WRONG_FILE_FORMAT = 2;
-  UNEXPECTED_END_OF_FILE = 3;
+  NO_ERROR                = 0;
+  FILE_NOT_FOUND          = 1;
+  WRONG_FILE_FORMAT       = 2;
+  UNEXPECTED_END_OF_FILE  = 3;
+  TERMINATED              = 4;
 
   F4_RESULT_ERROR = -999.25;
   F8_RESULT_ERROR = -999.25;

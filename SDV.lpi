@@ -26,6 +26,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="TAChartLazarusPkg"/>
+      </Item>
+      <Item>
         <PackageName Value="LCL"/>
       </Item>
     </RequiredPackages>
@@ -68,6 +71,16 @@
         <ComponentName Value="ShowChannelForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="lineserieutils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="LineSerieUtils"/>
+      </Unit>
+      <Unit>
+        <Filename Value="chartutils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ChartUtils"/>
       </Unit>
     </Units>
   </ProjectOptions>

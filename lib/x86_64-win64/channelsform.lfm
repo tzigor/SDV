@@ -1,27 +1,52 @@
 object ShowChannelForm: TShowChannelForm
-  Left = 2365
-  Height = 586
-  Top = -695
-  Width = 239
+  Left = 2897
+  Height = 663
+  Top = -708
+  Width = 240
   Caption = 'Channels'
-  ClientHeight = 586
-  ClientWidth = 239
+  ClientHeight = 663
+  ClientWidth = 240
+  Constraints.MinHeight = 663
+  Constraints.MinWidth = 240
   LCLVersion = '2.2.4.0'
   object ChannelList: TListBox
     Left = 8
-    Height = 520
-    Top = 16
+    Height = 528
+    Top = 96
     Width = 224
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    DragMode = dmAutomatic
+    ExtendedSelect = False
     ItemHeight = 0
     TabOrder = 0
   end
   object CloseList: TBitBtn
-    Left = 152
+    Left = 157
     Height = 25
-    Top = 552
+    Top = 632
     Width = 75
+    Anchors = [akLeft, akBottom]
     Caption = 'Close'
     OnClick = CloseListClick
     TabOrder = 1
+  end
+  object DrawBtn: TBitBtn
+    Left = 8
+    Height = 25
+    Top = 632
+    Width = 75
+    Anchors = [akLeft, akBottom]
+    Caption = 'Draw'
+    OnClick = DrawBtnClick
+    TabOrder = 2
+  end
+  object FileList: TListBox
+    Left = 8
+    Height = 80
+    Top = 8
+    Width = 224
+    Anchors = [akTop, akLeft, akRight]
+    ItemHeight = 0
+    TabOrder = 3
   end
 end
