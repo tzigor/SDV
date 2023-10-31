@@ -13,6 +13,7 @@ procedure SetLineSerieColor(LineSerie: TLineSeries; AColor: TColor);
 function GetColorIndex(n: Byte): Byte;
 function GetColorBySerieName(LineSerieName: String): TColor;
 function GetLineSerie(ChartNumber, LineSerieNumber: Byte): TLineSeries;
+procedure PointersVisible(Visible: Boolean);
 
 implementation
 uses Main;
@@ -26,6 +27,8 @@ begin
     Pointer.Style := psCircle;
     Pointer.VertSize:= 2;
     Pointer.HorizSize:= 2;
+
+    LinePen.Width:= 1;
     ShowLines := true;
     LinePen.Style := psSolid;
     Legend.Visible:= False;
@@ -33,6 +36,21 @@ begin
     Marks.LinkPen.Color:= clGray;
   end;
   AChart.AddSeries(Result);
+end;
+
+procedure PointersVisible(Visible: Boolean);
+var i, j : Byte;
+begin
+  for i:= 1 to 8 do
+    for j:= 1 to 8 do begin
+        GetLineSerie(i, j).Pointer.Visible:= Visible;
+        GetLineSerie(i, j).Pointer.Style := psCircle;
+        GetLineSerie(i, j).Pointer.VertSize:= 2;
+        GetLineSerie(i, j).Pointer.HorizSize:= 2;
+        GetLineSerie(i, j).Pointer.Brush.Color:= clWhite;
+        GetLineSerie(i, j).Pointer.Brush.Style:= bsSolid;
+        GetLineSerie(i, j).LinePen.Width:= 1;
+    end;
 end;
 
 function GetLineSerie(ChartNumber, LineSerieNumber: Byte): TLineSeries;

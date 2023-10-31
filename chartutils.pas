@@ -5,7 +5,7 @@ unit ChartUtils;
 interface
 
 uses
-  Classes, SysUtils, UserTypes, TASeries, LineSerieUtils, TAGraph;
+  Classes, SysUtils, UserTypes, TASeries, LineSerieUtils, TAGraph, Controls;
 
 procedure DrawSerie(LineSerie: TLineSeries; SelectedSource, SelectedParam: Word; Name: String);
 procedure ChartsVisible(visible: Boolean);
@@ -13,6 +13,9 @@ procedure ChartsEnabled(visible: Boolean);
 procedure ResetChartsZoom;
 function GetFreeChart: Byte;
 function GetLastChart: Byte;
+procedure ChartsHeight();
+procedure ChartsPosition();
+function GetChartCount: Byte;
 
 implementation
 uses Main;
@@ -95,6 +98,16 @@ begin
   end;
 end;
 
+function GetChartCount: Byte;
+var i, n: Byte;
+begin
+  n:= 0;
+  for i:=1 to 8 do begin
+     if TChart(App.FindComponent('Chart' + IntToStr(i))).Visible then Inc(n);
+  end;
+  Result:= n;
+end;
+
 function GetLastChart: Byte;
 var i: Byte;
     MaxTop: Integer;
@@ -103,7 +116,20 @@ begin
   for i:=1 to 8 do begin
      if TChart(App.FindComponent('Chart' + IntToStr(i))).Visible AND (TChart(App.FindComponent('Chart' + IntToStr(i))).Top >= MaxTop) then begin
         MaxTop:= TChart(App.FindComponent('Chart' + IntToStr(i))).Top;
-        GetLastChart:= i;
+        Result:= i;
+     end;
+  end;
+end;
+
+function GetFirstChart: Byte;
+var i: Byte;
+    MinTop: Integer;
+begin
+  MinTop:= App.ChartScrollBox.Height;
+  for i:=1 to 8 do begin
+     if TChart(App.FindComponent('Chart' + IntToStr(i))).Visible AND (TChart(App.FindComponent('Chart' + IntToStr(i))).Top <= MinTop) then begin
+        MinTop:= TChart(App.FindComponent('Chart' + IntToStr(i))).Top;
+        Result:= i;
      end;
   end;
 end;
@@ -113,7 +139,7 @@ var i: Byte;
 begin
   for i:=1 to 8 do begin
      if TChart(App.FindComponent('Chart' + IntToStr(i))).Visible = false then begin
-        GetFreeChart:= i;
+        Result:= i;
         Break;
      end;
   end;
@@ -122,19 +148,52 @@ end;
 procedure ChartsVisible(visible: Boolean);
 var i: byte;
 begin
- for i:=1 to 8 do TChart(App.FindComponent('Chart' + IntToStr(i))).Visible:= visible;
+  for i:=1 to 8 do TChart(App.FindComponent('Chart' + IntToStr(i))).Visible:= visible;
+end;
+
+procedure ChartsHeight();
+var i : byte;
+begin
+  for i:=1 to 8 do TChart(App.FindComponent('Chart' + IntToStr(i))).Height:= App.ChartScrollBox.Height Div GetChartCount;
+end;
+
+procedure ChartsPosition();
+const FooterSize = 40;
+var i                : Byte;
+    Chart, PrevChart : TChart;
+    LastChart        : Byte;
+begin;
+   PrevChart:= TChart(App.FindComponent('Chart' + IntToStr(1)));
+   for i:=1 to ChartsCount do begin
+      Chart:= TChart(App.FindComponent('Chart' + IntToStr(i)));
+      if ChartsCount > 1 then Chart.Height:= (App.ChartScrollBox.Height - FooterSize - 4) Div ChartsCount
+      else Chart.Height:= App.ChartScrollBox.Height;
+      Chart.Top:= 0;
+
+      if i > 1 then begin
+         Chart.Top:= (App.ChartScrollBox.Height Div ChartsCount) * (i - 1);
+         Chart.AnchorToNeighbour(akTop, 0, PrevChart);
+      end;
+
+      Chart.AxisList[1].Marks.Visible:= False;
+      PrevChart:= Chart;
+   end;
+   LastChart:= GetLastChart;
+   if ChartsCount > 1 then
+       TChart(App.FindComponent('Chart' + IntToStr(LastChart))).Height:= TChart(App.FindComponent('Chart' + IntToStr(LastChart))).Height + FooterSize;
+   TChart(App.FindComponent('Chart' + IntToStr(LastChart))).AxisList[1].Marks.Visible:= True;
 end;
 
 procedure ChartsEnabled(visible: Boolean);
 var i: byte;
 begin
- for i:=1 to 8 do TChart(App.FindComponent('Chart' + IntToStr(i))).Visible:= visible;
+  for i:=1 to 8 do TChart(App.FindComponent('Chart' + IntToStr(i))).Visible:= visible;
 end;
 
 procedure ResetChartsZoom;
 var i: byte;
 begin
- for i:=1 to 8 do TChart(App.FindComponent('Chart' + IntToStr(i))).ZoomFull();
+  for i:=1 to 8 do TChart(App.FindComponent('Chart' + IntToStr(i))).ZoomFull();
 end;
 
 end.

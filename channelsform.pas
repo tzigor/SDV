@@ -29,7 +29,7 @@ var
   ShowChannelForm: TShowChannelForm;
 
 implementation
-uses Main;
+uses Main, Utils;
 
 {$R *.lfm}
 
@@ -43,17 +43,17 @@ end;
 procedure TShowChannelForm.DrawBtnClick(Sender: TObject);
 var Chart      : TChart;
 begin
-   if ChartCount < 8 then begin
+   if ChartsCount < 8 then begin
       CurrentChart:= GetFreeChart;
+      Inc(ChartsCount);
       Chart:= TChart(App.FindComponent('Chart' + IntToStr(CurrentChart)));
-      //Chart.Enabled:= True;
       Chart.Visible:= True;
-      Chart.Top:= 0;
-      Chart.Height:= App.ChartScrollBox.Height Div ChartCount;
+      Chart.Title.Text[0]:= Chart.Name;
+      ChartsPosition();
       DrawSerie(GetLineSerie(CurrentChart, CurrentSerie), CurrentSource, ChannelList.ItemIndex, ChannelList.Items[ChannelList.ItemIndex]);
-      Inc(ChartCount);
    end
-   else Application.MessageBox('Too many curves for chart','Error', MB_ICONERROR + MB_OK);
+   else Application.MessageBox('Too many charts','Error', MB_ICONERROR + MB_OK);
+   ProgressDone;
 end;
 
 end.
