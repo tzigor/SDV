@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, DateUtils,
-  UserTypes, StrUtils, Buttons, LCLType;
+  UserTypes, StrUtils, Buttons, LCLType, TASeries;
 
 function GetErrorMessage(error: Byte): PChar;
 procedure LoadByteArray(const AFileName: string);
@@ -17,6 +17,9 @@ function isEndOfFile(): Boolean;
 procedure IncDataOffset(n: LongWord);
 procedure ProgressInit(n: LongWord; PLabel: String);
 procedure ProgressDone();
+function GetSticker(x, y: Double; Param: String): String;
+procedure StickLabel(ChartLineSerie: TLineSeries);
+procedure SetNavigation(NavMode: Byte);
 
 implementation
 
@@ -136,6 +139,62 @@ begin
   App.ProcessProgress.Visible:= False;
   App.ProcessLabel.Caption:= '';
   App.ProcessLabel.Refresh;
+end;
+
+function GetSticker(x, y: Double; Param: String): String;
+var AfterDot: Byte;
+begin
+  if y > 10000 then AfterDot:= 0
+  else AfterDot:= 3;
+  Result:= Param + '=' + FloatToStrF(y, ffFixed, 12, AfterDot) + NewLine + DateTimeToStr(x);
+end;
+
+procedure StickLabel(ChartLineSerie: TLineSeries);
+var y: Double;
+    x: TDateTime;
+begin
+  if ChartLineSerie.Count > 0 then begin
+     x:= ChartLineSerie.GetXValue(ChartPointIndex);
+     y:= ChartLineSerie.GetYValue(ChartPointIndex);
+     ChartLineSerie.ListSource.Item[ChartPointIndex]^.Text:= GetSticker(x, y, ChartLineSerie.Title);
+     ChartLineSerie.ParentChart.Repaint;
+  end;
+end;
+
+procedure SetNavigation(NavMode: Byte);
+begin
+  App.ChartToolset1PanDragTool1.Enabled:= False;
+  App.ChartToolset1ZoomDragTool1.Enabled:= False;
+  App.DistanceTool.Enabled:= False;
+  App.ChartToolset1DataPointClickTool4.Enabled:= False;
+  App.ChartToolset1DataPointHintTool1.Enabled:= False;
+  App.ZoomOff.Visible:= True;
+  App.ZoomOn.Visible:= False;
+  App.PanOff.Visible:= True;
+  App.PanOn.Visible:= False;
+  App.DistanceOff.Visible:= True;
+  App.DistanceOn.Visible:= False;
+  case NavMode of
+     ZOOM_MODE:     begin
+                       App.ChartToolset1ZoomDragTool1.Enabled:= True;
+                       App.ChartToolset1DataPointClickTool4.Enabled:= True;
+                       App.ChartToolset1DataPointHintTool1.Enabled:= True;
+                       App.ZoomOff.Visible:= False;
+                       App.ZoomOn.Visible:= True;
+                    end;
+     PAN_MODE:      begin
+                       App.ChartToolset1PanDragTool1.Enabled:= True;
+                       App.ChartToolset1DataPointClickTool4.Enabled:= True;
+                       App.ChartToolset1DataPointHintTool1.Enabled:= True;
+                       App.PanOff.Visible:= False;
+                       App.PanOn.Visible:= True;
+                    end;
+     DISTANCE_MODE: begin
+                       App.DistanceTool.Enabled:= True;
+                       App.DistanceOff.Visible:= False;
+                       App.DistanceOn.Visible:= True;
+                    end;
+  end;
 end;
 
 end.

@@ -26,6 +26,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="DateTimeCtrls"/>
+      </Item>
+      <Item>
         <PackageName Value="TAChartLazarusPkg"/>
       </Item>
       <Item>
@@ -81,6 +84,13 @@
         <Filename Value="chartutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ChartUtils"/>
+      </Unit>
+      <Unit>
+        <Filename Value="paramoptions.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ParamOptionsForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="ParamOptions"/>
       </Unit>
     </Units>
   </ProjectOptions>

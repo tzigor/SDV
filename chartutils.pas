@@ -5,20 +5,28 @@ unit ChartUtils;
 interface
 
 uses
-  Classes, SysUtils, UserTypes, TASeries, LineSerieUtils, TAGraph, Controls;
+  Classes, SysUtils, UserTypes, TASeries, TAGraph, Controls, TATypes, LCLType,
+  TAChartUtils, DateUtils, StrUtils, Forms;
 
 procedure DrawSerie(LineSerie: TLineSeries; SelectedSource, SelectedParam: Word; Name: String);
 procedure ChartsVisible(visible: Boolean);
 procedure ChartsEnabled(visible: Boolean);
 procedure ResetChartsZoom;
+procedure RepaintAll;
 function GetFreeChart: Byte;
 function GetLastChart: Byte;
 procedure ChartsHeight();
 procedure ChartsPosition();
 function GetChartCount: Byte;
+function GetChartNumber(ChartName: String): Byte;
+procedure ZoomChartCurrentExtent(Chart: TChart);
+function GetChart(ChartNubmber: Byte): TChart;
+procedure DateTimeLineLineSerieInit;
+procedure FindTimeRange;
+procedure ChartsNavigation(Value: Boolean);
 
 implementation
-uses Main;
+uses Main, LineSerieUtils;
 
 function GetChannelValue(DataChannels: TTFFDataChannels; Frame: TFrameRecord; Channel: Word; var Value: Double): Boolean;
 var Offset : Word;
@@ -28,12 +36,12 @@ var Offset : Word;
     U2     : Word;
     I4     : LongInt;
     U4     : LongWord;
-    U8     : QWord;
     F4     : Single;
     F8     : Double;
 
 begin
   Result:= True;
+  Value:= 0;
   Offset:= DataChannels[Channel].Offset;
   case DataChannels[Channel].RepCode of
   'F4': begin
@@ -43,7 +51,7 @@ begin
         end;
   'F8': begin
           Move(Bytes[DataOffset], F8, 8);
-          if (F4 = -999.25) then Result:= False
+          if (F8 = -999.25) then Result:= False
           else Value:= F8;
         end;
   'I1': begin
@@ -53,7 +61,7 @@ begin
         end;
   'U1': begin
           Move(Frame.Data[Offset], U1, 1);
-          if (I1 = 255) then Result:= False
+          if (U1 = 255) then Result:= False
           else Value:= U1;
         end;
   'I2': begin
@@ -79,31 +87,89 @@ begin
   end;
 end;
 
+procedure DateTimeLineLineSerieInit;
+begin
+  DateTimeDrawed:= False;
+  App.DateTimeLine.Visible:= False;
+  App.DateTimeLineLineSerie.Clear;
+  App.DateTimeLineLineSerie.AddXY(StartDateTime, 0);
+  App.DateTimeLineLineSerie.AddXY(EndDateTime, 0);
+  App.StartTime.Caption:= DateTimeToStr(StartDateTime);
+  App.EndTime.Caption:= DateTimeToStr(EndDateTime);
+  App.DateTimeLine.Visible:= True;
+  Application.ProcessMessages;
+  App.DateTimeLine.ZoomFull();
+end;
+
 procedure DrawSerie(LineSerie: TLineSeries; SelectedSource, SelectedParam: Word; Name: String);
 var
   FramesCount, i : LongWord;
   Value          : Double;
+
 begin
   LineSerie.Clear;
   LineSerie.Title:= Name;
-  SetLineSerieColor(LineSerie, GetColorBySerieName(LineSerie.Name));
   LineSerie.Legend.Visible:= True;
+  SetLineSerieColor(LineSerie, GetColorBySerieName(LineSerie.Name));
   FramesCount:= Length(DataSources[SelectedSource].FrameRecords);
   for i:=0 to FramesCount - 1 do begin
-    GetChannelValue(DataSources[SelectedSource].TFFDataChannels,
-                    DataSources[SelectedSource].FrameRecords[i],
-                    SelectedParam,
-                    Value);
-    LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, '');
+    if GetChannelValue(DataSources[SelectedSource].TFFDataChannels,
+                       DataSources[SelectedSource].FrameRecords[i],
+                       SelectedParam,
+                       Value) then
+    begin
+        LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, '');
+    end;
   end;
+  if LineSerie.Count > 0 then begin
+    if SourceCount > 1 then begin
+       if CompareDateTime(LineSerie.MinXValue, StartDateTime) < 0 then StartDateTime:= LineSerie.MinXValue;
+       if CompareDateTime(LineSerie.MaxXValue, EndDateTime) > 0 then EndDateTime:= LineSerie.MaxXValue;
+    end
+    else begin
+       StartDateTime:= LineSerie.MinXValue;
+       EndDateTime:= LineSerie.MaxXValue;
+    end;
+    DateTimeLineLineSerieInit
+  end;
+end;
+
+procedure FindTimeRange;
+var i, j       : Byte;
+    LineSerie  : TLineSeries;
+    FirstSerie : Boolean;
+begin
+  FirstSerie:= True;
+  for i:=1 to MAX_CHART_NUMBER do
+    if GetChart(i).Visible then
+      for j:=1 to MAX_SERIE_NUMBER do begin
+         LineSerie:= GetLineSerie(i, j);
+         if LineSerie.Count > 0 then begin
+            if FirstSerie then begin
+               StartDateTime:= LineSerie.MinXValue;
+               EndDateTime:= LineSerie.MaxXValue;
+               FirstSerie:= False;
+            end
+            else begin
+               if CompareDateTime(LineSerie.MinXValue, StartDateTime) < 0 then StartDateTime:= LineSerie.MinXValue;
+               if CompareDateTime(LineSerie.MaxXValue, EndDateTime) > 0 then EndDateTime:= LineSerie.MaxXValue;
+            end;
+         end;
+      end;
+   DateTimeLineLineSerieInit;
+end;
+
+function GetChart(ChartNubmber: Byte): TChart;
+begin
+  Result:= TChart(App.FindComponent('Chart' + IntToStr(ChartNubmber)))
 end;
 
 function GetChartCount: Byte;
 var i, n: Byte;
 begin
   n:= 0;
-  for i:=1 to 8 do begin
-     if TChart(App.FindComponent('Chart' + IntToStr(i))).Visible then Inc(n);
+  for i:=1 to MAX_CHART_NUMBER do begin
+     if GetChart(i).Visible then Inc(n);
   end;
   Result:= n;
 end;
@@ -113,9 +179,9 @@ var i: Byte;
     MaxTop: Integer;
 begin
   MaxTop:= 0;
-  for i:=1 to 8 do begin
-     if TChart(App.FindComponent('Chart' + IntToStr(i))).Visible AND (TChart(App.FindComponent('Chart' + IntToStr(i))).Top >= MaxTop) then begin
-        MaxTop:= TChart(App.FindComponent('Chart' + IntToStr(i))).Top;
+  for i:=1 to MAX_CHART_NUMBER do begin
+     if GetChart(i).Visible AND (GetChart(i).Top >= MaxTop) then begin
+        MaxTop:= GetChart(i).Top;
         Result:= i;
      end;
   end;
@@ -123,12 +189,15 @@ end;
 
 function GetFirstChart: Byte;
 var i: Byte;
-    MinTop: Integer;
+    MinTop, n: Integer;
+    v : boolean;
 begin
-  MinTop:= App.ChartScrollBox.Height;
-  for i:=1 to 8 do begin
-     if TChart(App.FindComponent('Chart' + IntToStr(i))).Visible AND (TChart(App.FindComponent('Chart' + IntToStr(i))).Top <= MinTop) then begin
-        MinTop:= TChart(App.FindComponent('Chart' + IntToStr(i))).Top;
+  MinTop:= 65536;
+  for i:=1 to MAX_CHART_NUMBER do begin
+     n:= GetChart(i).Top;
+     v:= GetChart(i).Visible;
+     if GetChart(i).Visible AND (GetChart(i).Top <= MinTop) then begin
+        MinTop:= GetChart(i).Top;
         Result:= i;
      end;
   end;
@@ -137,8 +206,8 @@ end;
 function GetFreeChart: Byte;
 var i: Byte;
 begin
-  for i:=1 to 8 do begin
-     if TChart(App.FindComponent('Chart' + IntToStr(i))).Visible = false then begin
+  for i:=1 to MAX_CHART_NUMBER do begin
+     if GetChart(i).Visible = false then begin
         Result:= i;
         Break;
      end;
@@ -148,52 +217,102 @@ end;
 procedure ChartsVisible(visible: Boolean);
 var i: byte;
 begin
-  for i:=1 to 8 do TChart(App.FindComponent('Chart' + IntToStr(i))).Visible:= visible;
+  for i:=1 to MAX_CHART_NUMBER do GetChart(i).Visible:= visible;
 end;
 
 procedure ChartsHeight();
 var i : byte;
 begin
-  for i:=1 to 8 do TChart(App.FindComponent('Chart' + IntToStr(i))).Height:= App.ChartScrollBox.Height Div GetChartCount;
+  for i:=1 to MAX_CHART_NUMBER do GetChart(i).Height:= App.ChartScrollBox.Height Div GetChartCount;
 end;
 
 procedure ChartsPosition();
 const FooterSize = 40;
 var i                : Byte;
     Chart, PrevChart : TChart;
-    LastChart        : Byte;
+    FirstChart       : Byte;
 begin;
-   PrevChart:= TChart(App.FindComponent('Chart' + IntToStr(1)));
-   for i:=1 to ChartsCount do begin
-      Chart:= TChart(App.FindComponent('Chart' + IntToStr(i)));
-      if ChartsCount > 1 then Chart.Height:= (App.ChartScrollBox.Height - FooterSize - 4) Div ChartsCount
-      else Chart.Height:= App.ChartScrollBox.Height;
-      Chart.Top:= 0;
+   FirstChart:= GetFirstChart;
+   PrevChart:= GetChart(FirstChart);
+   if ChartsCount = 1 then begin
+      PrevChart.Height:= App.ChartScrollBox.Height - FooterSize - 2;
+   end
+   else
+       for i:=1 to MAX_CHART_NUMBER do begin
+          Chart:= GetChart(i);
+          if Chart.Visible then begin
+              Chart.Height:= (App.ChartScrollBox.Height - FooterSize - 2) Div ChartsCount;
+              if i <> FirstChart then begin
+                 Chart.Top:= ((App.ChartScrollBox.Height - FooterSize) Div ChartsCount) * (i - 1);
+                 Chart.AnchorToCompanion(akTop, 0, PrevChart);
+              end;
+              Chart.AxisList[1].Marks.Visible:= False;
+              PrevChart:= Chart;
 
-      if i > 1 then begin
-         Chart.Top:= (App.ChartScrollBox.Height Div ChartsCount) * (i - 1);
-         Chart.AnchorToNeighbour(akTop, 0, PrevChart);
-      end;
+              Chart.Title.Text[0]:= Chart.Title.Text[0] + ' Top: ' + IntToStr(Chart.Top) + ' F: ' + IntToStr(FirstChart);
 
-      Chart.AxisList[1].Marks.Visible:= False;
-      PrevChart:= Chart;
-   end;
-   LastChart:= GetLastChart;
-   if ChartsCount > 1 then
-       TChart(App.FindComponent('Chart' + IntToStr(LastChart))).Height:= TChart(App.FindComponent('Chart' + IntToStr(LastChart))).Height + FooterSize;
-   TChart(App.FindComponent('Chart' + IntToStr(LastChart))).AxisList[1].Marks.Visible:= True;
+
+          end;
+       end;
+   GetChart(FirstChart).Top:= 0;
 end;
 
 procedure ChartsEnabled(visible: Boolean);
 var i: byte;
 begin
-  for i:=1 to 8 do TChart(App.FindComponent('Chart' + IntToStr(i))).Visible:= visible;
+  for i:=1 to MAX_CHART_NUMBER do GetChart(i).Visible:= visible;
 end;
 
 procedure ResetChartsZoom;
 var i: byte;
 begin
-  for i:=1 to 8 do TChart(App.FindComponent('Chart' + IntToStr(i))).ZoomFull();
+  for i:=1 to MAX_CHART_NUMBER do GetChart(i).ZoomFull();
+end;
+
+procedure RepaintAll;
+var i: byte;
+begin
+  for i:=1 to MAX_CHART_NUMBER do GetChart(i).Repaint;
+end;
+
+procedure ChartsNavigation(Value: Boolean);
+var i     : byte;
+    Chart : TChart;
+begin
+  for i:=1 to MAX_CHART_NUMBER do begin
+    Chart:= GetChart(i);
+    Chart.AllowPanning:= Value;
+    Chart.AllowZoom:= Value;
+  end;
+end;
+
+function GetChartNumber(ChartName: String): Byte;
+begin
+  Result:= StrToInt(MidStr(ChartName, 6, 1));
+end;
+
+procedure ZoomChartCurrentExtent(Chart: TChart);
+var MinMax, wMinMax    : TMinMax;
+    dr                 : TDoubleRect;
+    i                  : Byte;
+    Serie              : TLineSeries;
+begin
+  if Chart.Visible then begin
+    MinMax.Min:= 1.7E308;
+    MinMax.Max:= 5.0E-324;
+    for i:=0 to MAX_SERIE_NUMBER - 1 do begin
+      Serie:= TLineSeries(Chart.Series[i]);
+      if Serie.Count > 0 then begin
+         wMinMax:= GetMinMaxForCurrentExtent(Serie);
+         if wMinMax.Min < MinMax.Min then MinMax.Min:= wMinMax.Min;
+         if wMinMax.Max > MinMax.Max then MinMax.Max:= wMinMax.Max;
+      end;
+    end;
+    dr:= Chart.LogicalExtent;
+    dr.a.Y:= MinMax.Min;
+    dr.b.Y:= MinMax.Max;
+    Chart.LogicalExtent:= dr;
+  end;
 end;
 
 end.

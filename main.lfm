@@ -1,20 +1,21 @@
 object App: TApp
-  Left = 1978
-  Height = 765
-  Top = -641
-  Width = 1168
+  Left = 1886
+  Height = 686
+  Top = -708
+  Width = 1190
   Caption = 'Smart Data Viewer'
-  ClientHeight = 765
-  ClientWidth = 1168
+  ClientHeight = 686
+  ClientWidth = 1190
   Color = clWhite
   OnCreate = FormCreate
   OnResize = FormResize
   LCLVersion = '2.2.4.0'
+  WindowState = wsMaximized
   object PageControl1: TPageControl
     Left = 0
-    Height = 765
+    Height = 686
     Top = 0
-    Width = 1168
+    Width = 1190
     ActivePage = ChartPage
     Align = alClient
     Anchors = [akTop, akLeft, akRight]
@@ -22,10 +23,10 @@ object App: TApp
     TabOrder = 0
     object ChartPage: TTabSheet
       Caption = 'Chart'
-      ClientHeight = 737
-      ClientWidth = 1160
+      ClientHeight = 658
+      ClientWidth = 1182
       object CloseApp: TBitBtn
-        Left = 1084
+        Left = 1106
         Height = 25
         Top = 2
         Width = 75
@@ -44,7 +45,7 @@ object App: TApp
       object Indicator: TLabel
         Left = 728
         Height = 15
-        Top = 718
+        Top = 639
         Width = 47
         Anchors = [akLeft, akBottom]
         Caption = 'Indicator'
@@ -53,7 +54,7 @@ object App: TApp
       object ProcessProgress: TProgressBar
         Left = 80
         Height = 15
-        Top = 718
+        Top = 640
         Width = 320
         Anchors = [akLeft, akBottom]
         TabOrder = 1
@@ -61,659 +62,17 @@ object App: TApp
       object ProcessLabel: TLabel
         Left = 0
         Height = 15
-        Top = 718
+        Top = 639
         Width = 68
         Anchors = [akLeft, akBottom]
         Caption = 'ProcessLabel'
         ParentColor = False
       end
-      object ChartScrollBox: TScrollBox
-        Left = 2
-        Height = 668
-        Top = 36
-        Width = 1157
-        HorzScrollBar.Page = 75
-        VertScrollBar.Page = 1
-        Anchors = [akTop, akLeft, akRight, akBottom]
-        ClientHeight = 664
-        ClientWidth = 1153
-        TabOrder = 2
-        object Chart1: TChart
-          AnchorSideBottom.Side = asrBottom
-          Left = 0
-          Height = 74
-          Top = 592
-          Width = 1153
-          AxisList = <          
-            item
-              Grid.Color = clSilver
-              LabelSize = 54
-              MarginsForMarks = False
-              Marks.Distance = 0
-              Marks.LabelBrush.Style = bsClear
-              Minors = <>
-              Title.LabelFont.Orientation = 900
-              Title.LabelBrush.Style = bsClear
-            end          
-            item
-              Grid.Color = clSilver
-              Alignment = calBottom
-              AtDataOnly = True
-              MarginsForMarks = False
-              Marks.Margins.Left = 0
-              Marks.Margins.Top = 0
-              Marks.Margins.Right = 0
-              Marks.Margins.Bottom = 0
-              Marks.Format = '%2:s'
-              Marks.LabelBrush.Style = bsClear
-              Marks.OverlapPolicy = opHideNeighbour
-              Marks.Source = DateTimeIntervalChartSource1
-              Marks.Style = smsLabel
-              Minors = <>
-              Title.LabelBrush.Style = bsClear
-            end>
-          Foot.Margins.Left = 0
-          Foot.Margins.Top = 0
-          Foot.Margins.Right = 0
-          Foot.Margins.Bottom = 0
-          Foot.Margin = 0
-          Legend.Frame.Color = clSilver
-          Legend.UseSidebar = False
-          Legend.Visible = True
-          Margins.Left = 0
-          Margins.Top = 0
-          Margins.Right = 0
-          Margins.Bottom = 0
-          MarginsExternal.Left = 0
-          MarginsExternal.Top = 0
-          Title.Text.Strings = (
-            'TAChart'
-          )
-          Toolset = ChartToolset1
-          Anchors = [akLeft, akRight]
-          Color = clWhite
-          DragMode = dmAutomatic
-          OnDragDrop = Chart1DragDrop
-          OnDragOver = Chart1DragOver
-        end
-        object Chart2: TChart
-          Left = 0
-          Height = 74
-          Top = 505
-          Width = 1153
-          AxisList = <          
-            item
-              Grid.Color = clSilver
-              LabelSize = 54
-              MarginsForMarks = False
-              Marks.Distance = 0
-              Marks.LabelBrush.Style = bsClear
-              Minors = <>
-              Title.LabelFont.Orientation = 900
-              Title.LabelBrush.Style = bsClear
-            end          
-            item
-              Grid.Color = clSilver
-              Alignment = calBottom
-              AtDataOnly = True
-              MarginsForMarks = False
-              Marks.Margins.Left = 0
-              Marks.Margins.Top = 0
-              Marks.Margins.Right = 0
-              Marks.Margins.Bottom = 0
-              Marks.Format = '%2:s'
-              Marks.LabelBrush.Style = bsClear
-              Marks.OverlapPolicy = opHideNeighbour
-              Marks.Source = DateTimeIntervalChartSource1
-              Marks.Style = smsLabel
-              Minors = <>
-              Title.LabelBrush.Style = bsClear
-            end>
-          Foot.Margins.Left = 0
-          Foot.Margins.Top = 0
-          Foot.Margins.Right = 0
-          Foot.Margins.Bottom = 0
-          Foot.Margin = 0
-          Legend.Frame.Color = clSilver
-          Legend.UseSidebar = False
-          Legend.Visible = True
-          Margins.Left = 0
-          Margins.Top = 0
-          Margins.Right = 0
-          Margins.Bottom = 0
-          MarginsExternal.Left = 0
-          MarginsExternal.Top = 0
-          Title.Text.Strings = (
-            'TAChart'
-          )
-          Toolset = ChartToolset1
-          Anchors = [akLeft, akRight]
-          Color = clWhite
-        end
-        object Chart3: TChart
-          Left = 0
-          Height = 82
-          Top = 420
-          Width = 1153
-          AxisList = <          
-            item
-              Grid.Color = clSilver
-              LabelSize = 54
-              MarginsForMarks = False
-              Marks.Distance = 0
-              Marks.LabelBrush.Style = bsClear
-              Minors = <>
-              Title.LabelFont.Orientation = 900
-              Title.LabelBrush.Style = bsClear
-            end          
-            item
-              Grid.Color = clSilver
-              Alignment = calBottom
-              AtDataOnly = True
-              MarginsForMarks = False
-              Marks.Margins.Left = 0
-              Marks.Margins.Top = 0
-              Marks.Margins.Right = 0
-              Marks.Margins.Bottom = 0
-              Marks.Format = '%2:s'
-              Marks.LabelBrush.Style = bsClear
-              Marks.OverlapPolicy = opHideNeighbour
-              Marks.Source = DateTimeIntervalChartSource1
-              Marks.Style = smsLabel
-              Minors = <>
-              Title.LabelBrush.Style = bsClear
-            end>
-          Foot.Margins.Left = 0
-          Foot.Margins.Top = 0
-          Foot.Margins.Right = 0
-          Foot.Margins.Bottom = 0
-          Foot.Margin = 0
-          Legend.Frame.Color = clSilver
-          Legend.UseSidebar = False
-          Legend.Visible = True
-          Margins.Left = 0
-          Margins.Top = 0
-          Margins.Right = 0
-          Margins.Bottom = 0
-          MarginsExternal.Left = 0
-          MarginsExternal.Top = 0
-          Title.Text.Strings = (
-            'TAChart'
-          )
-          Toolset = ChartToolset1
-          Anchors = [akLeft, akRight]
-          Color = clWhite
-        end
-        object Chart4: TChart
-          Left = 0
-          Height = 73
-          Top = 341
-          Width = 1153
-          AxisList = <          
-            item
-              Grid.Color = clSilver
-              LabelSize = 54
-              MarginsForMarks = False
-              Marks.Distance = 0
-              Marks.LabelBrush.Style = bsClear
-              Minors = <>
-              Title.LabelFont.Orientation = 900
-              Title.LabelBrush.Style = bsClear
-            end          
-            item
-              Grid.Color = clSilver
-              Alignment = calBottom
-              AtDataOnly = True
-              MarginsForMarks = False
-              Marks.Margins.Left = 0
-              Marks.Margins.Top = 0
-              Marks.Margins.Right = 0
-              Marks.Margins.Bottom = 0
-              Marks.Format = '%2:s'
-              Marks.LabelBrush.Style = bsClear
-              Marks.OverlapPolicy = opHideNeighbour
-              Marks.Source = DateTimeIntervalChartSource1
-              Marks.Style = smsLabel
-              Minors = <>
-              Title.LabelBrush.Style = bsClear
-            end>
-          Foot.Margins.Left = 0
-          Foot.Margins.Top = 0
-          Foot.Margins.Right = 0
-          Foot.Margins.Bottom = 0
-          Foot.Margin = 0
-          Legend.Frame.Color = clSilver
-          Legend.UseSidebar = False
-          Legend.Visible = True
-          Margins.Left = 0
-          Margins.Top = 0
-          Margins.Right = 0
-          Margins.Bottom = 0
-          MarginsExternal.Left = 0
-          MarginsExternal.Top = 0
-          Title.Text.Strings = (
-            'TAChart'
-          )
-          Toolset = ChartToolset1
-          Anchors = [akLeft, akRight]
-          Color = clWhite
-        end
-        object Chart5: TChart
-          Left = 0
-          Height = 81
-          Top = 260
-          Width = 1153
-          AxisList = <          
-            item
-              Grid.Color = clSilver
-              LabelSize = 54
-              MarginsForMarks = False
-              Marks.Distance = 0
-              Marks.LabelBrush.Style = bsClear
-              Minors = <>
-              Title.LabelFont.Orientation = 900
-              Title.LabelBrush.Style = bsClear
-            end          
-            item
-              Grid.Color = clSilver
-              Alignment = calBottom
-              AtDataOnly = True
-              MarginsForMarks = False
-              Marks.Margins.Left = 0
-              Marks.Margins.Top = 0
-              Marks.Margins.Right = 0
-              Marks.Margins.Bottom = 0
-              Marks.Format = '%2:s'
-              Marks.LabelBrush.Style = bsClear
-              Marks.OverlapPolicy = opHideNeighbour
-              Marks.Source = DateTimeIntervalChartSource1
-              Marks.Style = smsLabel
-              Minors = <>
-              Title.LabelBrush.Style = bsClear
-            end>
-          Foot.Margins.Left = 0
-          Foot.Margins.Top = 0
-          Foot.Margins.Right = 0
-          Foot.Margins.Bottom = 0
-          Foot.Margin = 0
-          Legend.Frame.Color = clSilver
-          Legend.UseSidebar = False
-          Legend.Visible = True
-          Margins.Left = 0
-          Margins.Top = 0
-          Margins.Right = 0
-          Margins.Bottom = 0
-          MarginsExternal.Left = 0
-          MarginsExternal.Top = 0
-          Title.Text.Strings = (
-            'TAChart'
-          )
-          Toolset = ChartToolset1
-          Anchors = [akLeft, akRight]
-          Color = clWhite
-        end
-        object Chart6: TChart
-          Left = 0
-          Height = 81
-          Top = 173
-          Width = 1153
-          AxisList = <          
-            item
-              Grid.Color = clSilver
-              LabelSize = 54
-              MarginsForMarks = False
-              Marks.Distance = 0
-              Marks.LabelBrush.Style = bsClear
-              Minors = <>
-              Title.LabelFont.Orientation = 900
-              Title.LabelBrush.Style = bsClear
-            end          
-            item
-              Grid.Color = clSilver
-              Alignment = calBottom
-              AtDataOnly = True
-              MarginsForMarks = False
-              Marks.Margins.Left = 0
-              Marks.Margins.Top = 0
-              Marks.Margins.Right = 0
-              Marks.Margins.Bottom = 0
-              Marks.Format = '%2:s'
-              Marks.LabelBrush.Style = bsClear
-              Marks.OverlapPolicy = opHideNeighbour
-              Marks.Source = DateTimeIntervalChartSource1
-              Marks.Style = smsLabel
-              Minors = <>
-              Title.LabelBrush.Style = bsClear
-            end>
-          Foot.Margins.Left = 0
-          Foot.Margins.Top = 0
-          Foot.Margins.Right = 0
-          Foot.Margins.Bottom = 0
-          Foot.Margin = 0
-          Legend.Frame.Color = clSilver
-          Legend.UseSidebar = False
-          Legend.Visible = True
-          Margins.Left = 0
-          Margins.Top = 0
-          Margins.Right = 0
-          Margins.Bottom = 0
-          MarginsExternal.Left = 0
-          MarginsExternal.Top = 0
-          Title.Text.Strings = (
-            'TAChart'
-          )
-          Toolset = ChartToolset1
-          Anchors = [akLeft, akRight]
-          Color = clWhite
-        end
-        object Chart7: TChart
-          Left = 0
-          Height = 81
-          Top = 86
-          Width = 1153
-          AxisList = <          
-            item
-              Grid.Color = clSilver
-              LabelSize = 54
-              MarginsForMarks = False
-              Marks.Distance = 0
-              Marks.LabelBrush.Style = bsClear
-              Minors = <>
-              Title.LabelFont.Orientation = 900
-              Title.LabelBrush.Style = bsClear
-            end          
-            item
-              Grid.Color = clSilver
-              Alignment = calBottom
-              AtDataOnly = True
-              MarginsForMarks = False
-              Marks.Margins.Left = 0
-              Marks.Margins.Top = 0
-              Marks.Margins.Right = 0
-              Marks.Margins.Bottom = 0
-              Marks.Format = '%2:s'
-              Marks.LabelBrush.Style = bsClear
-              Marks.OverlapPolicy = opHideNeighbour
-              Marks.Source = DateTimeIntervalChartSource1
-              Marks.Style = smsLabel
-              Minors = <>
-              Title.LabelBrush.Style = bsClear
-            end>
-          Foot.Margins.Left = 0
-          Foot.Margins.Top = 0
-          Foot.Margins.Right = 0
-          Foot.Margins.Bottom = 0
-          Foot.Margin = 0
-          Legend.Frame.Color = clSilver
-          Legend.UseSidebar = False
-          Legend.Visible = True
-          Margins.Left = 0
-          Margins.Top = 0
-          Margins.Right = 0
-          Margins.Bottom = 0
-          MarginsExternal.Left = 0
-          MarginsExternal.Top = 0
-          Title.Text.Strings = (
-            'TAChart'
-          )
-          Toolset = ChartToolset1
-          Anchors = [akLeft, akRight]
-          Color = clWhite
-        end
-        object Chart8: TChart
-          Left = 0
-          Height = 73
-          Top = 4
-          Width = 1153
-          AxisList = <          
-            item
-              Grid.Color = clSilver
-              LabelSize = 54
-              MarginsForMarks = False
-              Marks.Distance = 0
-              Marks.LabelBrush.Style = bsClear
-              Minors = <>
-              Title.LabelFont.Orientation = 900
-              Title.LabelBrush.Style = bsClear
-            end          
-            item
-              Grid.Color = clSilver
-              Alignment = calBottom
-              AtDataOnly = True
-              MarginsForMarks = False
-              Marks.Margins.Left = 0
-              Marks.Margins.Top = 0
-              Marks.Margins.Right = 0
-              Marks.Margins.Bottom = 0
-              Marks.Format = '%2:s'
-              Marks.LabelBrush.Style = bsClear
-              Marks.OverlapPolicy = opHideNeighbour
-              Marks.Source = DateTimeIntervalChartSource1
-              Marks.Style = smsLabel
-              Minors = <>
-              Title.LabelBrush.Style = bsClear
-            end>
-          Foot.Margins.Left = 0
-          Foot.Margins.Top = 0
-          Foot.Margins.Right = 0
-          Foot.Margins.Bottom = 0
-          Foot.Margin = 0
-          Legend.Frame.Color = clSilver
-          Legend.UseSidebar = False
-          Legend.Visible = True
-          Margins.Left = 0
-          Margins.Top = 0
-          Margins.Right = 0
-          Margins.Bottom = 0
-          MarginsExternal.Left = 0
-          MarginsExternal.Top = 0
-          Title.Text.Strings = (
-            'TAChart'
-          )
-          Toolset = ChartToolset1
-          Anchors = [akLeft, akRight]
-          Color = clWhite
-        end
-      end
-      object AddChartBtn: TBitBtn
-        Left = 40
-        Height = 25
-        Top = 3
-        Width = 64
-        Caption = 'Add chart'
-        OnClick = AddChartBtnClick
-        TabOrder = 3
-      end
-      object CursorMode: TSpeedButton
-        Left = 152
-        Height = 26
-        Hint = 'Mouse drag'
-        Top = 2
-        Width = 26
-        Glyph.Data = {
-          FA090000424DFA09000000000000360000002800000019000000190000000100
-          200000000000C409000064000000640000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          00000000000000000000000000000000000000000000D9D9D91899999955C6C6
-          C62CF4F4F4060000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          00000000000000000000000000000000000000000000FBFBFB017171717B0A0A
-          0AEA181818D6525252A0C8C8C82E000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000DADADA1B2525
-          25CD787878758181815A070707E68D8D8D630000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          00000000000000000000C6C6C62B9494944FE6E6E60B00000000000000008D8D
-          8D63202020D1D2D2D220777777601B1B1BD1D0D0D02100000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          00000000000000000000FBFBFB025A5A5A96030303F05050508FD6D6D613E7E7
-          E70F363636BB6E6E6E86D7D7D712272727B960606089F8F8F803000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000FAFAFA03505050A31A1A1AC61A1A1AC83030
-          30A67373736A121212D8B6B6B6308D8D8D48131313D9C0C0C033000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          000000000000000000000000000000000000FAFAFA03505050A34F4F4F92B5B5
-          B52F2C2C2CB6060606EF3B3B3B9DD7D7D70D363636A3414141A2E7E7E709F5F5
-          F501F5F5F5010000000000000000000000000000000000000000000000000000
-          00000000000000000000000000000000000000000000FAFAFA03505050A35252
-          5291F8F8F801D5D5D51C6E6E6E83AFAFAF35B3B3B32F0A0A0AE51C1C1CBD4040
-          4091404040914141418E8F8F8F46000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000FAFAFA035050
-          50A352525291FAFAFA0100000000FCFCFC0100000000C3C3C3224B4B4B8F4545
-          459A4141419A121212C2010101F864646485FBFBFB0200000000000000000000
-          000000000000000000000000000000000000000000000000000000000000FAFA
-          FA03505050A352525291FAFAFA0100000000000000000000000000000000F7F7
-          F702F3F3F303AAAAAA35171717C5464646A0D8D8D81900000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000FAFAFA03505050A352525291FAFAFA010000000000000000000000000000
-          0000FAFAFA01A3A3A3381D1D1DC64343439ADADADA1500000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          000000000000FAFAFA03505050A352525291FAFAFA0100000000000000000000
-          0000FBFBFB01A2A2A23F171717CC42424296D9D9D91300000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          00000000000000000000FAFAFA03505050A352525291FAFAFA01000000000000
-          0000FAFAFA01A2A2A2431A1A1AD14F4F4F95DADADA1200000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000FAFAFA03505050A352525291FAFAFA010000
-          0000FAFAFA01A0A0A045191919D35B5B5B94E8E8E81100000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          000000000000000000000000000000000000FAFAFA03505050A352525291FAFA
-          FA01FAFAFA02A0A0A044191919D15C5C5C8FE8E8E81000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          00000000000000000000000000000000000000000000FAFAFA03505050A35252
-          5291F5F5F5039E9E9E49191919D15D5D5D87E8E8E80D00000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000FAFAFA035050
-          50A34E4E4E949A9A9A4F191919D25C5C5C7FE8E8E80B00000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          000000000000000000000000000000000000000000000000000000000000FAFA
-          FA03505050A3171717D3171717D45D5D5D77E8E8E80A00000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000FAFAFA0258585894040404ED5E5E5E73E9E9E90800000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          00000000000000000000CDCDCD24A3A3A343EBEBEB0800000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          000000000000000000000000000000000000000000000000000000000000
-        }
-        OnClick = CursorModeClick
-        ShowHint = True
-        ParentShowHint = False
-      end
-      object ZoomMode: TSpeedButton
-        Left = 184
-        Height = 26
-        Hint = 'Mouse zoom'
-        Top = 2
-        Width = 26
-        Flat = True
-        Glyph.Data = {
-          FA090000424DFA09000000000000360000002800000019000000190000000100
-          200000000000C409000064000000640000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          00000000000000000000E5E5E519434343BB3E3E3EC1E6E6E619000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          00000000000000000000E6E6E618555555A9020202FC030303FC8A8A8A780000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          00000000000000000000EDEDED115D5D5DA2030303FB000000FF050505F99191
-          9173000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          00000000000000000000F3F3F30B76767688060606F9000000FF040404FA6262
-          629CEDEDED110000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000F9F9F905CFCFCF309292926D6B6B6B936C6C
-          6C929090906FCDCDCD32EDEDED117B7B7B83090909F5000000FF040404FA6060
-          609EEAEAEA140000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000EBEBEB137A7A7A851A1A1AE4020202FC0000
-          00FF000000FF010101FD191919E5404040BE090909F5000000FF010101FD5353
-          53ADE9E9E9150000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000EDEDED116262629E050505F9131313EB5656
-          56A88585857A868686795B5B5BA3161616E8000000FE000000FF010101FD4141
-          41BDDBDBDB240000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000FBFBFB0385858579060606F82D2D2DD1B7B7
-          B748F7F7F7070000000000000000F8F8F806BDBDBD41343434CB000000FE2424
-          24DAD2D2D22C0000000000000000000000000000000000000000000000000000
-          000000000000000000000000000000000000D9D9D925222222DC161616E8BDBD
-          BD41000000000000000000000000000000000000000000000000C3C3C33C1919
-          19E5191919E6D0D0D03000000000000000000000000000000000000000000000
-          000000000000000000000000000000000000000000008D8D8D72030303FB5F5F
-          5F9FF9F9F905000000000000000000000000000000000000000000000000FAFA
-          FA0468686897020202FC9090906E000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000111111EE0303
-          03FBA1A1A15DFDFDFD01FCFCFC02000000000000000000000000000000000000
-          000000000000ABABAB53060606F86161619DFCFCFC0200000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          00FF040404FAAEAEAE50ADADAD517D7D7D81F5F5F50900000000000000000000
-          00000000000000000000C1C1C13E0B0B0BF3555555A9FBFBFB03000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          00001E1E1EE0020202FC9B9B9B638181817F131313EBBBBBBB43000000000000
-          0000000000000000000000000000A7A7A758050505FA6363639CFCFCFC020000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000009F9F9F5F040404FA565656A9CCCCCC32272727D82E2E2ED1A0A0
-          A05FF3F3F30C0000000000000000F9F9F90566666698030303FB989898670000
-          0000000000000000000000000000000000000000000000000000000000000000
-          00000000000000000000DCDCDC22262626D8111111EEA8A8A857AFAFAF4F2F2F
-          2FCF202020DFCECECE3100000000FDFDFD01B7B7B747161616E8222222DDD7D7
-          D727000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000FCFCFC029090906F080808F61E1E1EE1A3A3
-          A35BD2D2D22DC5C5C539F6F6F609F2F2F20DADADAD52272727D8060606F88888
-          8876FBFBFB030000000000000000000000000000000000000000000000000000
-          00000000000000000000000000000000000000000000F0F0F00E6A6A6A940707
-          07F70B0B0BF3424242BD7777778776767689434343BC0E0E0EF1070707F76161
-          619EEDEDED110000000000000000000000000000000000000000000000000000
-          000000000000000000000000000000000000000000000000000000000000EFEF
-          EF0F8C8C8C73272727D9050505FA000000FF000000FF040404FA242424DA8989
-          8975EEEEEE100000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          000000000000FCFCFC03DFDFDF21AAAAAA556B6B6B9B6D6D6D97A8A8A858DDDD
-          DD21FCFCFC020000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000000000000000
-          000000000000000000000000000000000000000000000000000000000000
-        }
-        OnClick = ZoomModeClick
-        ShowHint = True
-        ParentShowHint = False
-      end
       object Image3: TImage
-        Left = 224
+        Left = 176
         Height = 25
         Hint = 'Unzoom all'
-        Top = 2
+        Top = 3
         Width = 25
         OnClick = Image3Click
         ParentShowHint = False
@@ -751,12 +110,13 @@ object App: TApp
         }
         ShowHint = True
       end
-      object Image4: TImage
-        Left = 256
+      object ZoomExtent: TImage
+        Left = 208
         Height = 25
         Hint = 'Current extent zoom'
-        Top = 2
+        Top = 3
         Width = 25
+        OnClick = ZoomExtentClick
         ParentShowHint = False
         Picture.Data = {
           1754506F727461626C654E6574776F726B47726170686963B903000089504E47
@@ -793,46 +153,13 @@ object App: TApp
         }
         ShowHint = True
       end
-      object FitToWin: TImage
-        Left = 288
-        Height = 25
-        Hint = 'Fit to window'
-        Top = 2
-        Width = 25
-        ParentShowHint = False
-        Picture.Data = {
-          1754506F727461626C654E6574776F726B47726170686963B002000089504E47
-          0D0A1A0A0000000D49484452000000190000001908020000004B8B1234000000
-          097048597300000EC400000EC401952B0E1B0000023B4944415478DA63ACABAB
-          E3E6E666626262A000FCFBF7EFEBD7AF8C9D9D9DFEFEFE7C7C7C9498F5E9D3A7
-          8D1B37327677774747470B0A0A5262D6FBF7EF972E5D0A358B9F5FE0D2E5FFCF
-          5FB0906A8A8CCC5F6D4D868F1F3F20CC626412080A67B97C9585839D0483BEFF
-          F86FA8FF6FCDB23FFFFE21B9EBDF7F414F3F365DDD7FE9C97F8934E8FFFFFFBD
-          13BE3D7828B07DD32F26460CB3DC5CFF36D7FD616464C4AEF9DB37C66D3B985F
-          BD01B2FF8A89FCF570CBAFF97BEA8C2859663D7DC69A98C67CE112E3E7CF7FA5
-          24BF6F5D5F3043825CB3FEFE633A729435BF84F1CEDD7F22C2DFB66E289C2D45
-          8E59C0D0F97FE3165B7EF1BFE7CF994C4D180F1CFAB6655DE12C5C66F9B3B9BB
-          FC6DC265D6D76F4C29997F6EDDFED9D7C9C1CFC7B86ADDDF829C8236362C6671
-          72094C99CEA0ADF9C7D5198B41C01CC6F8EFDFFFDD7BFF484AB0EAE932002D03
-          E61A0686FCE22F58CCE2E212983CEDC7858B3F18B08595B626477E2E3B17274A
-          9E059A9657F419A71FBF7FFBA7A9F107CDA0EB37595858FEEED8F45B5C8C8568
-          B3FCD85C9CFE34D4A09BD5D4C6BA75FBBF1D9B7E898BB3926016D678AC6B62D9
-          BCF5EFA859D8CC72F9DB5C8F1EF6F5CD40B340612F86118FD8D317C42C0E8EBF
-          3656E865CED1E32C9F3EFD9D3AF1E79E7D6C3F7E20E50486FF7BF7012DE64637
-          8B9D5DA0A296E9C44956066CC0D0E04F68D0CF960ECE6FDFD0AB186BAB7F6D8D
-          7F7EFC40324B4040E0FB0F86EFDFB197109C1CFFD9D9193E7F66FCFB0F5D8A8B
-          938183E3FF870FE0329A9AF51015EB4700F7F50D977100A0750000001B744558
-          74536F66747761726500417274776561766572204672656520372E30B0E96D7E
-          0000000049454E44AE426082
-        }
-        ShowHint = True
-      end
       object HideLabel: TImage
-        Left = 320
+        Left = 240
         Height = 25
         Hint = 'Remove labels'
-        Top = 2
+        Top = 3
         Width = 25
+        OnClick = HideLabelClick
         ParentShowHint = False
         Picture.Data = {
           1754506F727461626C654E6574776F726B477261706869637905000089504E47
@@ -884,32 +211,32 @@ object App: TApp
         ShowHint = True
       end
       object ChartPoints: TCheckBox
-        Left = 368
+        Left = 296
         Height = 19
-        Top = 0
+        Top = -2
         Width = 85
         Caption = 'Chart points'
         OnChange = ChartPointsChange
-        TabOrder = 4
+        TabOrder = 2
       end
       object ChartLink: TCheckBox
-        Left = 368
+        Left = 296
         Height = 19
-        Top = 16
+        Top = 14
         Width = 71
         Caption = 'Chart link'
         Checked = True
         OnChange = ChartLinkChange
         State = cbChecked
-        TabOrder = 5
+        TabOrder = 3
       end
-      object Image2: TImage
+      object OpenFile: TImage
         Left = 8
         Height = 20
-        Hint = 'Open'
+        Hint = 'Open file'
         Top = 5
         Width = 23
-        OnClick = Image2Click
+        OnClick = OpenFileClick
         ParentShowHint = False
         Picture.Data = {
           1754506F727461626C654E6574776F726B47726170686963C303000089504E47
@@ -946,23 +273,942 @@ object App: TApp
         }
         ShowHint = True
       end
+      object Label1: TLabel
+        Left = 392
+        Height = 15
+        Top = 0
+        Width = 54
+        Caption = 'Start time:'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label2: TLabel
+        Left = 392
+        Height = 15
+        Top = 16
+        Width = 50
+        Caption = 'End time:'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        ParentColor = False
+        ParentFont = False
+      end
+      object EndTime: TLabel
+        Left = 456
+        Height = 15
+        Top = 16
+        Width = 46
+        Caption = 'EndTime'
+        ParentColor = False
+      end
+      object StartTime: TLabel
+        Left = 456
+        Height = 15
+        Top = 0
+        Width = 50
+        Caption = 'StartTime'
+        ParentColor = False
+      end
+      object AddChart: TImage
+        Left = 40
+        Height = 25
+        Hint = 'Add chart'
+        Top = 2
+        Width = 25
+        OnClick = AddChartClick
+        ParentShowHint = False
+        Picture.Data = {
+          1754506F727461626C654E6574776F726B47726170686963E203000089504E47
+          0D0A1A0A0000000D4948445200000019000000190806000000C4E98563000000
+          097048597300000EC400000EC401952B0E1B0000036D4944415478DABD965B48
+          945110C7FFDFCD4A5B715D492BA252B7841289CA245F8AB4522CAD074BECA542
+          8510EC417B085AC43431F3C182B0024943F245C4348212214A08CA6E50769134
+          33A39B2B9A657D97D37C675973B75D8B5A9CA7F30DE7CC6F98F9CFF0090E8783
+          85848440144504DA0CC3C0C4C40484AAAA2A96999989D0D0D08043C6C6C6D0D6
+          D606A1BABA9AE5E6E6C26AB5FE7F545D078686207CFF0E16130327419A9A9A02
+          08191F87D4DC0CE9DC39B0E5CBA19E3F0F27B90307F9F205725919A48B1761D8
+          EDD00F1F8691950527F90303D13448F5F5908F1D83B17933B4F2725E2A08029C
+          4E670020D403B1B313726121586424B48606B0E8680E30CD3F8431801A47FA03
+          E6CD9B7AE061E69DC9498857AEF0329930EDCC191829291EF7FD435EBF867CFC
+          3884D15168454560C9C980394366E0F7EF21F4F743A0C7224953ECE8006C3668
+          959530B66F0724C92317DF10CA48A29ACAB5B540501058541454532D8989C0C8
+          0894820208DDDD10E81E9B3B9767AE9BA54A48F80DE01F429906EDDC09466532
+          F6ED83545A0A161F0F9554230C0E4221C5185BB6C0484FE7B567AB57FB2FA93F
+          88D0D30385A65FDFBF1FFAD1A390A90C525D1DB48A0AB088082879795CFFC6EE
+          DD3CC893CF5D18187BC0CF4B2CF188B7A512EF0F3D115B5AA0E4E7433D7B16C6
+          9E3DBCFE4A4E0E17819E960699FCEAE5CBAE0693B5F495E1F6F0257E4E8ACA46
+          B69D7A29883343A49A1AC8A74EE1476B2B5852120F2E3536423E72048C7A0445
+          81DADEEE2AD33F41C2C22017177359AAD7AE81C5C6BA6E92CACC4113C967A4A6
+          423B7912B058FE11121C0C859A2D0C0CE087294D1AAEA99930D7F5F0309E2ABD
+          786E3C990AD2377A076F277AE90A43B86C47B46523DC1D59B520194BE7ACF182
+          D0820BCAC8008B8B834A93CB55E36557FB6BD0F9A6CE6B2E19BE4D1AF8FA55E7
+          F9B86DC78A43D8BA38DF1312FEE205945DBBF872D34B4A7CCAD21BE20FE01762
+          EBEAE2C3365DA2DEF6F8D375F48EDC9CFA7EF6F11EFA3E3CE38085F363B03262
+          3D795DC925446E426CF0064F48C4850B904E9F864AEB82AD5DEB13C278BABF52
+          6E7C548A1BAF1AF879D3B2BD38B0E60421DC15104833A35E105A701239B8B2CC
+          4DFA17D6F0D0310D92838326642675D96EDD8278F72E349A09B744030EB19A81
+          CDF54E03E76F1779DBFD7737F0F2F37D7E8EB62660DDA26DBED7CAACFCADCCC6
+          7FD74F2CFD227E79B5044A0000001B74455874536F6674776172650041727477
+          6561766572204672656520372E30B0E96D7E0000000049454E44AE426082
+        }
+        ShowHint = True
+      end
+      object Button1: TButton
+        Left = 1016
+        Height = 25
+        Top = 2
+        Width = 75
+        Caption = 'Button1'
+        OnClick = Button1Click
+        TabOrder = 4
+      end
+      object ShowLabel: TImage
+        Left = 240
+        Height = 25
+        Hint = 'Show labels'
+        Top = 3
+        Width = 25
+        OnClick = ShowLabelClick
+        ParentShowHint = False
+        Picture.Data = {
+          1754506F727461626C654E6574776F726B477261706869631504000089504E47
+          0D0A1A0A0000000D4948445200000019000000190806000000C4E98563000000
+          097048597300000EC400000EC401952B0E1B000003A04944415478DABD965D4C
+          5B551CC07FF752D8A05D471168E56B7BD2D7B998B9E8AB06DFC8642E2180B2D5
+          6D6133140A6546A1DD428C0251077B538813D6854F1D535F4C1C4C13335D377D
+          5BB2653311746F1011EA1AD77B3CE7DEF4030BAC248BFFA4E9C3B9B9BFF3FB7F
+          9C7BB4603028EC763BBAAEF3B8C3300C565757D17A7B7B454D4D0D4EA7F3B143
+          96979799999941EBEFEF17F5F5F5B85CAE2DED70717191A5A525727373CD2C68
+          9A965C77381CE6FBD47A381CDE3A241A8DD2D313E4F6ED7176EE5892004D0274
+          62B16DACAC0AFE8EC6F9F32F8F34B88ACD66DB3A4401DADA9AA92C9FC6EF33D8
+          E114D68250763A0FE34898C07B4C100CDDC4E3F16C0D62014EB0AB7292CE0E03
+          875DBD187EBA9EC3A5CB82A79FD239581B277FBBA0B149A3A3F33A656565D943
+          1206551553BC153090CD68C6DD7B399C6CD94D43E369AECE7DC3DE3D618E7A0D
+          BCC7F368F1FD903D2461505531C92965E048ADCD7D6763247C8873E73E261289
+          3031F632031FC6686DDFCE61EFF7D9411206BBA44167C04A517ADCBF0FCD6FBA
+          28AF7C953B77221CF3FE42ED018377BA6DD41EBAF668487A8A1206AA06D77ED4
+          E5BFE085E7ADA22F2CE8DCFC59C8220B9ED9836C69E80AC12B07239B43D618A4
+          01AECCE5103A23686F131CA811A48D46321E3C4076D736DEEEBA415151D1FA90
+          3506815417CD4A40F769C11B470C1AEBAD1DFF37E2B285BFB8A431F1F98B0C0F
+          4FB3B2B29209D92845576673099E915D7338CE6B0DA08E39F54B3751802FBFD6
+          F8ECC23E060626282D2DCD9CF8BCBC3CFC6A0EAA2C80DD9E00E4488065D0200D
+          E6E76168D8C6896683CA0A2309B8FC95C6E8C5FD9C3D3B660254AC81D4D5D5D1
+          DDDD49F9936399290A4980D74AD1FC02B4B469B84B753EE88B535898028C8453
+          06895803A9AEAEC6D7B29F8BA3513C6EEB81C80D1D9F1F8E3459800509686DD7
+          282ED679FF5D839212616E44012E48838FD20CD6852893BEBE1E5CCE4F08B45B
+          A9BA754BE3EEAF1AD52F19FC2653E4F36B944840DF7B162065F09C3418CF0064
+          40544D0A0A0ACC9415150E13F0C79347871AB8E327A5C1139906E7479F95D33E
+          B52E605D88EAAE582C26410113D4E1B76A734FDA4C4DEB34BD2E01C529C088EC
+          22952275D26E141B7E4F1428143A45A173C83492820861B56C2245CA60707012
+          B7DBCD66B1E9472BDD28E0B76A949883F3A3FBCC36DDCC202B480A246BB47308
+          7FABC1B7B3D91B640D4982BA02FCF1FBA7FCF3702F0383E3591964401E755B89
+          CB3CCDCB3157BBCFCFCFCF1AA022795BF93FEE5DFF02DB51537E757063D60000
+          001B74455874536F66747761726500417274776561766572204672656520372E
+          30B0E96D7E0000000049454E44AE426082
+        }
+        ShowHint = True
+      end
+      object Panel1: TPanel
+        Left = 74
+        Height = 31
+        Top = 1
+        Width = 93
+        BevelOuter = bvNone
+        BorderStyle = bsSingle
+        ClientHeight = 27
+        ClientWidth = 89
+        Color = clWhite
+        ParentColor = False
+        TabOrder = 5
+        object ZoomOff: TImage
+          Left = 1
+          Height = 25
+          Top = 1
+          Width = 25
+          OnClick = ZoomOffClick
+          Picture.Data = {
+            1754506F727461626C654E6574776F726B477261706869632403000089504E47
+            0D0A1A0A0000000D4948445200000019000000190806000000C4E98563000000
+            097048597300000EC400000EC401952B0E1B000002AF4944415478DABD96CB4A
+            72611486975A6A656A5A238BF2ECC84C7024227A035E80F7D23CBA8E2EA07938
+            5170D048C533A5851A2A968887D4D29F77C1969D7982E4FF60B30F6CD7B30EEF
+            F7BA25D7D7D7D3838303924AA5B4ED35994CA8D7EB91E4E6E6661A0A8548AD56
+            6F1DD2E974E8FEFE9E24B7B7B7D370384C4747473F5E984EA79CC96030A0CFCF
+            4FBE572814B4B7B7473B3B3B249148D6423E3E3EE8EEEEEE3744085EAFD7E9F9
+            F999DEDFDF69381CF2F3DDDD5DD2683474717141A7A7A77CBF0AB61082405F5F
+            5F94CD66A95028F0BD56ABA5C3C3439E19AA0274341AD1D9D9195D5E5ED2FEFE
+            FE52D042C8F7F73703D2E93407369BCDA4D3E93863994CC63FECF7FB542C16A9
+            5AAD72351E8F87E472F9661064DC683428168B71EF1D0E07A9542A0E8E2AC467
+            24934AA5A852A990DBED268BC5B2B09A5F10F4FAF1F191CAE532D96C36D2EBF5
+            1C501C5C7C8D8AE2F13829954AF2FBFD9CD85A0854138944782676BB9D5BB00A
+            82CC514DAD56A34020C049AD8540960F0F0F0C331A8DB3A0CB2038BFBCBC5026
+            9321AFD7CB42D81882F2CFCFCF1742E661AFAFAF94CBE5368708ED823C5189A0
+            A85510281162D9B85DC2E04BA5124B13F7CB5A85032E90482408BEB7F1E021E1
+            66B349D1689483190C06AE6E11048E8064F0FED5D515AB712309CF6F46647672
+            72C27B05F312148576BEBDBD51ABD56218F688CBE56235CE8356DA0A86095BC1
+            35AA0110558CC763DE1F00E180CDC0BDAD562B5BCC3C68A94162A122B4E2E9E9
+            89334640B141620E6857BBDDE677F10C2D03486C9A2B21623746B6820B235361
+            4EA834994CFE0061133B9DCE19682D64DD426001846048681E8404FE041140F9
+            7C9EED450C82B902D4ED76FF0E5904C2C2DF43301864456E058205150A20CCEF
+            F8F8987C3E1F27B035880082E2A04693C9C47B6C36936D7FAD40858284675F2B
+            FFE3BBEB1FDB5F2D7EE65A74620000001B74455874536F667477617265004172
+            74776561766572204672656520372E30B0E96D7E0000000049454E44AE426082
+          }
+        end
+        object PanOff: TImage
+          Left = 32
+          Height = 25
+          Top = 1
+          Width = 25
+          OnClick = PanOffClick
+          Picture.Data = {
+            1754506F727461626C654E6574776F726B47726170686963F402000089504E47
+            0D0A1A0A0000000D4948445200000019000000190806000000C4E98563000000
+            097048597300000EC400000EC401952B0E1B0000027F4944415478DABD96CB6E
+            697114C697BBBA2B0314E9484A626A6AC2503C8077316F3C87293A1097C40C69
+            24D2495D129A189188A8342E712927DF4AB6A387D696235D89D8D7F5DBDF5ADF
+            7FED2D89C7E33BAD564B52A994AE1DDBED9666B319491E1F1F77D168940C06C3
+            D5211F1F1FF4F4F444924422B18BC562A4D7EB69B7DB915C2E2789447215C8FB
+            FB3B2593C9BF90CFCF4FEA743A74777747B7B7B7A4D16818F63FC023C8CDCD0D
+            150A054E6AB55AC96432F1BFD16824A552C9375D0A3C8220E9CBCB0B3D3F3FB3
+            1AF448269331DC62B1F04FA7D3B141C4C28E2066B399C6E331A552295A2E97E4
+            743AF7664052F40AFB50876B552AD5D9729E84A02FA552891A8D069748000989
+            600C280100D70388F3DF99E52404497ABD1E65B3595AAFD7A450281884BE9C4A
+            8272628D09E5C4F6E175272188C562C1DE1E0C06BC7F0E84806A97CB450E8783
+            C167215053AFD7A95C2EF3F64F202484DD710EEBECDFA9F12D04311A8D289D4E
+            D3743ADD1F0308AE830B1128CDFDFD3D430013DD1321608062B148ED76FBCB4D
+            02084F8D86FB7CBEA33E8886A04C6F6F6F94CBE568B3D91C81EC763B83A0C2EB
+            F5EEA7C3451004A6672693A1E170B83F86C45843788843D0C3C3C34945672148
+            54ABD5A85AADEE1D140E87693E9FF33194146E0208F74291680B1F0654400D54
+            E16943A1103BE8F5F59541282514A13FA740A2204892CFE7A9DFEF532412219B
+            CDC609A00253A152A9FC08120541C9BADD2E5B3A10087C596800359B4D5E4F87
+            20581C200CD3C964721E8258AD56FC1A55ABD547E7041014610C1D2AF2FBFD3C
+            3D4441CE0540AD568B1509208FC7C33D442FAF023904C10C6EB79B82C1202B17
+            5DAE4B4018AAC8232CCE7DE37FE56BE537BEBBFE00F01BC76F5471275F000000
+            1B74455874536F66747761726500417274776561766572204672656520372E30
+            B0E96D7E0000000049454E44AE426082
+          }
+        end
+        object DistanceOff: TImage
+          Left = 63
+          Height = 25
+          Top = 1
+          Width = 25
+          OnClick = DistanceOffClick
+          Picture.Data = {
+            1754506F727461626C654E6574776F726B47726170686963D302000089504E47
+            0D0A1A0A0000000D4948445200000019000000190806000000C4E98563000000
+            097048597300000EC400000EC401952B0E1B0000025E4944415478DABD56D96A
+            6241102DF7B8270111242A2A11F521060545FD083FC07FC9BBF81D7E80FFE083
+            B822791049DC9E447149226EE0329C82CE248319E78A63837495B7BB4ED739D5
+            75AFECE9E969AFD7EB492E97D3B9C76EB7A3F97C4EB2743ABD4F2693643299CE
+            0EF2F1F141B95C8E64994C669F4AA5E8E6E6E6EC20D3E994B2D9EC6F10A3D148
+            ED769B341A0D391C0E92C96427D1D3EBF57876B95CF4FEFEFE1D44A7D3513E9F
+            67DAC2E1F0491A6DB75B2A168BB4D96C28168BD16C363B0EB2DFEFF954B00F65
+            F6E77349208F8F8FF4F6F6469D4E87378742A183992168B55A651BF498CD66AA
+            542AC74130D6EB35BDBCBC7075783C1E723A9D3F52D4ED76594B687A7F7F4F2A
+            958AB45AEDDF4130DBED766AB55AF4FAFA4A369B8D2291C88F74819E7EBFCF00
+            C806D963FC932608BA5C2E69B158D0EDEDED41BAA0C76432215CE6ABAB2BF625
+            0B7F91EAFAEF208273519EA25C858D59E8041F3F0C4920E01AC2070201AE9CD1
+            68C4A2FAFD7E161A817C3E1F076E369BA4542AC9ED764B0341EAE57299330110
+            6C8BC5C2F6783C665F541D02630F0A441208366351A1506020F4340455ABD54C
+            5BBD5EE7FB8467F82F180C7E96B4E4B6F2FCFC4C8D4683E2F138DDDDDD7D6A82
+            00580F3F914830A5924B189B71E3BF66128D4679FE7A11150AC5E77AC9D58585
+            E01D8242E052A94456AB953511598AE7E87527810C87436E2D0F0F0F64301868
+            3018703F838F460810D0884CBC5EEF6920A2F61144E880CDF04526088A21D61C
+            0541FFC1029C1AA73DE5C643F85AADC660382834FD06727D7DCD0D51887CCAEB
+            17D9AD562BB6D130F14E62908B7CAD5CE2BBEB1747E0847E206190680000001B
+            74455874536F66747761726500417274776561766572204672656520372E30B0
+            E96D7E0000000049454E44AE426082
+          }
+        end
+        object ZoomOn: TImage
+          Left = 1
+          Height = 25
+          Top = 1
+          Width = 25
+          Picture.Data = {
+            1754506F727461626C654E6574776F726B47726170686963EF03000089504E47
+            0D0A1A0A0000000D4948445200000019000000190806000000C4E98563000000
+            097048597300000EC400000EC401952B0E1B0000037A4944415478DABD965F68
+            1C551487BF7B67264BB39B6C36B59A1823DA4A119B06D2163550451A43B52891
+            A028C4A22F82083EB4ACAD10B30FF1C12E4BA94A459122464D8D4DAB44449082
+            D2075311835A25D42844D0AA35DB06374DCCEEFCB99E69D2766B927695A50766
+            E7727738DF3DE777CE9951A954CA44A351B4D694DB8220607A7A1A954EA74D47
+            4707D5D5D56587E4723986868650994CC6747575914824163C640CCCBA8A937F
+            29660A8A886DB83A6E88450C4A5D1E323939497F7FFFD29033B38A7D9FD9F41D
+            D18C4F84A143E8B72E0E9DB7056CDBE2B3221EA0FE2FE4D7539AAD7B6D8EFDAE
+            58B3DEB0616DC0B509437E168E8D69868735711BFA9EF25877A3BF246849C894
+            44707FDA61EC8CE2BE077D5A6F322CAF3054495DC4B42122CF8C6615BBF7DB4C
+            9D541CEE76695C1E940E093578F16387DE8F349BB706AC5F1D9C755E25CE6316
+            E74131B91F3FADD8F192C3A69586D79E28A055899050DCDBBB2B706F30B43F10
+            5053218ED53980211A02D5DC7A99ACF70D5B1C3C6031B2CBA5BE26280D323EA1
+            6979D6A1E961C3CD4DE682E3F9D3174712EE8D8976C9176CF63FE9D1DEEC9706
+            193D61716BCAA6F97143A34413B58A0173F7E2F5E40CECC83824DB7C9EBEC75B
+            50008B428EFF66B1E1399B558F1AEA579D135B2EAB08A4E62392BDEC94A23763
+            B3ABD3E7B13BBDD22299C869D63EE310D9080D1BE7B528D2E4A24804F6FDB8E2
+            CD572D8EF478345F5F62BA7CD1EEA13D157CFAA7A2FE11434DCD05A7FFD6C6F2
+            0CEF1FB2F07F517CFE7C814A29F392FBE4CB9F2CEE4DDBE83570559BA13ACA82
+            88227298D111CD17438AE496809E4E77D131B324249003EDFDC4A667D0C25A09
+            B5AD10AF1380947314F9330727BE568C0F2BBC5370CB6AF860E7E20D79C9B112
+            A6EDBDA33629E9813FFE06A756AE4A995DA26D3E2BF73CB8B2EF7FA550B586E6
+            4D8643498F86DAA074486861F767A7341F8669F951CB2496A862C8AC32B435F9
+            0C1EB5D8FD8EC6FB46400D8675771B06B77B1735E56521E761F33F611ACF8E0E
+            35378D5D29A6DE830E7B04E47F2BA04619A4023A20A0BA78F0DF2097B210D43D
+            E0F0CABB9A20044903B7B61B06B6B9ACA832E5818456F0143B6522BF3E20A0EF
+            0424E9BC63B39477D2A53073BA3C90D0F2024ABE6DF3C6A0807E50E816C3C8CB
+            1ED72CCB960F125AF89ADEDE67F3D661CD5D2DA1362EF9E93246529CBA9FB39A
+            EB12019591224DAEC8D7CA95F8EEFA07F573057E01FAC7310000001B74455874
+            536F66747761726500417274776561766572204672656520372E30B0E96D7E00
+            00000049454E44AE426082
+          }
+        end
+        object PanOn: TImage
+          Left = 32
+          Height = 25
+          Top = 1
+          Width = 25
+          Picture.Data = {
+            1754506F727461626C654E6574776F726B47726170686963B003000089504E47
+            0D0A1A0A0000000D4948445200000019000000190806000000C4E98563000000
+            097048597300000EC400000EC401952B0E1B0000033B4944415478DABD96CF4B
+            545114C7BFF7FD18CDB171C65FA36491244AD9A2D299C49220A232CA51301394
+            B01F2E848496063AA3B8F10794890B5B2A0EBA545CF90724DA42104468D12610
+            44B0317F34E89BF76EE7FA4646731C47120F5C78C31CBE9F7BCEFD9ECB655EAF
+            975BAD56489284D30EC330B0B5B505D6DDDDCD3D1E0F6C36DBA943D6D7D73131
+            3101D6DBDBCBEBEAEAA02639A033C0A6028C9D0E241008C0EFF747203F5652D1
+            F54D41598981074E0357AC1C09D2FF010F411873A0A659C5D70209596EA02CCD
+            80275B4749AA81CC04409CD84981872076BB030303323E7C52A03750C64D2051
+            01F2A9A2F20C1D4FA8BA421B47921C3FEC10C4E170E0FB77868A0A153F83A4F2
+            86B26E89ED9BA2A97456C529545D96817BE93A2E9E0314161B1815B2B3033437
+            2B181EA6ED6650D66B5A45B4A4B012E750A86F971239EE533B2BB20D1411D86E
+            89A41C0B210D4C4D49A8AF57C9DF3041AF6815238A0AC779DA4B6132C753A78E
+            726A677EB2B989981011ABAB4075B505333361D1F47D20395A6F382E9031DE5F
+            0EE16DAE8E44390E080D29FAFA64B4B529F4CD7645901606B9F683389249F051
+            BA8177B921143938D47F2E8D232122161785012C585A8A08EE8284EBDCD8F573
+            21B9AE253F84C79906AC4A7403C4846C6F034D4D0A464765D35E7BA054FAF592
+            BE6E10CBCEF1A5444301D9FA2887C58408034C4E4A686850110CEE57E090284D
+            AE0542344765E4AE7E5708F94780624244ACAC00555516CCCDB170351C39391C
+            1B1B0C1BD42EF905A0D31CDDA1B9E97787A256742C4418A0A7474667A769001B
+            890C0E6A0467E8E850F09B87413447A504FA4C155D4D39083A1622627E9EA1B2
+            D282E565A0B6D6A06B47834A933F3424A3BD5DC19A6E824264EF5227A78AB403
+            A0B820C120D0D8A8627A5AC2D8D80E5C2E5340DC0CE256F0F922209D402561D0
+            B530282E8830C0F8B88485058696167DB78ABD10A09111195EAF82408840CF09
+            44F676679AA0EBE4BEB5B53820223637A91D2462B71FFE4F80FC7E8906574540
+            23500DE5BACC331ABAAB21693B4EC8712140A3A3125A5B55FCA2EF046ADDB36A
+            031F6F6B90FE9C124484A699209F4F45D943035D3D1AB2E9C91077BB4E029A9D
+            65C8CBE3703A71F0E0CFE4B57216EFAEBF9441C86FEE4F9FA30000001B744558
+            74536F66747761726500417274776561766572204672656520372E30B0E96D7E
+            0000000049454E44AE426082
+          }
+        end
+        object DistanceOn: TImage
+          Left = 63
+          Height = 25
+          Top = 1
+          Width = 25
+          Picture.Data = {
+            1754506F727461626C654E6574776F726B477261706869638A03000089504E47
+            0D0A1A0A0000000D4948445200000019000000190806000000C4E98563000000
+            097048597300000EC400000EC401952B0E1B000003154944415478DABD964D48
+            545114C7FF6FDE7BE3E8E8E8E8843046306828B42810172112868552E9A276D3
+            62A840343F5017ED46372E4C13C4AF85F91128448BC288222573768644433B45
+            2C846CA358E3CCE8CCFBB89DFB260BD46A6630DFE6DDC77DF7FEEEF9FFCF395C
+            C1EBF532ABD50A93C984A37E745D47281482D0D5D5C56A6A6A60B3D98E1C1208
+            04303D3D0DA1BBBB9BB9DD6ED8EDF623876C6D6D616A6AEA37C46CB563784144
+            6E3A83FB9C8E64D45375E0D17B11110DB853A22114D807D153ECA81A37A3E804
+            C3D80D05521290880AB81FCB084681A737154442714018635055159224411084
+            039BF279455120CBB2319F1064F8DA36D63E7FC2FCFC3C445184C7E3314007E4
+            A1038C8E8E1AB0F2F272E49D72E1D6B38C7F436C91359C59BB8F572F5F607D7D
+            1D151515282B2BFBA3443E9F0F737373703A9DB85C75151FF2EE21C371F2EF10
+            5746182D457EBC997D8D999919141717A3BEBEFED03AD2340D434343F0FBFDA8
+            ACACC4858B97D0F9F12C14C1129F2726E8460A6E6C6CA0A0A0C090ED30B95657
+            57E17038909595054537256EFCB164D7FF87680A6F3E80D90CF0F4E5E328ADE6
+            59465E80CBB72721FFA6F988492688397E88BCF80EE2F838B4B63630F2445858
+            80480BB4D6569866678160105A63A37100716000A0261BF6DC86FB8925814882
+            0148B4218F8483F8582F2D85D6D202617111327D2B7C732A4499B24FE9E9C16E
+            C9F904E5121884E565C87575605C22CA20A5BF1FC8CE06953924AF17D8DC8CC9
+            999909B5A383E43227613C692D767642EAEB83323606BDBA3AE60F55B8B0B202
+            99D6F14EAA4C4E82E5E75363149288646909726D2D183F6D4E0E94C141E3BD67
+            B6D4D000582C50492A9E04896717F784F4475A1AB4A62648CDCDD0A9BD707F0C
+            89289ABD7995A245A20D9243CCBEB7102726A0B6B783B95C10A84749232350C9
+            0B56586840C4DE5E23128D8C4F0A22457763F94F27357CE0E370184849F91509
+            767662D2A5A6C60781C56EFC70DAC1F0E08A9A54C5470972F7B9847054C0C3EB
+            0A7683FB20B64C3BBE04E89054C4B9E9B1C327FAF0E0BE6E53F1D3DB49F792EF
+            DF7E428EE5B6721CF7AE1F10CA7E7E0374AD6D0000001B74455874536F667477
+            61726500417274776561766572204672656520372E30B0E96D7E000000004945
+            4E44AE426082
+          }
+        end
+      end
+    end
+  end
+  object ChartScrollBox: TScrollBox
+    Left = 2
+    Height = 601
+    Top = 58
+    Width = 1186
+    HorzScrollBar.Page = 75
+    VertScrollBar.Page = 37
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ClientHeight = 597
+    ClientWidth = 1182
+    TabOrder = 1
+    object Chart1: TChart
+      AnchorSideBottom.Side = asrBottom
+      Left = 0
+      Height = 67
+      Top = 488
+      Width = 1184
+      AntialiasingMode = amOn
+      AxisList = <      
+        item
+          Grid.Color = clSilver
+          LabelSize = 54
+          MarginsForMarks = False
+          Marks.Distance = 0
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Title.LabelFont.Orientation = 900
+          Title.LabelBrush.Style = bsClear
+        end      
+        item
+          Grid.Color = clSilver
+          Intervals.MaxLength = 100
+          Intervals.MinLength = 50
+          Alignment = calBottom
+          AtDataOnly = True
+          MarginsForMarks = False
+          Marks.Margins.Left = 0
+          Marks.Margins.Top = 0
+          Marks.Margins.Right = 0
+          Marks.Margins.Bottom = 0
+          Marks.Visible = False
+          Marks.Format = '%2:s'
+          Marks.LabelBrush.Style = bsClear
+          Marks.OverlapPolicy = opHideNeighbour
+          Marks.Style = smsLabel
+          Minors = <>
+          Title.LabelBrush.Style = bsClear
+        end>
+      Foot.Margins.Left = 0
+      Foot.Margins.Top = 0
+      Foot.Margins.Right = 0
+      Foot.Margins.Bottom = 0
+      Foot.Margin = 0
+      Legend.Frame.Color = clSilver
+      Legend.UseSidebar = False
+      Legend.Visible = True
+      Margins.Left = 0
+      Margins.Right = 0
+      MarginsExternal.Left = 0
+      MarginsExternal.Top = 0
+      Title.Text.Strings = (
+        'TAChart'
+      )
+      Toolset = ChartToolset1
+      Anchors = [akLeft, akRight]
+      Color = clWhite
+      DragMode = dmAutomatic
+      OnDragDrop = Chart1DragDrop
+      OnDragOver = Chart1DragOver
+    end
+    object DateTimeLine: TChart
+      Left = 0
+      Height = 37
+      Top = 560
+      Width = 1184
+      AxisList = <      
+        item
+          Grid.Color = clSilver
+          LabelSize = 54
+          MarginsForMarks = False
+          Marks.Distance = 0
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Title.LabelFont.Orientation = 900
+          Title.LabelBrush.Style = bsClear
+        end      
+        item
+          Grid.Color = clSilver
+          Alignment = calBottom
+          AtDataOnly = True
+          MarginsForMarks = False
+          Marks.Margins.Left = 0
+          Marks.Margins.Top = 0
+          Marks.Margins.Right = 0
+          Marks.Margins.Bottom = 0
+          Marks.Format = '%2:s'
+          Marks.LabelBrush.Style = bsClear
+          Marks.OverlapPolicy = opHideNeighbour
+          Marks.Source = DateTimeIntervalChartSource1
+          Marks.Style = smsLabel
+          Minors = <>
+          Title.LabelBrush.Style = bsClear
+        end>
+      Foot.Margins.Left = 0
+      Foot.Margins.Top = 0
+      Foot.Margins.Right = 0
+      Foot.Margins.Bottom = 0
+      Foot.Margin = 0
+      Legend.Frame.Color = clSilver
+      Legend.UseSidebar = False
+      Margins.Left = 0
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
+      MarginsExternal.Left = 0
+      MarginsExternal.Top = 0
+      Title.Text.Strings = (
+        'TAChart'
+      )
+      Anchors = [akLeft, akRight, akBottom]
+      Color = clWhite
+      DragMode = dmAutomatic
+      object DateTimeLineLineSerie: TLineSeries
+      end
+    end
+    object Chart2: TChart
+      AnchorSideBottom.Side = asrBottom
+      Left = 0
+      Height = 67
+      Top = 416
+      Width = 1184
+      AxisList = <      
+        item
+          Grid.Color = clSilver
+          LabelSize = 54
+          MarginsForMarks = False
+          Marks.Distance = 0
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Title.LabelFont.Orientation = 900
+          Title.LabelBrush.Style = bsClear
+        end      
+        item
+          Grid.Color = clSilver
+          Intervals.MaxLength = 100
+          Intervals.MinLength = 50
+          Alignment = calBottom
+          AtDataOnly = True
+          MarginsForMarks = False
+          Marks.Margins.Left = 0
+          Marks.Margins.Top = 0
+          Marks.Margins.Right = 0
+          Marks.Margins.Bottom = 0
+          Marks.Visible = False
+          Marks.Format = '%2:s'
+          Marks.LabelBrush.Style = bsClear
+          Marks.OverlapPolicy = opHideNeighbour
+          Marks.Style = smsLabel
+          Minors = <>
+          Title.LabelBrush.Style = bsClear
+        end>
+      Foot.Margins.Left = 0
+      Foot.Margins.Top = 0
+      Foot.Margins.Right = 0
+      Foot.Margins.Bottom = 0
+      Foot.Margin = 0
+      Legend.Frame.Color = clSilver
+      Legend.UseSidebar = False
+      Legend.Visible = True
+      Margins.Left = 0
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
+      MarginsExternal.Left = 0
+      MarginsExternal.Top = 0
+      Title.Text.Strings = (
+        'TAChart'
+      )
+      Toolset = ChartToolset1
+      Anchors = [akLeft, akRight]
+      Color = clWhite
+      DragMode = dmAutomatic
+      OnDragDrop = Chart1DragDrop
+      OnDragOver = Chart1DragOver
+    end
+    object Chart3: TChart
+      AnchorSideBottom.Side = asrBottom
+      Left = 0
+      Height = 67
+      Top = 344
+      Width = 1184
+      AxisList = <      
+        item
+          Grid.Color = clSilver
+          LabelSize = 54
+          MarginsForMarks = False
+          Marks.Distance = 0
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Title.LabelFont.Orientation = 900
+          Title.LabelBrush.Style = bsClear
+        end      
+        item
+          Grid.Color = clSilver
+          Intervals.MaxLength = 100
+          Intervals.MinLength = 50
+          Alignment = calBottom
+          AtDataOnly = True
+          MarginsForMarks = False
+          Marks.Margins.Left = 0
+          Marks.Margins.Top = 0
+          Marks.Margins.Right = 0
+          Marks.Margins.Bottom = 0
+          Marks.Visible = False
+          Marks.Format = '%2:s'
+          Marks.LabelBrush.Style = bsClear
+          Marks.OverlapPolicy = opHideNeighbour
+          Marks.Style = smsLabel
+          Minors = <>
+          Title.LabelBrush.Style = bsClear
+        end>
+      Foot.Margins.Left = 0
+      Foot.Margins.Top = 0
+      Foot.Margins.Right = 0
+      Foot.Margins.Bottom = 0
+      Foot.Margin = 0
+      Legend.Frame.Color = clSilver
+      Legend.UseSidebar = False
+      Legend.Visible = True
+      Margins.Left = 0
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
+      MarginsExternal.Left = 0
+      MarginsExternal.Top = 0
+      Title.Text.Strings = (
+        'TAChart'
+      )
+      Toolset = ChartToolset1
+      Anchors = [akLeft, akRight]
+      Color = clWhite
+      DragMode = dmAutomatic
+      OnDragDrop = Chart1DragDrop
+      OnDragOver = Chart1DragOver
+    end
+    object Chart4: TChart
+      AnchorSideBottom.Side = asrBottom
+      Left = 0
+      Height = 67
+      Top = 272
+      Width = 1184
+      AxisList = <      
+        item
+          Grid.Color = clSilver
+          LabelSize = 54
+          MarginsForMarks = False
+          Marks.Distance = 0
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Title.LabelFont.Orientation = 900
+          Title.LabelBrush.Style = bsClear
+        end      
+        item
+          Grid.Color = clSilver
+          Intervals.MaxLength = 100
+          Intervals.MinLength = 50
+          Alignment = calBottom
+          AtDataOnly = True
+          MarginsForMarks = False
+          Marks.Margins.Left = 0
+          Marks.Margins.Top = 0
+          Marks.Margins.Right = 0
+          Marks.Margins.Bottom = 0
+          Marks.Visible = False
+          Marks.Format = '%2:s'
+          Marks.LabelBrush.Style = bsClear
+          Marks.OverlapPolicy = opHideNeighbour
+          Marks.Style = smsLabel
+          Minors = <>
+          Title.LabelBrush.Style = bsClear
+        end>
+      Foot.Margins.Left = 0
+      Foot.Margins.Top = 0
+      Foot.Margins.Right = 0
+      Foot.Margins.Bottom = 0
+      Foot.Margin = 0
+      Legend.Frame.Color = clSilver
+      Legend.UseSidebar = False
+      Legend.Visible = True
+      Margins.Left = 0
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
+      MarginsExternal.Left = 0
+      MarginsExternal.Top = 0
+      Title.Text.Strings = (
+        'TAChart'
+      )
+      Toolset = ChartToolset1
+      Anchors = [akLeft, akRight]
+      Color = clWhite
+      DragMode = dmAutomatic
+      OnDragDrop = Chart1DragDrop
+      OnDragOver = Chart1DragOver
+    end
+    object Chart5: TChart
+      AnchorSideBottom.Side = asrBottom
+      Left = 0
+      Height = 67
+      Top = 200
+      Width = 1184
+      AxisList = <      
+        item
+          Grid.Color = clSilver
+          LabelSize = 54
+          MarginsForMarks = False
+          Marks.Distance = 0
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Title.LabelFont.Orientation = 900
+          Title.LabelBrush.Style = bsClear
+        end      
+        item
+          Grid.Color = clSilver
+          Intervals.MaxLength = 100
+          Intervals.MinLength = 50
+          Alignment = calBottom
+          AtDataOnly = True
+          MarginsForMarks = False
+          Marks.Margins.Left = 0
+          Marks.Margins.Top = 0
+          Marks.Margins.Right = 0
+          Marks.Margins.Bottom = 0
+          Marks.Visible = False
+          Marks.Format = '%2:s'
+          Marks.LabelBrush.Style = bsClear
+          Marks.OverlapPolicy = opHideNeighbour
+          Marks.Style = smsLabel
+          Minors = <>
+          Title.LabelBrush.Style = bsClear
+        end>
+      Foot.Margins.Left = 0
+      Foot.Margins.Top = 0
+      Foot.Margins.Right = 0
+      Foot.Margins.Bottom = 0
+      Foot.Margin = 0
+      Legend.Frame.Color = clSilver
+      Legend.UseSidebar = False
+      Legend.Visible = True
+      Margins.Left = 0
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
+      MarginsExternal.Left = 0
+      MarginsExternal.Top = 0
+      Title.Text.Strings = (
+        'TAChart'
+      )
+      Toolset = ChartToolset1
+      Anchors = [akLeft, akRight]
+      Color = clWhite
+      DragMode = dmAutomatic
+      OnDragDrop = Chart1DragDrop
+      OnDragOver = Chart1DragOver
+    end
+    object Chart6: TChart
+      AnchorSideBottom.Side = asrBottom
+      Left = 0
+      Height = 67
+      Top = 128
+      Width = 1184
+      AxisList = <      
+        item
+          Grid.Color = clSilver
+          LabelSize = 54
+          MarginsForMarks = False
+          Marks.Distance = 0
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Title.LabelFont.Orientation = 900
+          Title.LabelBrush.Style = bsClear
+        end      
+        item
+          Grid.Color = clSilver
+          Intervals.MaxLength = 100
+          Intervals.MinLength = 50
+          Alignment = calBottom
+          AtDataOnly = True
+          MarginsForMarks = False
+          Marks.Margins.Left = 0
+          Marks.Margins.Top = 0
+          Marks.Margins.Right = 0
+          Marks.Margins.Bottom = 0
+          Marks.Visible = False
+          Marks.Format = '%2:s'
+          Marks.LabelBrush.Style = bsClear
+          Marks.OverlapPolicy = opHideNeighbour
+          Marks.Style = smsLabel
+          Minors = <>
+          Title.LabelBrush.Style = bsClear
+        end>
+      Foot.Margins.Left = 0
+      Foot.Margins.Top = 0
+      Foot.Margins.Right = 0
+      Foot.Margins.Bottom = 0
+      Foot.Margin = 0
+      Legend.Frame.Color = clSilver
+      Legend.UseSidebar = False
+      Legend.Visible = True
+      Margins.Left = 0
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
+      MarginsExternal.Left = 0
+      MarginsExternal.Top = 0
+      Title.Text.Strings = (
+        'TAChart'
+      )
+      Toolset = ChartToolset1
+      Anchors = [akLeft, akRight]
+      Color = clWhite
+      DragMode = dmAutomatic
+      OnDragDrop = Chart1DragDrop
+      OnDragOver = Chart1DragOver
+    end
+    object Chart7: TChart
+      AnchorSideBottom.Side = asrBottom
+      Left = 0
+      Height = 51
+      Top = 72
+      Width = 1184
+      AxisList = <      
+        item
+          Grid.Color = clSilver
+          LabelSize = 54
+          MarginsForMarks = False
+          Marks.Distance = 0
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Title.LabelFont.Orientation = 900
+          Title.LabelBrush.Style = bsClear
+        end      
+        item
+          Grid.Color = clSilver
+          Intervals.MaxLength = 100
+          Intervals.MinLength = 50
+          Alignment = calBottom
+          AtDataOnly = True
+          MarginsForMarks = False
+          Marks.Margins.Left = 0
+          Marks.Margins.Top = 0
+          Marks.Margins.Right = 0
+          Marks.Margins.Bottom = 0
+          Marks.Visible = False
+          Marks.Format = '%2:s'
+          Marks.LabelBrush.Style = bsClear
+          Marks.OverlapPolicy = opHideNeighbour
+          Marks.Style = smsLabel
+          Minors = <>
+          Title.LabelBrush.Style = bsClear
+        end>
+      Foot.Margins.Left = 0
+      Foot.Margins.Top = 0
+      Foot.Margins.Right = 0
+      Foot.Margins.Bottom = 0
+      Foot.Margin = 0
+      Legend.Frame.Color = clSilver
+      Legend.UseSidebar = False
+      Legend.Visible = True
+      Margins.Left = 0
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
+      MarginsExternal.Left = 0
+      MarginsExternal.Top = 0
+      Title.Text.Strings = (
+        'TAChart'
+      )
+      Toolset = ChartToolset1
+      Anchors = [akLeft, akRight]
+      Color = clWhite
+      DragMode = dmAutomatic
+      OnDragDrop = Chart1DragDrop
+      OnDragOver = Chart1DragOver
+    end
+    object Chart8: TChart
+      AnchorSideBottom.Side = asrBottom
+      Left = 0
+      Height = 59
+      Top = 8
+      Width = 1184
+      AxisList = <      
+        item
+          Grid.Color = clSilver
+          LabelSize = 54
+          MarginsForMarks = False
+          Marks.Distance = 0
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Title.LabelFont.Orientation = 900
+          Title.LabelBrush.Style = bsClear
+        end      
+        item
+          Grid.Color = clSilver
+          Intervals.MaxLength = 100
+          Intervals.MinLength = 50
+          Alignment = calBottom
+          AtDataOnly = True
+          MarginsForMarks = False
+          Marks.Margins.Left = 0
+          Marks.Margins.Top = 0
+          Marks.Margins.Right = 0
+          Marks.Margins.Bottom = 0
+          Marks.Visible = False
+          Marks.Format = '%2:s'
+          Marks.LabelBrush.Style = bsClear
+          Marks.OverlapPolicy = opHideNeighbour
+          Marks.Style = smsLabel
+          Minors = <>
+          Title.LabelBrush.Style = bsClear
+        end>
+      Foot.Margins.Left = 0
+      Foot.Margins.Top = 0
+      Foot.Margins.Right = 0
+      Foot.Margins.Bottom = 0
+      Foot.Margin = 0
+      Legend.Frame.Color = clSilver
+      Legend.UseSidebar = False
+      Legend.Visible = True
+      Margins.Left = 0
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
+      MarginsExternal.Left = 0
+      MarginsExternal.Top = 0
+      Title.Text.Strings = (
+        'TAChart'
+      )
+      Toolset = ChartToolset1
+      Anchors = [akLeft, akRight]
+      Color = clWhite
+      DragMode = dmAutomatic
+      OnDragDrop = Chart1DragDrop
+      OnDragOver = Chart1DragOver
     end
   end
   object OpenDialog: TOpenDialog
-    Left = 1104
-    Top = 728
+    Left = 16
+    Top = 160
   end
   object DateTimeIntervalChartSource1: TDateTimeIntervalChartSource
     Params.MaxLength = 100
     Params.MinLength = 100
     DateTimeFormat = '''hh:mm:ss''+#13+''DD.MM.'''
-    OnDateTimeStepChange = DateTimeIntervalChartSource1DateTimeStepChange
-    Left = 1072
-    Top = 730
+    Left = 16
+    Top = 120
   end
   object ChartToolset1: TChartToolset
-    Left = 1136
-    Top = 728
+    Left = 16
+    Top = 200
     object ChartToolset1ZoomMouseWheelTool1: TZoomMouseWheelTool
       Shift = [ssAlt]
       ZoomFactor = 1.1
@@ -979,9 +1225,53 @@ object App: TApp
       Shift = [ssLeft]
     end
     object ChartToolset1ZoomDragTool1: TZoomDragTool
+      Enabled = False
       Shift = [ssLeft]
       Brush.Style = bsClear
       RestoreExtentOn = []
+    end
+    object ChartToolset1UserDefinedTool1: TUserDefinedTool
+      Shift = [ssRight]
+      OnAfterMouseDown = ChartToolset1UserDefinedTool1AfterMouseDown
+    end
+    object ChartToolset1DataPointHintTool1: TDataPointHintTool
+      OnAfterMouseMove = ChartToolset1DataPointHintTool1AfterMouseMove
+      ActiveCursor = crCross
+      OnHint = ChartToolset1DataPointHintTool1Hint
+    end
+    object ChartToolset1DataPointClickTool1: TDataPointClickTool
+      Shift = [ssCtrl, ssLeft]
+      OnPointClick = ChartToolset1DataPointClickTool1PointClick
+    end
+    object ChartToolset1DataPointClickTool2: TDataPointClickTool
+      Shift = [ssAlt, ssLeft]
+      OnAfterMouseUp = ChartToolset1DataPointClickTool2AfterMouseUp
+      OnPointClick = ChartToolset1DataPointClickTool2PointClick
+    end
+    object ChartToolset1DataPointClickTool3: TDataPointClickTool
+      Shift = [ssShift, ssLeft]
+      OnPointClick = ChartToolset1DataPointClickTool3PointClick
+    end
+    object ChartToolset1DataPointClickTool4: TDataPointClickTool
+      Shift = [ssLeft]
+      OnPointClick = ChartToolset1DataPointClickTool4PointClick
+    end
+    object DistanceTool: TDataPointDistanceTool
+      Shift = [ssLeft]
+      DrawingMode = tdmNormal
+      Marks.Distance = 30
+      Marks.Format = 'dist=%0:.9g / %1:.9g'
+      Marks.LinkPen.Color = clBlue
+      MeasureMode = cdmOnlyX
+      PointerEnd.Brush.Style = bsClear
+      PointerEnd.Pen.Color = clGray
+      PointerEnd.VertSize = 1000
+      PointerEnd.Visible = True
+      PointerStart.Brush.Style = bsClear
+      PointerStart.Pen.Color = clGray
+      PointerStart.VertSize = 1000
+      PointerStart.Visible = True
+      OnGetDistanceText = DistanceToolGetDistanceText
     end
   end
   object ChartExtentLink1: TChartExtentLink
@@ -1009,9 +1299,24 @@ object App: TApp
       end    
       item
         Chart = Chart8
+      end    
+      item
+        Chart = DateTimeLine
       end>
     Mode = elmOnlyX
-    Left = 1040
-    Top = 728
+    Left = 16
+    Top = 72
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 16
+    Top = 248
+    object MenuItem1: TMenuItem
+      Caption = 'Add curve'
+      OnClick = MenuItem1Click
+    end
+    object MenuItem2: TMenuItem
+      Caption = 'Delete chart'
+      OnClick = MenuItem2Click
+    end
   end
 end

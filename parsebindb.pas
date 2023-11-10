@@ -117,7 +117,7 @@ begin
         b:= ReadCurrentByte;
         if b > 0 then Samples:= Samples + Chr(b);
      end;
-     wSamples:= StrToInt(Samples);
+     wSamples:= StrToInt(Trim(Samples));
      if wSamples > 1 then begin
         DLIS:= DLIS + '[]';
         isEnergiya:= True;

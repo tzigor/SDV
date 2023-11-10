@@ -12,8 +12,8 @@ Const
   Tab = #09;
   MIN_FILE_LENGTH = 100;
   DATA_MAX_SIZE = 4294967295;
-
-  ChartColors: array of TColor = (clRed, clBlue, clGreen, clPurple, clHighLight, clTeal, clFuchsia, clMaroon);
+  MAX_CHART_NUMBER = 8;
+  MAX_SERIE_NUMBER = 8;
 
   { Error codes }
   NO_ERROR                = 0;
@@ -21,6 +21,13 @@ Const
   WRONG_FILE_FORMAT       = 2;
   UNEXPECTED_END_OF_FILE  = 3;
   TERMINATED              = 4;
+  OUT_OF_BOUNDS           = 5;
+
+  { Navigation modes }
+  NAVIGATION_OFF          = 0;
+  ZOOM_MODE               = 1;
+  PAN_MODE                = 2;
+  DISTANCE_MODE           = 3;
 
   F4_RESULT_ERROR = -999.25;
   F8_RESULT_ERROR = -999.25;
@@ -34,6 +41,11 @@ Const
 Type
   String4 = String[4];
   String2 = String[2];
+
+  TMinMax = record
+    Min : Double;
+    Max : Double;
+  end;
 
   TTFFDataChannel = record
     DLIS        : String;
@@ -52,6 +64,8 @@ Type
   end;
 
   TFrameRecords = array of TFrameRecord;
+var
+   ChartColors     : array of TColor = (clRed, clBlue, clGreen, clPurple, TColor($C80000), TColor($00C800), clFuchsia, clMaroon);
 
 implementation
 

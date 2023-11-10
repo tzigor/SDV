@@ -10,8 +10,8 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, tachartlazaruspkg, Main, UserTypes, Utils, TffObjects, ParseBinDb,
-  ChannelsForm, LineSerieUtils
+  Forms, tachartlazaruspkg, datetimectrls, Main, UserTypes, Utils, TffObjects,
+  ParseBinDb, ChannelsForm, LineSerieUtils, ParamOptions
   { you can add units after this };
 
 {$R *.res}
@@ -22,6 +22,7 @@ begin
   Application.Initialize;
   Application.CreateForm(TApp, App);
   Application.CreateForm(TShowChannelForm, ShowChannelForm);
+  Application.CreateForm(TParamOptionsForm, ParamOptionsForm);
   Application.Run;
 end.
 

@@ -1,31 +1,33 @@
 object ShowChannelForm: TShowChannelForm
-  Left = 2897
-  Height = 663
-  Top = -708
+  Left = 2983
+  Height = 697
+  Top = -692
   Width = 240
   Caption = 'Channels'
-  ClientHeight = 663
+  ClientHeight = 697
   ClientWidth = 240
-  Constraints.MinHeight = 663
+  Constraints.MinHeight = 300
   Constraints.MinWidth = 240
+  FormStyle = fsStayOnTop
   LCLVersion = '2.2.4.0'
   object ChannelList: TListBox
     Left = 8
-    Height = 528
+    Height = 562
     Top = 96
     Width = 224
     Anchors = [akTop, akLeft, akRight, akBottom]
     DragMode = dmAutomatic
     ExtendedSelect = False
     ItemHeight = 0
+    OnDblClick = ChannelListDblClick
     TabOrder = 0
   end
   object CloseList: TBitBtn
     Left = 157
     Height = 25
-    Top = 632
+    Top = 666
     Width = 75
-    Anchors = [akLeft, akBottom]
+    Anchors = [akRight, akBottom]
     Caption = 'Close'
     OnClick = CloseListClick
     TabOrder = 1
@@ -33,7 +35,7 @@ object ShowChannelForm: TShowChannelForm
   object DrawBtn: TBitBtn
     Left = 8
     Height = 25
-    Top = 632
+    Top = 666
     Width = 75
     Anchors = [akLeft, akBottom]
     Caption = 'Draw'
@@ -47,6 +49,7 @@ object ShowChannelForm: TShowChannelForm
     Width = 224
     Anchors = [akTop, akLeft, akRight]
     ItemHeight = 0
+    OnSelectionChange = FileListSelectionChange
     TabOrder = 3
   end
 end
