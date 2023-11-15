@@ -21,6 +21,7 @@ procedure SerieReset(LineSerie: TLineSeries);
 function GetMinMaxForCurrentExtent(Chart1LineSeries: TLineSeries): TMinMax;
 procedure AddLineMarker(AChart: TChart);
 function GetLineMarker(Chart: TChart): TConstantLine;
+procedure SeriesReset();
 
 implementation
 uses Main;
@@ -35,7 +36,7 @@ begin
     Pointer.VertSize:= 2;
     Pointer.HorizSize:= 2;
 
-    LinePen.Width:= 2;
+    LinePen.Width:= 1;
     ShowLines := true;
     LinePen.Style := psSolid;
     Legend.Visible:= False;
@@ -159,6 +160,13 @@ begin
   LineSerie.Clear;
   LineSerie.Title:= '';
   LineSerie.Legend.Visible:= False;
+end;
+
+procedure SeriesReset();
+var i, j: Byte;
+begin
+  for i:= 1 to MAX_CHART_NUMBER do
+     for j:= 1 to MAX_SERIE_NUMBER do SerieReset(GetLineSerie(i, j));
 end;
 
 end.

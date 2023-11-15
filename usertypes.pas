@@ -5,7 +5,7 @@ unit UserTypes;
 interface
 
 uses
-  Classes, SysUtils, Graphics;
+  Classes, SysUtils, Graphics, TASeries, TATypes, LCLType, TAGraph;
 
 Const
   NewLine = #13#10;
@@ -27,7 +27,13 @@ Const
   NAVIGATION_OFF          = 0;
   ZOOM_MODE               = 1;
   PAN_MODE                = 2;
-  DISTANCE_MODE           = 3;
+  DISTANCE_MODE_X         = 3;
+  DISTANCE_MODE_Y         = 4;
+
+  TFF_V20 = 2;
+  TFF_V30 = 3;
+  TFF_V40 = 4;
+  TFF_V40_F8 = 40;
 
   F4_RESULT_ERROR = -999.25;
   F8_RESULT_ERROR = -999.25;
@@ -64,6 +70,19 @@ Type
   end;
 
   TFrameRecords = array of TFrameRecord;
+
+  TCurveStyle = record
+    Parameter        : ShortString;
+    LineColor        : TColor;
+    LineWidth        : Byte;
+    LineStyle        : TPenStyle;
+    PointBrushColor  : TColor;
+    PointPenColor    : TColor;
+    PointStyle       : TSeriesPointerStyle; { Brash color = ChartBGColor for transparent pointer }
+    PointSize        : Byte;
+    TransperentPoint : Boolean;
+  end;
+
 var
    ChartColors     : array of TColor = (clRed, clBlue, clGreen, clPurple, TColor($C80000), TColor($00C800), clFuchsia, clMaroon);
 

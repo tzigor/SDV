@@ -133,16 +133,28 @@ end;
 procedure ParseFrame(RecordLength: longWord);
 var
    F4        : Single;
-   TimeShift : Single;
+   F8        : Double;
+   TimeShift : Double;
 begin
-   FullDateTime:= StartDate + StartTime;
-   TimeShift:= SecondsBetween(FullDateTime, StartDate) / 100;
-   Move(Bytes[DataOffset], F4, 4);
-   Inc(DataOffset, 4);
-   FullDateTime:= IncSecond(FullDateTime, Round((F4 - TimeShift) * 100));
-   TffFrames.AddRecord(FullDateTime, TffStructure.GetDataChannelSize, TffStructure.GetTFFDataChannels);
-   TffFrames.MoveData();
-   Inc(DataOffset, RecordLength - 4);
+  if CurrentTFFVersion = TFF_V40_F8 then begin
+     FullDateTime:= StartDate;
+     Move(Bytes[DataOffset], F8, 8);
+     Inc(DataOffset, 8);
+     FullDateTime:= IncSecond(FullDateTime, Round(F8));
+     TffFrames.AddRecord(FullDateTime, TffStructure.GetDataChannelSize, TffStructure.GetTFFDataChannels);
+     TffFrames.MoveData();
+     Inc(DataOffset, RecordLength - 8);
+  end
+  else begin
+      FullDateTime:= StartDate + StartTime;
+      TimeShift:= SecondsBetween(FullDateTime, StartDate) / 100;
+      Move(Bytes[DataOffset], F4, 4);
+      Inc(DataOffset, 4);
+      FullDateTime:= IncSecond(FullDateTime, Round((F4 - TimeShift) * 100));
+      TffFrames.AddRecord(FullDateTime, TffStructure.GetDataChannelSize, TffStructure.GetTFFDataChannels);
+      TffFrames.MoveData();
+      Inc(DataOffset, RecordLength - 4);
+  end;
 end;
 
 procedure ParseFrameNRG(ChannelsList: TTFFDataChannels);
@@ -253,6 +265,7 @@ begin
          case RecordType of
             'P': begin
                     NewParameter:= DataToStr(RecordLength);
+                    if LeftStr(NewParameter, 3) = 'FFV' then CurrentTFFVersion:= StrToInt(MidStr(NewParameter, 6, 1));
                     ParamChannels.Add(NewParameter);
                     if FindStartDate(NewParameter, DateTime) then begin
                        StartDate:= DateTime;
@@ -266,6 +279,7 @@ begin
             'M': IncDataOffset(RecordLength);
             'D': begin
                     DataChannel:= ParseDataChannel(RecordLength);
+                    if (DataChannel.DLIS = 'TIME') And (DataChannel.RepCode = 'F8') then CurrentTFFVersion:= TFF_V40_F8;
                     TffStructure.AddChannel(DataChannel.DLIS, DataChannel.Units, DataChannel.RepCode, DataChannel.Samples, Tff_Ver);
                  end;
             'F': begin

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, DateUtils,
-  UserTypes, StrUtils, Buttons, LCLType, TASeries;
+  UserTypes, StrUtils, Buttons, LCLType, TASeries, TADataTools, TATools;
 
 function GetErrorMessage(error: Byte): PChar;
 procedure LoadByteArray(const AFileName: string);
@@ -172,8 +172,10 @@ begin
   App.ZoomOn.Visible:= False;
   App.PanOff.Visible:= True;
   App.PanOn.Visible:= False;
-  App.DistanceOff.Visible:= True;
-  App.DistanceOn.Visible:= False;
+  App.DistanceXOff.Visible:= True;
+  App.DistanceXOn.Visible:= False;
+  App.DistanceYOff.Visible:= True;
+  App.DistanceYOn.Visible:= False;
   case NavMode of
      ZOOM_MODE:     begin
                        App.ChartToolset1ZoomDragTool1.Enabled:= True;
@@ -189,10 +191,17 @@ begin
                        App.PanOff.Visible:= False;
                        App.PanOn.Visible:= True;
                     end;
-     DISTANCE_MODE: begin
+     DISTANCE_MODE_X: begin
                        App.DistanceTool.Enabled:= True;
-                       App.DistanceOff.Visible:= False;
-                       App.DistanceOn.Visible:= True;
+                       App.DistanceTool.MeasureMode:= cdmOnlyX;
+                       App.DistanceXOff.Visible:= False;
+                       App.DistanceXOn.Visible:= True;
+                    end;
+     DISTANCE_MODE_Y: begin
+                       App.DistanceTool.Enabled:= True;
+                       App.DistanceTool.MeasureMode:= cdmOnlyY;
+                       App.DistanceYOff.Visible:= False;
+                       App.DistanceYOn.Visible:= True;
                     end;
   end;
 end;
