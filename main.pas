@@ -26,12 +26,14 @@ type
     Chart7: TChart;
     Chart8: TChart;
     ChartExtentLink1: TChartExtentLink;
+    ChartHeightControl: TTrackBar;
     ChartScrollBox: TScrollBox;
     ChartToolset1: TChartToolset;
     ChartToolset1DataPointClickTool1: TDataPointClickTool;
     ChartToolset1DataPointClickTool2: TDataPointClickTool;
     ChartToolset1DataPointClickTool3: TDataPointClickTool;
     ChartToolset1DataPointClickTool4: TDataPointClickTool;
+    ChartAutiSize: TCheckBox;
     DistanceTool: TDataPointDistanceTool;
     ChartToolset1DataPointHintTool1: TDataPointHintTool;
     ChartToolset1PanDragTool1: TPanDragTool;
@@ -52,6 +54,11 @@ type
     DistanceXOn: TImage;
     DistanceYOff: TImage;
     DistanceYOn: TImage;
+    FitY: TImage;
+    FitX: TImage;
+    FitXY: TImage;
+    MenuItem3: TMenuItem;
+    MenuItem4: TMenuItem;
     Panel1: TPanel;
     PanOff: TImage;
     PanOn: TImage;
@@ -61,11 +68,9 @@ type
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
     OpenFile: TImage;
-    Image3: TImage;
     PopupMenu1: TPopupMenu;
     ShowLabel: TImage;
     StartTime: TLabel;
-    ZoomExtent: TImage;
     Indicator: TLabel;
     ProcessLabel: TLabel;
     CloseApp: TBitBtn;
@@ -98,21 +103,23 @@ type
     procedure ChartToolset1UserDefinedTool1AfterMouseDown(ATool: TChartTool;
       APoint: TPoint);
     procedure CloseAppClick(Sender: TObject);
-    procedure DistanceOffClick(Sender: TObject);
     procedure DistanceToolGetDistanceText(ASender: TDataPointDistanceTool;
       var AText: String);
     procedure DistanceXOffClick(Sender: TObject);
     procedure DistanceYOffClick(Sender: TObject);
+    procedure FitXClick(Sender: TObject);
+    procedure FitXYClick(Sender: TObject);
+    procedure FitYClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure HideLabelClick(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
+    procedure MenuItem3Click(Sender: TObject);
+    procedure MenuItem4Click(Sender: TObject);
     procedure PanOffClick(Sender: TObject);
     procedure ShowLabelClick(Sender: TObject);
-    procedure ZoomExtentClick(Sender: TObject);
     procedure OpenFileClick(Sender: TObject);
-    procedure Image3Click(Sender: TObject);
     procedure ZoomOffClick(Sender: TObject);
   private
 
@@ -158,7 +165,11 @@ var
   MousePosition      : TPoint;
   isOnHint           : Boolean = False;
   OnHintSerie        : TLineSeries;
+  OnHintXPoint       : Double;
+  OnHintYPoint       : Double;
   NavigationMode     : Byte;
+  SavedDateTimePoint : TDateTime;
+  SavedOnHintSerie   : TLineSeries;
 
   procedure OpenChannelForm(SourceNumber: Byte);
 
@@ -214,7 +225,9 @@ end;
 
 procedure TApp.FormResize(Sender: TObject);
 begin
-  if ChartsCount > 1 then ChartsPosition;
+  if ChartsCount > 1 then begin
+     ChartsPosition;
+  end;
 end;
 
 procedure TApp.HideLabelClick(Sender: TObject);
@@ -237,7 +250,8 @@ end;
 
 procedure TApp.MenuItem1Click(Sender: TObject);
 begin
-  OpenChannelForm(SourceCount);
+  OnHintSerie.Clear;
+  MenuItem4.Enabled:= False;
 end;
 
 procedure TApp.MenuItem2Click(Sender: TObject);
@@ -255,18 +269,36 @@ begin
      DateTimeLineLineSerie.Clear;
      DateTimeLine.Visible:= False;
   end;
+  MenuItem4.Enabled:= False;
+end;
+
+procedure TApp.MenuItem3Click(Sender: TObject);
+begin
+  SavedOnHintSerie:= OnHintSerie;
+  SavedDateTimePoint:= OnHintXPoint;
+  MenuItem4.Enabled:= True;
+end;
+
+procedure TApp.MenuItem4Click(Sender: TObject);
+var wDT, i : LongInt;
+    XVal   : Double;
+begin
+  if Not (SavedOnHintSerie = OnHintSerie) then begin
+    wDT:= SecondsBetween(SavedDateTimePoint, OnHintXPoint);
+    if CompareDateTime(SavedDateTimePoint, OnHintXPoint) < 0 then wDT:= -wDT;
+    for i:=0 to OnHintSerie.Count - 1 do begin
+       XVal:= OnHintSerie.GetXValue(i);
+       XVal:= IncSecond(XVal, wDT);
+       OnHintSerie.SetXValue(i, XVal);
+    end;
+    FindTimeRange;
+  end;
 end;
 
 procedure TApp.PanOffClick(Sender: TObject);
 begin
   NavigationMode:= PAN_MODE;
   SetNavigation(NavigationMode);
-end;
-
-procedure TApp.ZoomExtentClick(Sender: TObject);
-var i, j: Byte;
-begin
-  for i:=1 to MAX_CHART_NUMBER do ZoomChartCurrentExtent(GetChart(i));
 end;
 
 procedure OpenChannelForm(SourceNumber: Byte);
@@ -309,19 +341,9 @@ begin
   Bin_DbToBin_Db();
 end;
 
-procedure TApp.Image3Click(Sender: TObject);
-begin
-  App.DateTimeLine.ZoomFull();
-end;
-
 procedure TApp.CloseAppClick(Sender: TObject);
 begin
   App.Close;
-end;
-
-procedure TApp.DistanceOffClick(Sender: TObject);
-begin
-
 end;
 
 procedure TApp.ChartLinkChange(Sender: TObject);
@@ -367,7 +389,7 @@ begin
     if (Series is TLineSeries) then
       with TLineSeries(Series) do Delete(PointIndex);
   end;
-  App.ZoomExtentClick(ATool);
+  App.FitYClick(ATool);
 end;
 
 procedure TApp.ChartToolset1DataPointClickTool4PointClick(ATool: TChartTool;
@@ -380,6 +402,9 @@ begin
   wCurveStyle.PointBrushColor:= OnHintSerie.Pointer.Brush.Color;
   wCurveStyle.PointPenColor:= OnHintSerie.Pointer.Pen.Color;
   wCurveStyle.PointSize:= OnHintSerie.Pointer.HorizSize;
+  wCurveStyle.Parameter:= OnHintSerie.Title;
+
+  ParamOptionsForm.ParameterName.Caption:= wCurveStyle.Parameter;
   if wCurveStyle.PointBrushColor = ChartBGColor then ParamOptionsForm.TransparentPointer.Checked:= True
   else ParamOptionsForm.TransparentPointer.Checked:= False;
 
@@ -424,12 +449,10 @@ end;
 
 procedure TApp.ChartToolset1DataPointHintTool1Hint(ATool: TDataPointHintTool;
   const APoint: TPoint; var AHint: String);
-  var y     : Double;
-      x     : TDateTime;
 begin
-   x:= TLineSeries(ATool.Series).GetXValue(ATool.PointIndex);
-   y:= TLineSeries(ATool.Series).GetYValue(ATool.PointIndex);
-   AHint:= GetSticker(x, y, TLineSeries(ATool.Series).Title);
+   OnHintXPoint:= TLineSeries(ATool.Series).GetXValue(ATool.PointIndex);
+   OnHintYPoint:= TLineSeries(ATool.Series).GetYValue(ATool.PointIndex);
+   AHint:= GetSticker(OnHintXPoint, OnHintYPoint, TLineSeries(ATool.Series).Title);
    MousePosition:= Mouse.CursorPos;
    isOnHint:= True;
    OnHintSerie:= TLineSeries(ATool.Series);
@@ -502,6 +525,26 @@ procedure TApp.DistanceYOffClick(Sender: TObject);
 begin
   NavigationMode:= DISTANCE_MODE_Y;
   SetNavigation(NavigationMode);
+end;
+
+procedure TApp.FitXClick(Sender: TObject);
+var i: Byte;
+begin
+  App.DateTimeLine.ZoomFull();
+end;
+
+procedure TApp.FitYClick(Sender: TObject);
+var i: Byte;
+begin
+  for i:=1 to MAX_CHART_NUMBER do ZoomChartCurrentExtent(GetChart(i));
+end;
+
+procedure TApp.FitXYClick(Sender: TObject);
+begin
+  FitXClick(Sender);
+  Application.ProcessMessages;
+  FitYClick(Sender);
+  Application.ProcessMessages;
 end;
 
 procedure TApp.DistanceToolGetDistanceText(ASender: TDataPointDistanceTool;

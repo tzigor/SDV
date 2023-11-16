@@ -44,6 +44,8 @@ Const
   U4_RESULT_ERROR = 4294967295;
   I4_RESULT_ERROR = 2147483647;
 
+  FooterSize = 40;
+
 Type
   String4 = String[4];
   String2 = String[2];
@@ -72,7 +74,7 @@ Type
   TFrameRecords = array of TFrameRecord;
 
   TCurveStyle = record
-    Parameter        : ShortString;
+    Parameter        : String;
     LineColor        : TColor;
     LineWidth        : Byte;
     LineStyle        : TPenStyle;

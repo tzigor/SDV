@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, UserTypes, TASeries, TAGraph, Controls, TATypes, LCLType,
-  TAChartUtils, DateUtils, StrUtils, Forms;
+  TAChartUtils, DateUtils, StrUtils, Forms, Dialogs;
 
 procedure DrawSerie(LineSerie: TLineSeries; SelectedSource, SelectedParam: Word; Name: String);
 procedure ChartsVisible(visible: Boolean);
@@ -227,7 +227,6 @@ begin
 end;
 
 procedure ChartsPosition();
-const FooterSize = 40;
 var i                : Byte;
     Chart, PrevChart : TChart;
     FirstChart       : Byte;
@@ -248,10 +247,7 @@ begin;
               end;
               Chart.AxisList[1].Marks.Visible:= False;
               PrevChart:= Chart;
-
               Chart.Title.Text[0]:= Chart.Title.Text[0] + ' Top: ' + IntToStr(Chart.Top) + ' F: ' + IntToStr(FirstChart);
-
-
           end;
        end;
    GetChart(FirstChart).Top:= 0;

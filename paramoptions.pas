@@ -6,14 +6,21 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ColorBox, TAChartCombos;
+  ColorBox, Spin, TAChartCombos, DateUtils, ChartUtils;
 
 type
 
   { TParamOptionsForm }
 
   TParamOptionsForm = class(TForm)
+    Label11: TLabel;
+    ParameterName: TLabel;
+    TimeShiftBtn: TButton;
     CancelBtn: TButton;
+    Label10: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
     PointSizeBox: TComboBox;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
@@ -30,6 +37,9 @@ type
     ColorDialog1: TColorDialog;
     PointerColorBox: TColorBox;
     PointerStyleBox: TChartComboBox;
+    ShiftHr: TSpinEdit;
+    ShiftMin: TSpinEdit;
+    ShiftSec: TSpinEdit;
     TransparentPointer: TCheckBox;
     procedure CancelBtnClick(Sender: TObject);
     procedure FormHide(Sender: TObject);
@@ -40,6 +50,7 @@ type
     procedure PointerColorBoxChange(Sender: TObject);
     procedure PointerStyleBoxChange(Sender: TObject);
     procedure PointSizeBoxChange(Sender: TObject);
+    procedure TimeShiftBtnClick(Sender: TObject);
     procedure TransparentPointerChange(Sender: TObject);
   private
 
@@ -75,6 +86,14 @@ end;
 
 procedure TParamOptionsForm.CancelBtnClick(Sender: TObject);
 begin
+  OnHintSerie.SeriesColor:= wCurveStyle.LineColor;
+  OnHintSerie.LinePen.Style:= wCurveStyle.LineStyle;
+  OnHintSerie.LinePen.Width:= wCurveStyle.LineWidth;
+  OnHintSerie.Pointer.Style:= wCurveStyle.PointStyle;
+  OnHintSerie.Pointer.Brush.Color:= wCurveStyle.PointBrushColor;
+  OnHintSerie.Pointer.Pen.Color:= wCurveStyle.PointPenColor;
+  OnHintSerie.Pointer.HorizSize:= wCurveStyle.PointSize;
+  OnHintSerie.Pointer.VertSize:= wCurveStyle.PointSize;
   ParamOptionsForm.Close;
 end;
 
@@ -118,6 +137,20 @@ begin
   SetSerieStyleParameters;
 end;
 
+procedure TParamOptionsForm.TimeShiftBtnClick(Sender: TObject);
+var i           : LongWord;
+    XVal        : Double;
+begin
+  for i:=0 to OnHintSerie.Count - 1 do begin
+     XVal:= OnHintSerie.GetXValue(i);
+     XVal:= IncHour(XVal, ShiftHr.Value);
+     XVal:= IncMinute(XVal, ShiftMin.Value);
+     XVal:= IncSecond(XVal, ShiftSec.Value);
+     OnHintSerie.SetXValue(i, XVal);
+  end;
+  FindTimeRange;
+end;
+
 procedure TParamOptionsForm.TransparentPointerChange(Sender: TObject);
 begin
   if TransparentPointer.Checked then PointerStyleBox.BrushColor:= ChartBGColor
@@ -127,6 +160,7 @@ end;
 
 procedure TParamOptionsForm.OkBtnClick(Sender: TObject);
 begin
+  TimeShiftBtnClick(Sender);
   ParamOptionsForm.Close;
 end;
 
