@@ -59,6 +59,7 @@ begin
       CurrentSerie:= GetFreeLineSerie(CurrentChart);
       Chart.Visible:= True;
       Chart.Title.Text[0]:= Chart.Name;
+      ParametersUnits[CurrentChart, CurrentSerie]:= DataSources[CurrentSource].TFFDataChannels[ChannelList.ItemIndex].Units;
       DrawSerie(GetLineSerie(CurrentChart, CurrentSerie), CurrentSource, ChannelList.ItemIndex, ChannelList.Items[ChannelList.ItemIndex]);
       ChartsPosition();
    end

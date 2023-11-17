@@ -17,9 +17,10 @@ function isEndOfFile(): Boolean;
 procedure IncDataOffset(n: LongWord);
 procedure ProgressInit(n: LongWord; PLabel: String);
 procedure ProgressDone();
-function GetSticker(x, y: Double; Param: String): String;
+function GetSticker(Serie: TLineSeries; x, y: Double): String;
 procedure StickLabel(ChartLineSerie: TLineSeries);
 procedure SetNavigation(NavMode: Byte);
+procedure SetFastMode(Value: Boolean);
 
 implementation
 
@@ -62,8 +63,6 @@ begin
   App.OpenDialog.Filter:= 'bin files|*.' + FileExt + '|all files|*.*|';
   App.OpenDialog.DefaultExt:= '.' + FileExt;
   if App.OpenDialog.Execute then begin
-     App.Indicator.Caption:= 'Loading file';
-     App.Indicator.Refresh;
      LoadByteArray(App.OpenDialog.FileName);
      if Bytes <> Nil then begin
         CurrentFileSize:= Length(Bytes);
@@ -72,8 +71,6 @@ begin
            EndOfFile:= False;
            Result:= True;
            CurrentOpenedFile:= App.OpenDialog.FileName;
-           App.Indicator.Caption:= 'In progress';
-           App.Indicator.Refresh;
         end;
      end;
   end;
@@ -88,8 +85,6 @@ begin
     AStream := TFileStream.Create(AFileName, fmCreate);
     try
        AStream.WriteBuffer(Pointer(AByteArray)^, Length(AByteArray));
-       App.Indicator.Caption:= 'File converted';
-       App.Indicator.Refresh;
     finally
        AStream.Free;
     end;
@@ -126,6 +121,7 @@ end;
 
 procedure ProgressInit(n: LongWord; PLabel: String);
 begin
+  App.ProcessLabel.Visible:= True;
   App.ProcessProgress.Max:= n;
   App.ProcessProgress.Position:= 0;
   App.ProcessProgress.Visible:= True;
@@ -135,18 +131,25 @@ end;
 
 procedure ProgressDone();
 begin
+  App.ProcessLabel.Visible:= False;
   App.ProcessProgress.Position:= 0;
   App.ProcessProgress.Visible:= False;
   App.ProcessLabel.Caption:= '';
   App.ProcessLabel.Refresh;
 end;
 
-function GetSticker(x, y: Double; Param: String): String;
-var AfterDot: Byte;
+function GetSticker(Serie: TLineSeries; x, y: Double): String;
+var AfterDot : Byte;
+    AddStr   : String;
+    sUnit    : String;
 begin
-  if y > 10000 then AfterDot:= 0
+  if y > Abs(10000) then AfterDot:= 0
   else AfterDot:= 3;
-  Result:= Param + '=' + FloatToStrF(y, ffFixed, 12, AfterDot) + NewLine + DateTimeToStr(x);
+  if App.ExtHint.Checked then AddStr:= 'Min value = ' + FloatToStrF(Serie.GetYMin, ffFixed, 12, AfterDot) + ', ' +
+                                       'Max value = ' + FloatToStrF(Serie.GetYMax, ffFixed, 12, AfterDot) + NewLine
+  else AddStr:= '';
+  sUnit:= ParametersUnits[StrToInt(MidStr(Serie.Name, 6, 1)), StrToInt(MidStr(Serie.Name, 12, 1))];
+  Result:= Serie.Title + ' = ' + FloatToStrF(y, ffFixed, 12, AfterDot) + ' ' + sUnit + NewLine + AddStr + DateTimeToStr(x);
 end;
 
 procedure StickLabel(ChartLineSerie: TLineSeries);
@@ -156,8 +159,24 @@ begin
   if ChartLineSerie.Count > 0 then begin
      x:= ChartLineSerie.GetXValue(ChartPointIndex);
      y:= ChartLineSerie.GetYValue(ChartPointIndex);
-     ChartLineSerie.ListSource.Item[ChartPointIndex]^.Text:= GetSticker(x, y, ChartLineSerie.Title);
+     ChartLineSerie.ListSource.Item[ChartPointIndex]^.Text:= GetSticker(ChartLineSerie, x, y);
      ChartLineSerie.ParentChart.Repaint;
+  end;
+end;
+
+procedure SetFastMode(Value: Boolean);
+begin
+  App.RecordsNumber.Enabled:= Value;
+  App.RecordCount.Visible:= Value;
+  if Value = True then begin
+     FastModeDivider:= App.RecordsNumber.Position;
+     App.SlowLabel.Font.Color:= clBlue;
+     App.FastLabel.Font.Color:= clBlue;
+  end
+  else begin
+     FastModeDivider:= 1;
+     App.SlowLabel.Font.Color:= clSilver;
+     App.FastLabel.Font.Color:= clSilver;
   end;
 end;
 

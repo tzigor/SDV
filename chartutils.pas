@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, UserTypes, TASeries, TAGraph, Controls, TATypes, LCLType,
-  TAChartUtils, DateUtils, StrUtils, Forms, Dialogs;
+  TAChartUtils, DateUtils, StrUtils, Forms, Dialogs, Utils;
 
 procedure DrawSerie(LineSerie: TLineSeries; SelectedSource, SelectedParam: Word; Name: String);
 procedure ChartsVisible(visible: Boolean);
@@ -24,6 +24,7 @@ function GetChart(ChartNubmber: Byte): TChart;
 procedure DateTimeLineLineSerieInit;
 procedure FindTimeRange;
 procedure ChartsNavigation(Value: Boolean);
+procedure SetChartsBGColor;
 
 implementation
 uses Main, LineSerieUtils;
@@ -94,8 +95,6 @@ begin
   App.DateTimeLineLineSerie.Clear;
   App.DateTimeLineLineSerie.AddXY(StartDateTime, 0);
   App.DateTimeLineLineSerie.AddXY(EndDateTime, 0);
-  App.StartTime.Caption:= DateTimeToStr(StartDateTime);
-  App.EndTime.Caption:= DateTimeToStr(EndDateTime);
   App.DateTimeLine.Visible:= True;
   Application.ProcessMessages;
   App.DateTimeLine.ZoomFull();
@@ -103,23 +102,41 @@ end;
 
 procedure DrawSerie(LineSerie: TLineSeries; SelectedSource, SelectedParam: Word; Name: String);
 var
-  FramesCount, i : LongWord;
-  Value          : Double;
+  FramesCount, i  : LongWord;
+  Value           : Double;
+  iPrevPercent, n : Integer;
 
 begin
+  App.ChartScrollBox.Visible:= False;
   LineSerie.Clear;
   LineSerie.Title:= Name;
   LineSerie.Legend.Visible:= True;
   SetLineSerieColor(LineSerie, GetColorBySerieName(LineSerie.Name));
   FramesCount:= Length(DataSources[SelectedSource].FrameRecords);
+  ProgressInit(100, 'Process channel');
+  iPrevPercent:= 0;
+
+  if FramesCount < 60000 then begin
+     App.FastMode.Checked:= False;
+     SetFastMode(App.FastMode.Checked);
+  end;
+
   for i:=0 to FramesCount - 1 do begin
-    if GetChannelValue(DataSources[SelectedSource].TFFDataChannels,
-                       DataSources[SelectedSource].FrameRecords[i],
-                       SelectedParam,
-                       Value) then
-    begin
-        LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, '');
+    if (i Mod FastModeDivider) = 0 then
+      if GetChannelValue(DataSources[SelectedSource].TFFDataChannels,
+                         DataSources[SelectedSource].FrameRecords[i],
+                         SelectedParam,
+                         Value) then
+      begin
+         LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, '');
+      end;
+
+    n:= Trunc(i * 100 / FramesCount);
+    if (n > iPrevPercent) then begin
+      App.ProcessProgress.Position:= n;
+      iPrevPercent:= n;
     end;
+
   end;
   if LineSerie.Count > 0 then begin
     if SourceCount > 1 then begin
@@ -132,6 +149,7 @@ begin
     end;
     DateTimeLineLineSerieInit
   end;
+  App.ChartScrollBox.Visible:= True;
 end;
 
 procedure FindTimeRange;
@@ -269,6 +287,12 @@ procedure RepaintAll;
 var i: byte;
 begin
   for i:=1 to MAX_CHART_NUMBER do GetChart(i).Repaint;
+end;
+
+procedure SetChartsBGColor;
+var i: byte;
+begin
+  for i:=1 to MAX_CHART_NUMBER do GetChart(i).BackColor:= App.GChartBGColor.Selected;
 end;
 
 procedure ChartsNavigation(Value: Boolean);

@@ -249,13 +249,15 @@ var
     DataChannel     : TTFFDataChannel;
     DateTime        : TDateTime;
     i, iPrevPercent : Integer;
+    FrameCount      : LongWord;
 
 begin
   ErrorCode:= NO_ERROR;
   isEnergiya:= False;
   TffStructure.Init;
   TffFrames.Init;
-  ProgressInit(100, 'Parsing');
+  FrameCount:= 0;
+  ProgressInit(100, 'Loading file');
   iPrevPercent:= 0;
   ParamChannels:= TStringList.Create;
   repeat
@@ -285,6 +287,7 @@ begin
             'F': begin
                     if isEnergiya then ParseFrameNRG(TffStructure.GetTFFDataChannels)
                     else ParseFrame(RecordLength);
+                    Inc(FrameCount);
                  end;
             'B': IncDataOffset(RecordLength);
          else ErrorCode:= WRONG_FILE_FORMAT;

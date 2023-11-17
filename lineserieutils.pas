@@ -10,6 +10,7 @@ uses
   Controls, Dialogs;
 
 function AddLineSerie(AChart: TChart; AName: String): TLineSeries;
+procedure SetLineSeriesStyle();
 procedure SetLineSerieColor(LineSerie: TLineSeries; AColor: TColor);
 function GetColorIndex(n: Byte): Byte;
 function GetColorBySerieName(LineSerieName: String): TColor;
@@ -19,9 +20,9 @@ procedure ZoomCurrentExtent(Chart1LineSeries: TLineSeries);
 function GetFreeLineSerie(ChartNum: Byte): Byte;
 procedure SerieReset(LineSerie: TLineSeries);
 function GetMinMaxForCurrentExtent(Chart1LineSeries: TLineSeries): TMinMax;
-procedure AddLineMarker(AChart: TChart);
 function GetLineMarker(Chart: TChart): TConstantLine;
 procedure SeriesReset();
+procedure SetAllLineSeriesColor();
 
 implementation
 uses Main;
@@ -32,13 +33,13 @@ begin
   with TLineSeries(Result) do
   begin
     Name:= AChart.Name + AName;
-    Pointer.Style := psCircle;
-    Pointer.VertSize:= 2;
-    Pointer.HorizSize:= 2;
+    Pointer.Style := App.GPointerStyleBox.PointerStyle;
+    Pointer.VertSize:= App.GPointSizeBox.ItemIndex + 2;
+    Pointer.HorizSize:= App.GPointSizeBox.ItemIndex + 2;
 
-    LinePen.Width:= 1;
+    LinePen.Width:= App.GLineWidthBox.PenWidth;
+    LinePen.Style := App.GLineStyleBox.PenStyle;
     ShowLines := true;
-    LinePen.Style := psSolid;
     Legend.Visible:= False;
     Marks.Style:= smsLabel;
     Marks.LinkPen.Color:= clGray;
@@ -46,32 +47,26 @@ begin
   AChart.AddSeries(Result);
 end;
 
-procedure AddLineMarker(AChart: TChart);
-var
-  line: TConstantLine;
+procedure SetLineSeriesStyle();
+var i, j  : Byte;
+    Serie : TLineSeries;
 begin
-  line := TConstantLine.Create(AChart);
-  //line.Position := StartDateTime;
-  line.AxisIndex:= 1;
-  line.LineStyle := lsVertical;
-  line.Pen.Color := clGray;
-  line.Name:= AChart.Name + 'LineMarker';
-  AChart.AddSeries(line);
+  for i:= 1 to MAX_CHART_NUMBER do
+    for j:= 1 to MAX_SERIE_NUMBER do begin
+       Serie:= GetLineSerie(i, j);
+       Serie.LinePen.Width:= App.GLineWidthBox.PenWidth;
+       Serie.LinePen.Style := App.GLineStyleBox.PenStyle;
+       Serie.Pointer.Style := App.GPointerStyleBox.PointerStyle;
+       Serie.Pointer.VertSize:= App.GPointSizeBox.ItemIndex + 2;
+       Serie.Pointer.HorizSize:= App.GPointSizeBox.ItemIndex + 2;
+    end;
 end;
 
 procedure PointersVisible(Visible: Boolean);
 var i, j : Byte;
 begin
   for i:= 1 to MAX_CHART_NUMBER do
-    for j:= 1 to MAX_SERIE_NUMBER do begin
-        GetLineSerie(i, j).Pointer.Visible:= Visible;
-        GetLineSerie(i, j).Pointer.Style := psCircle;
-        GetLineSerie(i, j).Pointer.VertSize:= 2;
-        GetLineSerie(i, j).Pointer.HorizSize:= 2;
-        //GetLineSerie(i, j).Pointer.Brush.Color:= clWhite;
-        GetLineSerie(i, j).Pointer.Brush.Style:= bsSolid;
-        GetLineSerie(i, j).LinePen.Width:= 1;
-    end;
+    for j:= 1 to MAX_SERIE_NUMBER do GetLineSerie(i, j).Pointer.Visible:= Visible;
 end;
 
 function GetLineSerie(ChartNumber, LineSerieNumber: Byte): TLineSeries;
@@ -89,6 +84,17 @@ begin
   LineSerie.SeriesColor := AColor;
   LineSerie.Pointer.Brush.Color := AColor;
   LineSerie.Pointer.Pen.Color := AColor;
+end;
+
+procedure SetAllLineSeriesColor();
+var i, j  : Byte;
+    Serie : TLineSeries;
+begin
+  for i:= 1 to MAX_CHART_NUMBER do
+    for j:= 1 to MAX_SERIE_NUMBER do begin
+       Serie:= GetLineSerie(i, j);
+       SetLineSerieColor(Serie, GetColorBySerieName(Serie.Name));
+    end;
 end;
 
 function GetMinMaxForCurrentExtent(Chart1LineSeries: TLineSeries): TMinMax;
@@ -139,7 +145,8 @@ end;
 function GetColorBySerieName(LineSerieName: String): TColor;
 var Serie, Chart: Byte;
 begin
-  Chart:= GetChartNumber(LineSerieName) - 1;
+  if App.ColorsSync.Checked then Chart:= 0
+  else Chart:= GetChartNumber(LineSerieName) - 1;
   Serie:= StrToInt(MidStr(LineSerieName, 12, 1)) - 1;
   Result:= ChartColors[GetColorIndex(Serie + Chart)];
 end;

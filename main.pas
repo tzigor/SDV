@@ -7,16 +7,16 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
   Buttons, TffObjects, Utils, UserTypes, ParseBinDb, LCLType, ExtCtrls, Menus,
-  TAGraph, TAIntervalSources, TATools, TAChartExtentLink, TASeries, StrUtils,
-  DateTimePicker, channelsform, ChartUtils, LineSerieUtils, Types, TADrawUtils,
-  TAChartUtils, TADataTools, ParamOptions, DateUtils;
+  ColorBox, TAGraph, TAIntervalSources, TATools, TAChartExtentLink, TASeries,
+  StrUtils, DateTimePicker, channelsform, ChartUtils, LineSerieUtils, Types,
+  TADrawUtils, TAChartUtils, TADataTools, TAChartCombos, ParamOptions,
+  DateUtils;
 
 type
 
   { TApp }
 
   TApp = class(TForm)
-    Button1: TButton;
     Chart1: TChart;
     Chart2: TChart;
     Chart3: TChart;
@@ -25,15 +25,18 @@ type
     Chart6: TChart;
     Chart7: TChart;
     Chart8: TChart;
+    GChartBGColor: TColorBox;
     ChartExtentLink1: TChartExtentLink;
-    ChartHeightControl: TTrackBar;
     ChartScrollBox: TScrollBox;
     ChartToolset1: TChartToolset;
     ChartToolset1DataPointClickTool1: TDataPointClickTool;
     ChartToolset1DataPointClickTool2: TDataPointClickTool;
     ChartToolset1DataPointClickTool3: TDataPointClickTool;
     ChartToolset1DataPointClickTool4: TDataPointClickTool;
-    ChartAutiSize: TCheckBox;
+    ColorsSync: TCheckBox;
+    DateTimeLine: TChart;
+    DateTimeLineLineSerie: TLineSeries;
+    ExtHint: TCheckBox;
     DistanceTool: TDataPointDistanceTool;
     ChartToolset1DataPointHintTool1: TDataPointHintTool;
     ChartToolset1PanDragTool1: TPanDragTool;
@@ -45,9 +48,8 @@ type
     ChartPoints: TCheckBox;
     ChartLink: TCheckBox;
     DateTimeIntervalChartSource1: TDateTimeIntervalChartSource;
-    DateTimeLine: TChart;
-    DateTimeLineLineSerie: TLineSeries;
-    EndTime: TLabel;
+    FastLabel: TLabel;
+    FastMode: TCheckBox;
     HideLabel: TImage;
     AddChart: TImage;
     DistanceXOff: TImage;
@@ -57,21 +59,31 @@ type
     FitY: TImage;
     FitX: TImage;
     FitXY: TImage;
+    CloseCharts: TImage;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    GLineStyleBox: TChartComboBox;
+    GLineWidthBox: TChartComboBox;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
     Panel1: TPanel;
     PanOff: TImage;
     PanOn: TImage;
+    OptionsPage: TTabSheet;
+    GPointerStyleBox: TChartComboBox;
+    GPointSizeBox: TComboBox;
+    RecordCount: TLabel;
+    RecordsNumber: TTrackBar;
+    SlowLabel: TLabel;
     ZoomOff: TImage;
-    Label1: TLabel;
-    Label2: TLabel;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
     OpenFile: TImage;
     PopupMenu1: TPopupMenu;
     ShowLabel: TImage;
-    StartTime: TLabel;
-    Indicator: TLabel;
     ProcessLabel: TLabel;
     CloseApp: TBitBtn;
     OpenDialog: TOpenDialog;
@@ -80,7 +92,6 @@ type
     ProcessProgress: TProgressBar;
     ZoomOn: TImage;
     procedure AddChartClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure Chart1DragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure Chart1DragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
@@ -103,21 +114,30 @@ type
     procedure ChartToolset1UserDefinedTool1AfterMouseDown(ATool: TChartTool;
       APoint: TPoint);
     procedure CloseAppClick(Sender: TObject);
+    procedure CloseChartsClick(Sender: TObject);
+    procedure ColorsSyncChange(Sender: TObject);
     procedure DistanceToolGetDistanceText(ASender: TDataPointDistanceTool;
       var AText: String);
     procedure DistanceXOffClick(Sender: TObject);
     procedure DistanceYOffClick(Sender: TObject);
+    procedure FastModeChange(Sender: TObject);
     procedure FitXClick(Sender: TObject);
     procedure FitXYClick(Sender: TObject);
     procedure FitYClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure GChartBGColorChange(Sender: TObject);
+    procedure GLineStyleBoxChange(Sender: TObject);
+    procedure GLineWidthBoxChange(Sender: TObject);
+    procedure GPointerStyleBoxChange(Sender: TObject);
+    procedure GPointSizeBoxChange(Sender: TObject);
     procedure HideLabelClick(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem3Click(Sender: TObject);
     procedure MenuItem4Click(Sender: TObject);
     procedure PanOffClick(Sender: TObject);
+    procedure RecordsNumberChange(Sender: TObject);
     procedure ShowLabelClick(Sender: TObject);
     procedure OpenFileClick(Sender: TObject);
     procedure ZoomOffClick(Sender: TObject);
@@ -140,7 +160,6 @@ var
 
   wCurveStyle        : TCurveStyle; { temporary serie line & pointer style }
 
-  ChartBGColor       : TColor = clWhite;
   ErrorCode          : Byte;
   CurrentOpenedFile  : String;
   Bytes              : TBytes;   { Raw data source }
@@ -155,6 +174,7 @@ var
   CurrentChart       : Byte = 0;
   CurrentSource      : Byte = 0;
   CurrentSerie       : Byte = 1;
+  ParametersUnits    : Array[1..MAX_CHART_NUMBER, 1..MAX_SERIE_NUMBER] of String;
   ShowIndicator      : Boolean;
   StartDateTime      : TDateTime = 0;
   EndDateTime        : TDateTime = 0;
@@ -170,6 +190,7 @@ var
   NavigationMode     : Byte;
   SavedDateTimePoint : TDateTime;
   SavedOnHintSerie   : TLineSeries;
+  FastModeDivider    : Byte = 1;
 
   procedure OpenChannelForm(SourceNumber: Byte);
 
@@ -195,7 +216,7 @@ begin
 
   for i:= 1 to MAX_CHART_NUMBER do begin
      Chart:= GetChart(i);
-     Chart.BackColor:= ChartBGColor;
+     Chart.BackColor:= GChartBGColor.Selected;
      Chart.Margins.Top:= 10;
      Chart.Margins.Bottom:= 10;
      Chart.Legend.Visible:= True;
@@ -214,13 +235,12 @@ begin
 
   App.DateTimeLine.Visible:= False;
 
-  App.StartTime.Caption:= '';
-  App.EndTime.Caption:= '';
-
   DistanceTool.Options:= DistanceTool.Options + [dpdoRotateLabel, dpdoLabelAbove];
 
   NavigationMode:= PAN_MODE;
   SetNavigation(NavigationMode);
+
+  SetFastMode(FastMode.Checked);
 end;
 
 procedure TApp.FormResize(Sender: TObject);
@@ -228,6 +248,31 @@ begin
   if ChartsCount > 1 then begin
      ChartsPosition;
   end;
+end;
+
+procedure TApp.GChartBGColorChange(Sender: TObject);
+begin
+  SetChartsBGColor;
+end;
+
+procedure TApp.GLineStyleBoxChange(Sender: TObject);
+begin
+  SetLineSeriesStyle();
+end;
+
+procedure TApp.GLineWidthBoxChange(Sender: TObject);
+begin
+  SetLineSeriesStyle();
+end;
+
+procedure TApp.GPointerStyleBoxChange(Sender: TObject);
+begin
+  SetLineSeriesStyle();
+end;
+
+procedure TApp.GPointSizeBoxChange(Sender: TObject);
+begin
+  SetLineSeriesStyle();
 end;
 
 procedure TApp.HideLabelClick(Sender: TObject);
@@ -259,6 +304,7 @@ var
   Chart  : TChart;
   i      : Byte;
 begin
+  App.ChartScrollBox.Visible:= False;
   Chart:= GetChart(SelectedChart);
   for i:=1 to MAX_SERIE_NUMBER do SerieReset(GetLineSerie(SelectedChart, i));
   Chart.Visible:= False;
@@ -270,6 +316,7 @@ begin
      DateTimeLine.Visible:= False;
   end;
   MenuItem4.Enabled:= False;
+  App.ChartScrollBox.Visible:= True;
 end;
 
 procedure TApp.MenuItem3Click(Sender: TObject);
@@ -299,6 +346,11 @@ procedure TApp.PanOffClick(Sender: TObject);
 begin
   NavigationMode:= PAN_MODE;
   SetNavigation(NavigationMode);
+end;
+
+procedure TApp.RecordsNumberChange(Sender: TObject);
+begin
+  RecordCount.Caption:= 'Divide by ' + IntToStr(RecordsNumber.Position);
 end;
 
 procedure OpenChannelForm(SourceNumber: Byte);
@@ -346,6 +398,23 @@ begin
   App.Close;
 end;
 
+procedure TApp.CloseChartsClick(Sender: TObject);
+var i, j: Byte;
+begin
+  ChartsVisible(False);
+  for i:=1 to MAX_CHART_NUMBER do
+    for j:=1 to MAX_SERIE_NUMBER do SerieReset(GetLineSerie(i, j));
+  ChartsCount:= 0;
+  DateTimeLineLineSerie.Clear;
+  DateTimeLine.Visible:= False;
+  MenuItem4.Enabled:= False;
+end;
+
+procedure TApp.ColorsSyncChange(Sender: TObject);
+begin
+  SetAllLineSeriesColor();
+end;
+
 procedure TApp.ChartLinkChange(Sender: TObject);
 begin
   if ChartLink.Checked then ChartExtentLink1.Enabled:= True
@@ -370,7 +439,7 @@ begin
         LabelSticked:= True;
         x:= GetXValue(PointIndex);
         y:= GetYValue(PointIndex);
-        ListSource.Item[PointIndex]^.Text:= GetSticker(x, y, Title);
+        ListSource.Item[PointIndex]^.Text:= GetSticker(TLineSeries(Series), x, y);
         ParentChart.Repaint;
       end;
   end;
@@ -405,7 +474,7 @@ begin
   wCurveStyle.Parameter:= OnHintSerie.Title;
 
   ParamOptionsForm.ParameterName.Caption:= wCurveStyle.Parameter;
-  if wCurveStyle.PointBrushColor = ChartBGColor then ParamOptionsForm.TransparentPointer.Checked:= True
+  if wCurveStyle.PointBrushColor = GChartBGColor.Selected then ParamOptionsForm.TransparentPointer.Checked:= True
   else ParamOptionsForm.TransparentPointer.Checked:= False;
 
   ParamOptionsForm.LineColorBox.Selected:= wCurveStyle.LineColor;
@@ -452,7 +521,7 @@ procedure TApp.ChartToolset1DataPointHintTool1Hint(ATool: TDataPointHintTool;
 begin
    OnHintXPoint:= TLineSeries(ATool.Series).GetXValue(ATool.PointIndex);
    OnHintYPoint:= TLineSeries(ATool.Series).GetYValue(ATool.PointIndex);
-   AHint:= GetSticker(OnHintXPoint, OnHintYPoint, TLineSeries(ATool.Series).Title);
+   AHint:= GetSticker(TLineSeries(ATool.Series), OnHintXPoint, OnHintYPoint);
    MousePosition:= Mouse.CursorPos;
    isOnHint:= True;
    OnHintSerie:= TLineSeries(ATool.Series);
@@ -489,9 +558,6 @@ begin
                     CurrentSource,
                     ShowChannelForm.ChannelList.ItemIndex,
                     ShowChannelForm.ChannelList.Items[ShowChannelForm.ChannelList.ItemIndex]);
-          //App.DateTimeLine.Visible:= True;
-          //while Not DateTimeDrawed do Application.ProcessMessages;
-          //App.DateTimeLine.ZoomFull();
        end;
      end;
 end;
@@ -500,13 +566,6 @@ procedure TApp.AddChartClick(Sender: TObject);
 begin
   if SourceCount > 0 then OpenChannelForm(SourceCount)
   else Bin_DbToBin_Db();
-end;
-
-procedure TApp.Button1Click(Sender: TObject);
-var   f: double;
-begin
-   f:= sqrt((sqr(123.9) + sqr(126.3) + sqr(124.4) + sqr(126.3) + sqr(124.8) + sqr(124))/6);
-   ShowMessage(FloatToStr(f));
 end;
 
 procedure TApp.ZoomOffClick(Sender: TObject);
@@ -525,6 +584,11 @@ procedure TApp.DistanceYOffClick(Sender: TObject);
 begin
   NavigationMode:= DISTANCE_MODE_Y;
   SetNavigation(NavigationMode);
+end;
+
+procedure TApp.FastModeChange(Sender: TObject);
+begin
+  SetFastMode(FastMode.Checked);
 end;
 
 procedure TApp.FitXClick(Sender: TObject);

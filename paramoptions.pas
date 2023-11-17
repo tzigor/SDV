@@ -77,7 +77,7 @@ begin
   OnHintSerie.Pointer.HorizSize:= ParamOptionsForm.PointSizeBox.ItemIndex + 2;
   OnHintSerie.Pointer.VertSize:= ParamOptionsForm.PointSizeBox.ItemIndex + 2;
 
-  if ParamOptionsForm.TransparentPointer.Checked then OnHintSerie.Pointer.Brush.Color:= ChartBGColor
+  if ParamOptionsForm.TransparentPointer.Checked then OnHintSerie.Pointer.Brush.Color:= App.GChartBGColor.Selected
   else OnHintSerie.Pointer.Brush.Color:= ParamOptionsForm.PointerColorBox.Selected;
 
   OnHintSerie.Pointer.Pen.Color:= ParamOptionsForm.PointerColorBox.Selected;
@@ -121,7 +121,7 @@ end;
 
 procedure TParamOptionsForm.PointerColorBoxChange(Sender: TObject);
 begin
-  if TransparentPointer.Checked then PointerStyleBox.BrushColor:= ChartBGColor
+  if TransparentPointer.Checked then PointerStyleBox.BrushColor:= App.GChartBGColor.Selected
   else PointerStyleBox.BrushColor:= PointerColorBox.Selected;
   ParamOptionsForm.PointerStyleBox.PenColor:= PointerColorBox.Selected;
   SetSerieStyleParameters;
@@ -141,19 +141,22 @@ procedure TParamOptionsForm.TimeShiftBtnClick(Sender: TObject);
 var i           : LongWord;
     XVal        : Double;
 begin
-  for i:=0 to OnHintSerie.Count - 1 do begin
-     XVal:= OnHintSerie.GetXValue(i);
-     XVal:= IncHour(XVal, ShiftHr.Value);
-     XVal:= IncMinute(XVal, ShiftMin.Value);
-     XVal:= IncSecond(XVal, ShiftSec.Value);
-     OnHintSerie.SetXValue(i, XVal);
+  if (ShiftHr.Value <> 0) Or (ShiftMin.Value <> 0) Or (ShiftSec.Value <> 0) then begin
+    for i:=0 to OnHintSerie.Count - 1 do begin
+       XVal:= OnHintSerie.GetXValue(i);
+       XVal:= IncHour(XVal, ShiftHr.Value);
+       XVal:= IncMinute(XVal, ShiftMin.Value);
+       XVal:= IncSecond(XVal, ShiftSec.Value);
+       OnHintSerie.SetXValue(i, XVal);
+    end;
+    FindTimeRange;
+    App.FitXYClick(Sender);
   end;
-  FindTimeRange;
 end;
 
 procedure TParamOptionsForm.TransparentPointerChange(Sender: TObject);
 begin
-  if TransparentPointer.Checked then PointerStyleBox.BrushColor:= ChartBGColor
+  if TransparentPointer.Checked then PointerStyleBox.BrushColor:= App.GChartBGColor.Selected
   else PointerStyleBox.BrushColor:= PointerColorBox.Selected;
   SetSerieStyleParameters;
 end;
