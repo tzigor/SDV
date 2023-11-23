@@ -98,26 +98,14 @@ begin
 end;
 
 function GetMinMaxForCurrentExtent(Chart1LineSeries: TLineSeries): TMinMax;
-var i, start, count: Longint;
-    dr: TDoubleRect;
+var dr: TDoubleRect;
     Max, Min: Double;
 begin
  if Chart1LineSeries.Count > 0 then begin
+   dr:= Chart1LineSeries.ParentChart.CurrentExtent;
    Min:= 1.7E308;
    Max:= 5.0E-324;
-   count:= Chart1LineSeries.Count - 1;
-   dr:= Chart1LineSeries.ParentChart.CurrentExtent;
-   start:= 0;
-   repeat
-     Inc(start);
-   until (start = count) Or (Chart1LineSeries.ListSource.Item[start]^.X >= dr.a.X);
-   repeat
-     Dec(count);
-   until (count = 0) Or (Chart1LineSeries.ListSource.Item[count]^.X <= dr.b.X);
-   for i:=start to count do begin
-     if Chart1LineSeries.ListSource.Item[i]^.Y < Min then Min:= Chart1LineSeries.ListSource.Item[i]^.Y;
-     if Chart1LineSeries.ListSource.Item[i]^.Y > Max then Max:= Chart1LineSeries.ListSource.Item[i]^.Y;
-   end;
+   Chart1LineSeries.FindYRange(dr.a.X, dr.b.X, Min, Max);
    Result.Min:= Min;
    Result.Max:= Max;
  end;

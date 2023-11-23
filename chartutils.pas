@@ -90,7 +90,6 @@ end;
 
 procedure DateTimeLineLineSerieInit;
 begin
-  DateTimeDrawed:= False;
   App.DateTimeLine.Visible:= False;
   App.DateTimeLineLineSerie.Clear;
   App.DateTimeLineLineSerie.AddXY(StartDateTime, 0);
@@ -105,6 +104,8 @@ var
   FramesCount, i  : LongWord;
   Value           : Double;
   iPrevPercent, n : Integer;
+  PrevDateTime    : TDateTime = 0;
+  Sticker         : String = '';
 
 begin
   App.ChartScrollBox.Visible:= False;
@@ -128,7 +129,15 @@ begin
                          SelectedParam,
                          Value) then
       begin
-         LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, '');
+        if (DataSources[SelectedSource].FrameRecords[i].DateTime >= PrevDateTime) Or
+            Not App.RTCBugs.Checked then begin
+           LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, Sticker);
+           Sticker:= '';
+        end
+        else begin
+           Sticker:= 'Shift back in time';
+        end;
+        PrevDateTime:= DataSources[SelectedSource].FrameRecords[i].DateTime;
       end;
 
     n:= Trunc(i * 100 / FramesCount);

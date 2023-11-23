@@ -1,0 +1,62 @@
+{
+	"SIB-R" : {
+		"channels" : {
+			"statusWords" : {
+				"STATUS.SIBR.LO" : [
+					"+24V_CTRL out of range ±30%",
+					"+20V_SONDE out of range ±30%",
+					"+20VP out of range ±10%",
+					"+5V out of range ±10%",
+					"+3.3V out of range ±10%",
+					"+2.5V out of range ±10%",
+					"+1.8V out of range ±10%",
+					"+1.2V out of range ±10%",
+					"+5V Transmitters out of range ±10%",
+					"CTRL board temperature out of range",
+					"RTC is out of sync (waiting for TIMESTAMPING command)",
+					"CAN bus error. Data cannot be sent",
+					"GOLD firmware loaded",
+					"SPI-Flash error",
+					"I2C0 bus error",
+					"I2C0 bus multiple error"
+				],
+				"STATUS.SIBR.HI" : [
+					"SPI0 bus error",
+					"SPI1 bus error",
+					"NAND Flash initialisation error",
+					"NAND Flash page write error",
+					"NAND Flash block clear error",
+					"NAND Flash page read error",
+					"NAND Flash new bad block",
+					"NAND-Flash is about full",
+					"NAND-Flash is full",
+					"Packets loss",
+					"LVDS bus error",
+					"ADC input overflow",
+					"ADC multiple input overflow",
+					"Low signal of any receivers",
+					"Reserved",
+					"PIPE DETECTOR. Low signal of both receivers"
+				],
+				"ESTATUS.SIBR.LO" : [
+					"Data exchange error with transmitter - addr 1",
+					"Data exchange error with transmitter - addr 2",
+					"Data exchange error with transmitter - addr 3",
+					"Data exchange error with receiver - addr 4",
+					"Data exchange error with receiver - addr 5",
+					"Logging started",
+					"BHT & TEMP_CTRL difference > 25C ",
+					"Calculation error",
+					"Cabration file corrupted",
+					"Reserve",
+					"Reserve",
+					"Reserve",
+					"Active logging identifier bit 0",
+					"Active logging identifier bit 1",
+					"Active logging identifier bit 2",
+					"Active logging identifier bit 3"
+				]
+			}	
+		}	
+	},
+	"Impulse" : {}

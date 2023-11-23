@@ -9,30 +9,31 @@ uses
 
 Const
   NewLine = #13#10;
-  Tab = #09;
-  MIN_FILE_LENGTH = 100;
-  DATA_MAX_SIZE = 4294967295;
+  Tab     = #09;
+
+  MIN_FILE_LENGTH  = 100;
+  DATA_MAX_SIZE    = 4294967295;
   MAX_CHART_NUMBER = 8;
   MAX_SERIE_NUMBER = 8;
 
   { Error codes }
-  NO_ERROR                = 0;
-  FILE_NOT_FOUND          = 1;
-  WRONG_FILE_FORMAT       = 2;
-  UNEXPECTED_END_OF_FILE  = 3;
-  TERMINATED              = 4;
-  OUT_OF_BOUNDS           = 5;
+  NO_ERROR               = 0;
+  FILE_NOT_FOUND         = 1;
+  WRONG_FILE_FORMAT      = 2;
+  UNEXPECTED_END_OF_FILE = 3;
+  TERMINATED             = 4;
+  OUT_OF_BOUNDS          = 5;
 
   { Navigation modes }
-  NAVIGATION_OFF          = 0;
-  ZOOM_MODE               = 1;
-  PAN_MODE                = 2;
-  DISTANCE_MODE_X         = 3;
-  DISTANCE_MODE_Y         = 4;
+  NAVIGATION_OFF   = 0;
+  ZOOM_MODE        = 1;
+  PAN_MODE         = 2;
+  DISTANCE_MODE_X  = 3;
+  DISTANCE_MODE_Y  = 4;
 
-  TFF_V20 = 2;
-  TFF_V30 = 3;
-  TFF_V40 = 4;
+  TFF_V20    = 2;
+  TFF_V30    = 3;
+  TFF_V40    = 4;
   TFF_V40_F8 = 40;
 
   F4_RESULT_ERROR = -999.25;
@@ -67,11 +68,18 @@ Type
   TTFFDataChannels = array of TTFFDataChannel;
 
   TFrameRecord = record
-    DateTime: TDateTime;
-    Data: TBytes;
+    DateTime : TDateTime;
+    Data     : TBytes;
   end;
 
   TFrameRecords = array of TFrameRecord;
+
+  TStatusWord = record
+    Name : String;
+    Bits : TStringList;
+  end;
+
+  TStatusWords = array of TStatusWord;
 
   TCurveStyle = record
     Parameter        : String;
@@ -86,7 +94,7 @@ Type
   end;
 
 var
-   ChartColors     : array of TColor = (clRed, clBlue, clGreen, clPurple, TColor($C80000), TColor($00C800), clFuchsia, clMaroon);
+   ChartColors : array of TColor = (clRed, clBlue, clGreen, clPurple, TColor($C80000), TColor($00C800), clFuchsia, clMaroon);
 
 implementation
 

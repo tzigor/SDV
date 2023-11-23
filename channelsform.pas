@@ -6,13 +6,16 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Buttons,
-  LineSerieUtils, ChartUtils, TASeries, LCLType, TAGraph, DateUtils;
+  LineSerieUtils, ChartUtils, TASeries, LCLType, TAGraph, DateUtils,
+  ToolsConfig;
 
 type
 
   { TShowChannelForm }
 
   TShowChannelForm = class(TForm)
+    MultiColumns: TCheckBox;
+    RemoveFileBtn: TButton;
     DrawBtn: TBitBtn;
     CloseList: TBitBtn;
     ChannelList: TListBox;
@@ -21,6 +24,8 @@ type
     procedure CloseListClick(Sender: TObject);
     procedure DrawBtnClick(Sender: TObject);
     procedure FileListSelectionChange(Sender: TObject; User: boolean);
+    procedure MultiColumnsChange(Sender: TObject);
+    procedure RemoveFileBtnClick(Sender: TObject);
   private
 
   public
@@ -50,7 +55,6 @@ end;
 
 procedure TShowChannelForm.DrawBtnClick(Sender: TObject);
 var Chart      : TChart;
-  i:byte;
 begin
    if ChartsCount < MAX_CHART_NUMBER then begin
       CurrentChart:= GetFreeChart;
@@ -78,6 +82,20 @@ begin
       ShowChannelForm.ChannelList.Items.Add(DataSources[CurrentSource].TFFDataChannels[i].DLIS);
     end;
   end;
+end;
+
+procedure TShowChannelForm.MultiColumnsChange(Sender: TObject);
+begin
+  if MultiColumns.Checked then ChannelList.Columns:= 3
+  else ChannelList.Columns:= 0;
+end;
+
+procedure TShowChannelForm.RemoveFileBtnClick(Sender: TObject);
+begin
+  Delete(DataSources, FileList.ItemIndex, 1);
+  Dec(SourceCount);
+  if SourceCount > 0 then PrepareChannelForm(SourceCount)
+  else ShowChannelForm.Close;
 end;
 
 end.

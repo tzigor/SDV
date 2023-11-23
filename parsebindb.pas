@@ -66,7 +66,7 @@ begin
 end;
 
 function DataToStr(RecordLength: longWord): String;
-var len, i : Word;
+var        i : Word;
     wStr   : String;
     b      : Byte;
 begin
@@ -146,14 +146,14 @@ begin
      Inc(DataOffset, RecordLength - 8);
   end
   else begin
-      FullDateTime:= StartDate + StartTime;
-      TimeShift:= SecondsBetween(FullDateTime, StartDate) / 100;
-      Move(Bytes[DataOffset], F4, 4);
-      Inc(DataOffset, 4);
-      FullDateTime:= IncSecond(FullDateTime, Round((F4 - TimeShift) * 100));
-      TffFrames.AddRecord(FullDateTime, TffStructure.GetDataChannelSize, TffStructure.GetTFFDataChannels);
-      TffFrames.MoveData();
-      Inc(DataOffset, RecordLength - 4);
+     FullDateTime:= StartDate + StartTime;
+     TimeShift:= SecondsBetween(FullDateTime, StartDate) / 100;
+     Move(Bytes[DataOffset], F4, 4);
+     Inc(DataOffset, 4);
+     FullDateTime:= IncSecond(FullDateTime, Round((F4 - TimeShift) * 100));
+     TffFrames.AddRecord(FullDateTime, TffStructure.GetDataChannelSize, TffStructure.GetTFFDataChannels);
+     TffFrames.MoveData();
+     Inc(DataOffset, RecordLength - 4);
   end;
 end;
 
@@ -248,7 +248,7 @@ var
     RecordLength    : LongWord;
     DataChannel     : TTFFDataChannel;
     DateTime        : TDateTime;
-    i, iPrevPercent : Integer;
+    i, PrevPercent  : Integer;
     FrameCount      : LongWord;
 
 begin
@@ -258,7 +258,7 @@ begin
   TffFrames.Init;
   FrameCount:= 0;
   ProgressInit(100, 'Loading file');
-  iPrevPercent:= 0;
+  PrevPercent:= 0;
   ParamChannels:= TStringList.Create;
   repeat
      RecordLength:= GetRecordLength;
@@ -295,9 +295,9 @@ begin
      end;
 
      i:= Trunc(DataOffset * 100 / CurrentFileSize);
-     if (i > iPrevPercent) then begin
+     if (i > PrevPercent) then begin
        App.ProcessProgress.Position:= i;
-       iPrevPercent:= i;
+       PrevPercent:= i;
      end;
 
   until EndOfFile Or (ErrorCode > 0);
@@ -305,7 +305,7 @@ begin
   TffStructure.SetSamplesTo1;
   Result:= TffFrames.GetFrameRecords;
   SetLength(Bytes, 0);
-  Bytes:= nil;
+  Bytes:= Nil;
   TffFrames.Done;
 end;
 

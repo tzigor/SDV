@@ -10,13 +10,14 @@ uses
   ColorBox, TAGraph, TAIntervalSources, TATools, TAChartExtentLink, TASeries,
   StrUtils, DateTimePicker, channelsform, ChartUtils, LineSerieUtils, Types,
   TADrawUtils, TAChartUtils, TADataTools, TAChartCombos, ParamOptions,
-  DateUtils;
+  DateUtils,  JSONParser, JSONScanner, fpJSON, FileUtil, ToolConfiguration;
 
 type
 
   { TApp }
 
   TApp = class(TForm)
+    Button1: TButton;
     Chart1: TChart;
     Chart2: TChart;
     Chart3: TChart;
@@ -67,6 +68,7 @@ type
     Label6: TLabel;
     GLineStyleBox: TChartComboBox;
     GLineWidthBox: TChartComboBox;
+    Memo1: TMemo;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
     Panel1: TPanel;
@@ -77,7 +79,9 @@ type
     GPointSizeBox: TComboBox;
     RecordCount: TLabel;
     RecordsNumber: TTrackBar;
+    RTCBugs: TCheckBox;
     SlowLabel: TLabel;
+    TabSheet1: TTabSheet;
     ZoomOff: TImage;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
@@ -92,6 +96,7 @@ type
     ProcessProgress: TProgressBar;
     ZoomOn: TImage;
     procedure AddChartClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure Chart1DragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure Chart1DragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
@@ -148,9 +153,10 @@ type
   end;
 
   TDataSource = record
-      SourceName       : String;
-      TFFDataChannels  : TTFFDataChannels;
-      FrameRecords     : TFrameRecords;
+     SourceName       : String;
+     TFFDataChannels  : TTFFDataChannels;
+     FrameRecords     : TFrameRecords;
+     StatusWords      : TStatusWords;
   end;
 
   TDataSources = array of TDataSource;
@@ -163,10 +169,10 @@ var
   ErrorCode          : Byte;
   CurrentOpenedFile  : String;
   Bytes              : TBytes;   { Raw data source }
+  DataOffset         : LongWord;
   CurrentFileSize    : LongWord;
   CurrentTFFVersion  : Byte;
   EndOfFile          : Boolean;
-  DataOffset         : LongWord;
   TffStructure       : TTffStructure;
   DataSources        : TDataSources; { Data source for charts }
   SourceCount        : Byte = 0;
@@ -175,24 +181,27 @@ var
   CurrentSource      : Byte = 0;
   CurrentSerie       : Byte = 1;
   ParametersUnits    : Array[1..MAX_CHART_NUMBER, 1..MAX_SERIE_NUMBER] of String;
-  ShowIndicator      : Boolean;
   StartDateTime      : TDateTime = 0;
   EndDateTime        : TDateTime = 0;
-  SelectedChart      : Byte = 0;
-  DateTimeDrawed     : Boolean;
+  SelectedChart      : Byte = 0;  { Number of chart left button clicked on }
   ChartPointIndex    : LongInt;
   LabelSticked       : Boolean;
   MousePosition      : TPoint;
+  { Variables are initialized if OnHint event occur  }
   isOnHint           : Boolean = False;
   OnHintSerie        : TLineSeries;
   OnHintXPoint       : Double;
   OnHintYPoint       : Double;
-  NavigationMode     : Byte;
-  SavedDateTimePoint : TDateTime;
   SavedOnHintSerie   : TLineSeries;
+
+  NavigationMode     : Byte;
+  SavedDateTimePoint : TDateTime;  { Date/Time point for time synchronization }
   FastModeDivider    : Byte = 1;
 
+  ConfiguredTools    : TStringList;
+
   procedure OpenChannelForm(SourceNumber: Byte);
+  procedure PrepareChannelForm(SourceNumber: Byte);
 
 implementation
 
@@ -219,6 +228,8 @@ begin
      Chart.BackColor:= GChartBGColor.Selected;
      Chart.Margins.Top:= 10;
      Chart.Margins.Bottom:= 10;
+     Chart.Margins.Left:= 10;
+     Chart.Margins.Right:= 10;
      Chart.Legend.Visible:= True;
      Chart.Legend.Frame.Color:= clSilver;
      Chart.Legend.UseSidebar:= False;
@@ -241,6 +252,9 @@ begin
   SetNavigation(NavigationMode);
 
   SetFastMode(FastMode.Checked);
+
+  //ConfiguredTools:= TStringList.Create;
+  //jReadConfigTools();
 end;
 
 procedure TApp.FormResize(Sender: TObject);
@@ -295,7 +309,7 @@ end;
 
 procedure TApp.MenuItem1Click(Sender: TObject);
 begin
-  OnHintSerie.Clear;
+  if OnHintSerie <> Nil then OnHintSerie.Clear;
   MenuItem4.Enabled:= False;
 end;
 
@@ -353,7 +367,7 @@ begin
   RecordCount.Caption:= 'Divide by ' + IntToStr(RecordsNumber.Position);
 end;
 
-procedure OpenChannelForm(SourceNumber: Byte);
+procedure PrepareChannelForm(SourceNumber: Byte);
 var i : Byte;
 begin
   ShowChannelForm.ChannelList.Clear;
@@ -365,6 +379,12 @@ begin
     ShowChannelForm.ChannelList.Items.Add(DataSources[SourceNumber - 1].TFFDataChannels[i].DLIS);
   end;
   ShowChannelForm.FileList.ItemIndex:= SourceNumber - 1;
+end;
+
+procedure OpenChannelForm(SourceNumber: Byte);
+var i : Byte;
+begin
+  PrepareChannelForm(SourceNumber);
   ShowChannelForm.Show;
 end;
 
@@ -376,6 +396,7 @@ begin
      DataSource.SourceName:= CurrentOpenedFile;
      DataSource.FrameRecords:= BinDbParser(3);
      DataSource.TFFDataChannels:= TffStructure.GetTFFDataChannels;
+     TffStructure.Done;
      if ErrorCode = NO_ERROR then begin
         Insert(DataSource, DataSources, DATA_MAX_SIZE);
         Inc(SourceCount);
@@ -391,6 +412,7 @@ end;
 procedure TApp.OpenFileClick(Sender: TObject);
 begin
   Bin_DbToBin_Db();
+  //ShowConfigForm();
 end;
 
 procedure TApp.CloseAppClick(Sender: TObject);
@@ -497,6 +519,8 @@ begin
      if (Abs(MousePosition.X - Mouse.CursorPos.X) > 5) Or (Abs(MousePosition.Y - Mouse.CursorPos.Y) > 5) then begin
         SetNavigation(NavigationMode);
         isOnHint:= False;
+        OnHintSerie:= Nil;
+        MenuItem1.Enabled:= False;
      end;
 end;
 
@@ -526,8 +550,9 @@ begin
    isOnHint:= True;
    OnHintSerie:= TLineSeries(ATool.Series);
    SetNavigation(NAVIGATION_OFF);
-   App.ChartToolset1DataPointHintTool1.Enabled:= True;
-   App.ChartToolset1DataPointClickTool4.Enabled:= True;
+   ChartToolset1DataPointHintTool1.Enabled:= True;
+   ChartToolset1DataPointClickTool4.Enabled:= True;
+   MenuItem1.Enabled:= True;
 end;
 
 procedure TApp.ChartToolset1UserDefinedTool1AfterMouseDown(ATool: TChartTool;
@@ -566,6 +591,38 @@ procedure TApp.AddChartClick(Sender: TObject);
 begin
   if SourceCount > 0 then OpenChannelForm(SourceCount)
   else Bin_DbToBin_Db();
+end;
+
+procedure TApp.Button1Click(Sender: TObject);
+var
+  JsonParser: TJSONParser;
+  JsonObject, JsonNestedObj: TJSONObject;
+  JsonEnum: TBaseJSONEnumerator;
+  cJsonStr: TFileStream;
+  i: integer;
+begin
+  cJsonStr:= TFileStream.Create('ChannelsConfig.json',fmOpenRead or fmShareDenyWrite);
+  JsonParser := TJSONParser.Create(cJsonStr, []);
+  try
+    JsonObject := JsonParser.Parse as TJSONObject;
+    JsonObject:=JsonObject.FindPath('SIB-R.channels.statusWords') as TJSONObject;
+    try
+      JsonEnum := JsonObject.GetEnumerator;
+      try
+        while JsonEnum.MoveNext do
+          //Memo1.Lines.Add(JsonEnum.Current.Key);
+            if JsonObject.Types[JsonEnum.Current.Key] = jtArray then
+                 for i:=0 to Pred(TJSONArray(JsonEnum.Current.Value).Count) do
+                   Memo1.Lines.Add(TJSONArray(JsonEnum.Current.Value).Items[i].AsString);
+      finally
+        FreeAndNil(JsonEnum)
+      end;
+    finally
+      FreeAndNil(JsonObject);
+    end;
+  finally
+    FreeAndNil(JsonParser);
+  end;
 end;
 
 procedure TApp.ZoomOffClick(Sender: TObject);

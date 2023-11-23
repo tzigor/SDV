@@ -11,7 +11,7 @@ uses
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, tachartlazaruspkg, datetimectrls, Main, UserTypes, Utils, TffObjects,
-  ParseBinDb, ChannelsForm, LineSerieUtils, ParamOptions
+  ParseBinDb, ChannelsForm, LineSerieUtils, ParamOptions, ToolsConfig, ToolConfiguration
   { you can add units after this };
 
 {$R *.res}
@@ -23,6 +23,7 @@ begin
   Application.CreateForm(TApp, App);
   Application.CreateForm(TShowChannelForm, ShowChannelForm);
   Application.CreateForm(TParamOptionsForm, ParamOptionsForm);
+  Application.CreateForm(TToolConfigForm, ToolConfigForm);
   Application.Run;
 end.
 

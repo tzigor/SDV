@@ -50,7 +50,7 @@ begin
       AStream.Read(PByte(Bytes)^, ADataLeft);
     except
       on Exception : EStreamError do
-         Bytes:= Null;
+         Bytes:= Nil;
     end;
   finally
     AStream.Free;
@@ -136,6 +136,18 @@ begin
   App.ProcessProgress.Visible:= False;
   App.ProcessLabel.Caption:= '';
   App.ProcessLabel.Refresh;
+end;
+
+function GetStatusWord(Param: String): String;
+var i: Integer;
+    n: Byte;
+begin
+  n:= Length(DataSources[CurrentSource].StatusWords);
+  if n > 0 then begin
+     for i:=0 to n - 1 do begin
+
+     end;
+  end;
 end;
 
 function GetSticker(Serie: TLineSeries; x, y: Double): String;
