@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, DateUtils,
-  UserTypes, StrUtils, Buttons, LCLType, TASeries, TADataTools, TATools;
+  UserTypes, StrUtils, Buttons, LCLType, TASeries, TADataTools, TATools,
+  LCLIntf, Clipbrd;
 
 function GetErrorMessage(error: Byte): PChar;
 procedure LoadByteArray(const AFileName: string);
@@ -17,14 +18,17 @@ function isEndOfFile(): Boolean;
 procedure IncDataOffset(n: LongWord);
 procedure ProgressInit(n: LongWord; PLabel: String);
 procedure ProgressDone();
+function SWHint(SW: Integer; SWDescr: array of String; DT: TDateTime): String;
 function GetSticker(Serie: TLineSeries; x, y: Double): String;
 procedure StickLabel(ChartLineSerie: TLineSeries);
 procedure SetNavigation(NavMode: Byte);
 procedure SetFastMode(Value: Boolean);
+function Expon2(n: Integer): Integer;
+procedure MakeScreenShot(Handle: HWND);
 
 implementation
 
-uses Main;
+uses Main, channelsform;
 
 function GetErrorMessage(error: Byte): PChar;
 begin
@@ -138,16 +142,14 @@ begin
   App.ProcessLabel.Refresh;
 end;
 
-function GetStatusWord(Param: String): String;
-var i: Integer;
-    n: Byte;
+function SWHint(SW: Integer; SWDescr: array of String; DT: TDateTime): String;
+var i: Byte;
+    wStr: String;
 begin
-  n:= Length(DataSources[CurrentSource].StatusWords);
-  if n > 0 then begin
-     for i:=0 to n - 1 do begin
-
-     end;
-  end;
+   wStr:= wStr + 'Value - ' + IntToStr(SW) + #13#10;
+   for i:=0 to 15 do
+     if (SW and expon2(i)) > 0 then wStr:= wStr + '1 - ' + SWDescr[i] + #13#10;
+   Result:= wStr + DateTimeToStr(DT);
 end;
 
 function GetSticker(Serie: TLineSeries; x, y: Double): String;
@@ -155,7 +157,7 @@ var AfterDot : Byte;
     AddStr   : String;
     sUnit    : String;
 begin
-  if y > Abs(10000) then AfterDot:= 0
+  if Abs(y) > 10000 then AfterDot:= 0
   else AfterDot:= 3;
   if App.ExtHint.Checked then AddStr:= 'Min value = ' + FloatToStrF(Serie.GetYMin, ffFixed, 12, AfterDot) + ', ' +
                                        'Max value = ' + FloatToStrF(Serie.GetYMax, ffFixed, 12, AfterDot) + NewLine
@@ -178,17 +180,17 @@ end;
 
 procedure SetFastMode(Value: Boolean);
 begin
-  App.RecordsNumber.Enabled:= Value;
-  App.RecordCount.Visible:= Value;
+  ShowChannelForm.RecordsNumber.Enabled:= Value;
+  ShowChannelForm.RecordCount.Visible:= Value;
   if Value = True then begin
-     FastModeDivider:= App.RecordsNumber.Position;
-     App.SlowLabel.Font.Color:= clBlue;
-     App.FastLabel.Font.Color:= clBlue;
+     FastModeDivider:= ShowChannelForm.RecordsNumber.Position;
+     ShowChannelForm.SlowLabel.Font.Color:= clBlue;
+     ShowChannelForm.FastLabel.Font.Color:= clBlue;
   end
   else begin
      FastModeDivider:= 1;
-     App.SlowLabel.Font.Color:= clSilver;
-     App.FastLabel.Font.Color:= clSilver;
+     ShowChannelForm.SlowLabel.Font.Color:= clSilver;
+     ShowChannelForm.FastLabel.Font.Color:= clSilver;
   end;
 end;
 
@@ -234,6 +236,33 @@ begin
                        App.DistanceYOff.Visible:= False;
                        App.DistanceYOn.Visible:= True;
                     end;
+  end;
+end;
+
+function Expon2(n: Integer): Integer;
+var i, exp: Integer;
+begin
+  exp:= 1;
+  for i:=1 to n do exp:= exp * 2;
+  Result:= exp;
+end;
+
+procedure MakeScreenShot(Handle: HWND);
+var
+  MyBitmap : TBitmap;
+  ScreenDC : HDC;
+begin
+  MyBitmap:= TBitmap.Create;
+  try
+    ScreenDC:= GetDC(Handle);
+    try
+      MyBitmap.LoadFromDevice(ScreenDC);
+    finally
+      ReleaseDC(0,ScreenDC);
+    end;
+    Clipboard.Assign(MyBitmap);
+  finally
+    FreeAndNil(MyBitmap);
   end;
 end;
 

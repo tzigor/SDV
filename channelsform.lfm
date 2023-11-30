@@ -1,7 +1,7 @@
 object ShowChannelForm: TShowChannelForm
-  Left = 2977
+  Left = 2747
   Height = 697
-  Top = -720
+  Top = -766
   Width = 240
   Caption = 'Channels'
   ClientHeight = 697
@@ -9,11 +9,12 @@ object ShowChannelForm: TShowChannelForm
   Constraints.MinHeight = 300
   Constraints.MinWidth = 240
   FormStyle = fsStayOnTop
+  OnCreate = FormCreate
   LCLVersion = '3.0.0.2'
   object ChannelList: TListBox
     Left = 8
-    Height = 506
-    Top = 152
+    Height = 458
+    Top = 200
     Width = 224
     Anchors = [akTop, akLeft, akRight, akBottom]
     DragMode = dmAutomatic
@@ -48,26 +49,91 @@ object ShowChannelForm: TShowChannelForm
     Top = 8
     Width = 224
     Anchors = [akTop, akLeft, akRight]
+    Color = clWhite
     ItemHeight = 0
+    Style = lbOwnerDrawVariable
     TabOrder = 3
+    OnDrawItem = FileListDrawItem
+    OnKeyDown = FileListKeyDown
     OnSelectionChange = FileListSelectionChange
-  end
-  object RemoveFileBtn: TButton
-    Left = 157
-    Height = 22
-    Top = 108
-    Width = 75
-    Caption = 'Remove'
-    TabOrder = 4
-    OnClick = RemoveFileBtnClick
   end
   object MultiColumns: TCheckBox
     Left = 8
     Height = 19
-    Top = 130
+    Top = 180
     Width = 95
     Caption = 'Multi columns'
-    TabOrder = 5
+    TabOrder = 4
     OnChange = MultiColumnsChange
+  end
+  object FastMode: TCheckBox
+    Left = 10
+    Height = 19
+    Top = 112
+    Width = 73
+    Caption = 'Fast mode'
+    Checked = True
+    State = cbChecked
+    TabOrder = 5
+    OnChange = FastModeChange
+  end
+  object RecordsNumber: TTrackBar
+    Left = 8
+    Height = 25
+    Top = 136
+    Width = 224
+    Frequency = 100
+    Max = 100
+    Min = 2
+    OnChange = RecordsNumberChange
+    PageSize = 100
+    Position = 10
+    Anchors = [akTop, akLeft, akRight]
+    TabOrder = 6
+  end
+  object SlowLabel: TLabel
+    Left = 10
+    Height = 13
+    Top = 160
+    Width = 25
+    Caption = 'Slow'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -11
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentColor = False
+    ParentFont = False
+  end
+  object RecordCount: TLabel
+    Left = 88
+    Height = 13
+    Top = 160
+    Width = 62
+    Alignment = taCenter
+    Anchors = [akTop]
+    Caption = 'Divide by 10'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clMaroon
+    Font.Height = -11
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentColor = False
+    ParentFont = False
+  end
+  object FastLabel: TLabel
+    Left = 208
+    Height = 13
+    Top = 160
+    Width = 21
+    Anchors = [akTop, akRight]
+    Caption = 'Fast'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -11
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentColor = False
+    ParentFont = False
   end
 end

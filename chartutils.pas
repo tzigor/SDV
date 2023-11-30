@@ -27,7 +27,7 @@ procedure ChartsNavigation(Value: Boolean);
 procedure SetChartsBGColor;
 
 implementation
-uses Main, LineSerieUtils;
+uses Main, LineSerieUtils, channelsform;
 
 function GetChannelValue(DataChannels: TTFFDataChannels; Frame: TFrameRecord; Channel: Word; var Value: Double): Boolean;
 var Offset : Word;
@@ -106,6 +106,7 @@ var
   iPrevPercent, n : Integer;
   PrevDateTime    : TDateTime = 0;
   Sticker         : String = '';
+  nPoins          : LongWord = 0;
 
 begin
   App.ChartScrollBox.Visible:= False;
@@ -118,8 +119,8 @@ begin
   iPrevPercent:= 0;
 
   if FramesCount < 60000 then begin
-     App.FastMode.Checked:= False;
-     SetFastMode(App.FastMode.Checked);
+     ShowChannelForm.FastMode.Checked:= False;
+     SetFastMode(ShowChannelForm.FastMode.Checked);
   end;
 
   for i:=0 to FramesCount - 1 do begin
@@ -133,6 +134,7 @@ begin
             Not App.RTCBugs.Checked then begin
            LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, Sticker);
            Sticker:= '';
+           Inc(nPoins);
         end
         else begin
            Sticker:= 'Shift back in time';

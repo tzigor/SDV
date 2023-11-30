@@ -19,9 +19,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Main"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="515"/>
-        <CursorPos X="58" Y="524"/>
+        <CursorPos X="38" Y="14"/>
         <UsageCount Value="208"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -30,9 +28,8 @@
         <Filename Value="usertypes.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UserTypes"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="66"/>
-        <CursorPos X="65" Y="79"/>
+        <EditorIndex Value="2"/>
+        <CursorPos Y="13"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
       </Unit>
@@ -40,9 +37,9 @@
         <Filename Value="utils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Utils"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="134"/>
-        <CursorPos X="9" Y="148"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
+        <CursorPos X="19" Y="10"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
       </Unit>
@@ -50,8 +47,8 @@
         <Filename Value="tffobjects.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="TffObjects"/>
-        <EditorIndex Value="3"/>
-        <CursorPos X="83" Y="9"/>
+        <EditorIndex Value="4"/>
+        <CursorPos X="20" Y="9"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>
@@ -59,9 +56,9 @@
         <Filename Value="parsebindb.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ParseBinDb"/>
-        <EditorIndex Value="8"/>
-        <TopLine Value="233"/>
-        <CursorPos X="56" Y="259"/>
+        <EditorIndex Value="9"/>
+        <TopLine Value="171"/>
+        <CursorPos X="18" Y="259"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>
@@ -71,9 +68,9 @@
         <ComponentName Value="ShowChannelForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="9"/>
-        <TopLine Value="66"/>
-        <CursorPos X="3" Y="95"/>
+        <EditorIndex Value="10"/>
+        <TopLine Value="95"/>
+        <CursorPos X="48" Y="115"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -82,9 +79,9 @@
         <Filename Value="lineserieutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="LineSerieUtils"/>
-        <EditorIndex Value="6"/>
-        <TopLine Value="36"/>
-        <CursorPos X="99" Y="15"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="89"/>
+        <CursorPos X="39" Y="15"/>
         <UsageCount Value="211"/>
         <Loaded Value="True"/>
       </Unit>
@@ -92,9 +89,8 @@
         <Filename Value="chartutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ChartUtils"/>
-        <EditorIndex Value="7"/>
-        <TopLine Value="121"/>
-        <CursorPos X="92" Y="131"/>
+        <EditorIndex Value="8"/>
+        <CursorPos X="40" Y="30"/>
         <UsageCount Value="211"/>
         <Loaded Value="True"/>
       </Unit>
@@ -105,67 +101,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ParamOptions"/>
-        <EditorIndex Value="5"/>
-        <TopLine Value="50"/>
-        <CursorPos X="87" Y="32"/>
+        <EditorIndex Value="6"/>
+        <CursorPos X="20" Y="32"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="C:\lazarus\components\tachart\tatools.pas"/>
-        <UnitName Value="TATools"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="1231"/>
-        <CursorPos Y="1263"/>
-        <UsageCount Value="8"/>
-      </Unit>
-      <Unit>
-        <Filename Value="C:\lazarus\lcl\controls.pp"/>
-        <UnitName Value="Controls"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="2211"/>
-        <CursorPos X="14" Y="2271"/>
-        <UsageCount Value="85"/>
-      </Unit>
-      <Unit>
-        <Filename Value="C:\lazarus\lcl\graphics.pp"/>
-        <UnitName Value="Graphics"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="236"/>
-        <CursorPos X="3" Y="255"/>
-        <UsageCount Value="73"/>
-      </Unit>
-      <Unit>
-        <Filename Value="C:\lazarus\components\tachart\tachartutils.pas"/>
-        <UnitName Value="TAChartUtils"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="74"/>
-        <CursorPos X="49" Y="85"/>
-        <UsageCount Value="84"/>
-      </Unit>
-      <Unit>
-        <Filename Value="C:\lazarus\components\tachart\tadatatools.pas"/>
-        <UnitName Value="TADataTools"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="34"/>
-        <CursorPos X="68" Y="54"/>
-        <UsageCount Value="83"/>
-      </Unit>
-      <Unit>
-        <Filename Value="C:\lazarus\components\tachart\tacustomseries.pas"/>
-        <UnitName Value="TACustomSeries"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="959"/>
-        <CursorPos Y="978"/>
-        <UsageCount Value="10"/>
-      </Unit>
-      <Unit>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-json\src\fpjson.pp"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="31"/>
-        <CursorPos X="3" Y="50"/>
-        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="toolsconfig.pas"/>
@@ -173,149 +113,198 @@
         <UnitName Value="ToolsConfig"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="62" Y="16"/>
-        <UsageCount Value="75"/>
-      </Unit>
-      <Unit>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\classes\classesh.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="681"/>
-        <CursorPos X="14" Y="700"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="208"/>
       </Unit>
       <Unit>
         <Filename Value="toolconfiguration.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ToolConfigForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ToolConfiguration"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="100"/>
-        <CursorPos X="64" Y="134"/>
-        <UsageCount Value="31"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="15"/>
+        <CursorPos Y="134"/>
+        <UsageCount Value="212"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\controls.pp"/>
+        <UnitName Value="Controls"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2305"/>
+        <CursorPos X="26" Y="2323"/>
+        <UsageCount Value="65"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\graphics.pp"/>
+        <UnitName Value="Graphics"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="236"/>
+        <CursorPos X="3" Y="255"/>
+        <UsageCount Value="53"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\components\tachart\tachartutils.pas"/>
+        <UnitName Value="TAChartUtils"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="74"/>
+        <CursorPos X="49" Y="85"/>
+        <UsageCount Value="64"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\components\tachart\tadatatools.pas"/>
+        <UnitName Value="TADataTools"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="34"/>
+        <CursorPos X="68" Y="54"/>
+        <UsageCount Value="63"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\lcltype.pp"/>
+        <UnitName Value="LCLType"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="119"/>
+        <CursorPos X="3" Y="132"/>
+        <UsageCount Value="39"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\wininc\base.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="93"/>
+        <CursorPos X="6" Y="113"/>
+        <UsageCount Value="4"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="366"/>
+        <CursorPos Y="386"/>
+        <UsageCount Value="9"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="channelsform.pas"/>
-        <Caret Line="97" Column="33" TopLine="68"/>
+        <Caret Line="76" TopLine="62"/>
       </Position>
       <Position>
         <Filename Value="channelsform.pas"/>
-        <Caret Line="93" Column="47" TopLine="68"/>
+        <Caret Line="77" TopLine="62"/>
       </Position>
       <Position>
         <Filename Value="channelsform.pas"/>
-        <Caret Line="10" Column="3"/>
+        <Caret Line="78" TopLine="62"/>
       </Position>
       <Position>
         <Filename Value="channelsform.pas"/>
-        <Caret Line="10" Column="3"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="96" TopLine="75"/>
+        <Caret Line="77" TopLine="62"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="17" Column="75"/>
-      </Position>
-      <Position>
-        <Filename Value="tffobjects.pas"/>
-        <Caret Line="9" Column="83" TopLine="92"/>
+        <Caret Line="211" Column="43" TopLine="190"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="13" Column="56"/>
-      </Position>
-      <Position>
-        <Filename Value="toolconfiguration.pas"/>
-        <Caret Line="19" Column="112"/>
-      </Position>
-      <Position>
-        <Filename Value="toolconfiguration.pas"/>
-        <Caret Line="23" Column="112"/>
-      </Position>
-      <Position>
-        <Filename Value="toolconfiguration.pas"/>
-        <Caret Line="24" Column="112"/>
-      </Position>
-      <Position>
-        <Filename Value="toolconfiguration.pas"/>
-        <Caret Line="26" Column="112"/>
-      </Position>
-      <Position>
-        <Filename Value="toolconfiguration.pas"/>
-        <Caret Line="114" Column="27" TopLine="82"/>
+        <Caret Line="627" Column="43" TopLine="607"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="256" Column="18" TopLine="240"/>
-      </Position>
-      <Position>
-        <Filename Value="toolconfiguration.pas"/>
-        <Caret Line="125" Column="97" TopLine="94"/>
-      </Position>
-      <Position>
-        <Filename Value="toolconfiguration.pas"/>
-        <Caret Line="127" Column="85" TopLine="97"/>
-      </Position>
-      <Position>
-        <Filename Value="toolconfiguration.pas"/>
-        <Caret Line="101" Column="49" TopLine="83"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="8" Column="29"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="74" TopLine="53"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="94" Column="28" TopLine="67"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="25" Column="45" TopLine="8"/>
+        <Caret Line="629" Column="43" TopLine="609"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="180" Column="16" TopLine="155"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="78" Column="3" TopLine="66"/>
+        <Caret Line="676" Column="64" TopLine="656"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="260" Column="59" TopLine="239"/>
+        <Caret Line="677" Column="31" TopLine="649"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="419" Column="61" TopLine="411"/>
-      </Position>
-      <Position>
-        <Filename Value="chartutils.pas"/>
-        <Caret Line="131" Column="92" TopLine="121"/>
+        <Caret Line="96" Column="45" TopLine="147"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="312" Column="32" TopLine="294"/>
+        <Caret Line="668" TopLine="660"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="316" Column="78" TopLine="294"/>
+        <Caret Line="667" TopLine="659"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="198" Column="119" TopLine="218"/>
+        <Caret Line="668" TopLine="659"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="554" Column="37" TopLine="542"/>
+        <Caret Line="14" Column="56"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="674" Column="75" TopLine="664"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="675" Column="75" TopLine="665"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="386" Column="110" TopLine="368"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="369" Column="36" TopLine="353"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="379" Column="59" TopLine="367"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="393" Column="2" TopLine="369"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="392" Column="2" TopLine="628"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="365" Column="16" TopLine="365"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="366" Column="16" TopLine="366"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="367" Column="16" TopLine="367"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="366" Column="16" TopLine="366"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="372" Column="16" TopLine="372"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="365" Column="3" TopLine="341"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="331" Column="46" TopLine="320"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="370" Column="63" TopLine="363"/>
+      </Position>
+      <Position>
+        <Filename Value="utils.pas"/>
+        <Caret Line="10" Column="21"/>
       </Position>
     </JumpHistory>
     <RunParams>

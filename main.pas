@@ -9,8 +9,9 @@ uses
   Buttons, TffObjects, Utils, UserTypes, ParseBinDb, LCLType, ExtCtrls, Menus,
   ColorBox, TAGraph, TAIntervalSources, TATools, TAChartExtentLink, TASeries,
   StrUtils, DateTimePicker, channelsform, ChartUtils, LineSerieUtils, Types,
-  TADrawUtils, TAChartUtils, TADataTools, TAChartCombos, ParamOptions,
-  DateUtils,  JSONParser, JSONScanner, fpJSON, FileUtil, ToolConfiguration;
+  TADrawUtils, TAChartUtils, TADataTools, TAChartCombos, TANavigation,
+  ParamOptions, DateUtils, JSONParser, JSONScanner, fpJSON, FileUtil, Math,
+  ToolConfiguration, LCLIntf, Clipbrd, TAChartAxisUtils;
 
 type
 
@@ -49,8 +50,6 @@ type
     ChartPoints: TCheckBox;
     ChartLink: TCheckBox;
     DateTimeIntervalChartSource1: TDateTimeIntervalChartSource;
-    FastLabel: TLabel;
-    FastMode: TCheckBox;
     HideLabel: TImage;
     AddChart: TImage;
     DistanceXOff: TImage;
@@ -61,6 +60,9 @@ type
     FitX: TImage;
     FitXY: TImage;
     CloseCharts: TImage;
+    MenuItem5: TMenuItem;
+    ScreenShotFlash: TImage;
+    ScreenShot: TImage;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
@@ -77,10 +79,7 @@ type
     OptionsPage: TTabSheet;
     GPointerStyleBox: TChartComboBox;
     GPointSizeBox: TComboBox;
-    RecordCount: TLabel;
-    RecordsNumber: TTrackBar;
     RTCBugs: TCheckBox;
-    SlowLabel: TLabel;
     TabSheet1: TTabSheet;
     ZoomOff: TImage;
     MenuItem1: TMenuItem;
@@ -97,6 +96,8 @@ type
     ZoomOn: TImage;
     procedure AddChartClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure Chart1AxisList0GetMarkText(Sender: TObject; var AText: String;
+      AMark: Double);
     procedure Chart1DragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure Chart1DragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
@@ -116,6 +117,10 @@ type
       APoint: TPoint);
     procedure ChartToolset1DataPointHintTool1Hint(ATool: TDataPointHintTool;
       const APoint: TPoint; var AHint: String);
+    procedure ChartToolset1PanDragTool1AfterMouseDown(ATool: TChartTool;
+      APoint: TPoint);
+    procedure ChartToolset1PanDragTool1AfterMouseUp(ATool: TChartTool;
+      APoint: TPoint);
     procedure ChartToolset1UserDefinedTool1AfterMouseDown(ATool: TChartTool;
       APoint: TPoint);
     procedure CloseAppClick(Sender: TObject);
@@ -125,7 +130,6 @@ type
       var AText: String);
     procedure DistanceXOffClick(Sender: TObject);
     procedure DistanceYOffClick(Sender: TObject);
-    procedure FastModeChange(Sender: TObject);
     procedure FitXClick(Sender: TObject);
     procedure FitXYClick(Sender: TObject);
     procedure FitYClick(Sender: TObject);
@@ -141,8 +145,9 @@ type
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem3Click(Sender: TObject);
     procedure MenuItem4Click(Sender: TObject);
+    procedure MenuItem5Click(Sender: TObject);
     procedure PanOffClick(Sender: TObject);
-    procedure RecordsNumberChange(Sender: TObject);
+    procedure ScreenShotClick(Sender: TObject);
     procedure ShowLabelClick(Sender: TObject);
     procedure OpenFileClick(Sender: TObject);
     procedure ZoomOffClick(Sender: TObject);
@@ -200,8 +205,8 @@ var
 
   ConfiguredTools    : TStringList;
 
-  procedure OpenChannelForm(SourceNumber: Byte);
-  procedure PrepareChannelForm(SourceNumber: Byte);
+  procedure OpenChannelForm();
+  procedure PrepareChannelForm();
 
 implementation
 
@@ -251,10 +256,9 @@ begin
   NavigationMode:= PAN_MODE;
   SetNavigation(NavigationMode);
 
-  SetFastMode(FastMode.Checked);
-
   //ConfiguredTools:= TStringList.Create;
   //jReadConfigTools();
+
 end;
 
 procedure TApp.FormResize(Sender: TObject);
@@ -356,35 +360,47 @@ begin
   end;
 end;
 
+procedure TApp.MenuItem5Click(Sender: TObject);
+begin
+  MakeScreenShot(GetChart(SelectedChart).Handle);
+end;
+
 procedure TApp.PanOffClick(Sender: TObject);
 begin
   NavigationMode:= PAN_MODE;
   SetNavigation(NavigationMode);
 end;
 
-procedure TApp.RecordsNumberChange(Sender: TObject);
+procedure TApp.ScreenShotClick(Sender: TObject);
+var
+  MyBitmap : TBitmap;
+  ScreenDC : HDC;
 begin
-  RecordCount.Caption:= 'Divide by ' + IntToStr(RecordsNumber.Position);
+  ScreenShotFlash.Visible:= True;
+  Application.ProcessMessages;
+  MakeScreenShot(ChartScrollBox.Handle);
+  ScreenShotFlash.Visible:= False;
 end;
 
-procedure PrepareChannelForm(SourceNumber: Byte);
-var i : Byte;
+procedure PrepareChannelForm();
+var i : Integer;
 begin
   ShowChannelForm.ChannelList.Clear;
   ShowChannelForm.FileList.Clear;
   for i:=1 to SourceCount do begin
     ShowChannelForm.FileList.Items.Add(ExtractFileName(DataSources[i - 1].SourceName));
   end;
-  for i:=0 to Length(DataSources[SourceNumber - 1].TFFDataChannels) - 1 do begin
-    ShowChannelForm.ChannelList.Items.Add(DataSources[SourceNumber - 1].TFFDataChannels[i].DLIS);
+  for i:=0 to Length(DataSources[SourceCount - 1].TFFDataChannels) - 1 do begin
+    ShowChannelForm.ChannelList.Items.Add(DataSources[SourceCount - 1].TFFDataChannels[i].DLIS);
   end;
-  ShowChannelForm.FileList.ItemIndex:= SourceNumber - 1;
+  ShowChannelForm.FileList.ItemIndex:= SourceCount - 1;
+  CurrentSource:= SourceCount - 1;
 end;
 
-procedure OpenChannelForm(SourceNumber: Byte);
+procedure OpenChannelForm();
 var i : Byte;
 begin
-  PrepareChannelForm(SourceNumber);
+  PrepareChannelForm();
   ShowChannelForm.Show;
 end;
 
@@ -401,7 +417,7 @@ begin
         Insert(DataSource, DataSources, DATA_MAX_SIZE);
         Inc(SourceCount);
         CurrentSource:= SourceCount - 1;
-        OpenChannelForm(SourceCount);
+        OpenChannelForm();
      end
      else Application.MessageBox(GetErrorMessage(ErrorCode),'Error', MB_ICONERROR + MB_OK);
      Application.ProcessMessages;
@@ -542,10 +558,15 @@ end;
 
 procedure TApp.ChartToolset1DataPointHintTool1Hint(ATool: TDataPointHintTool;
   const APoint: TPoint; var AHint: String);
+var wStr: String;
 begin
+   wStr:= TLineSeries(ATool.Series).Title;
    OnHintXPoint:= TLineSeries(ATool.Series).GetXValue(ATool.PointIndex);
    OnHintYPoint:= TLineSeries(ATool.Series).GetYValue(ATool.PointIndex);
-   AHint:= GetSticker(TLineSeries(ATool.Series), OnHintXPoint, OnHintYPoint);
+   if (wStr = 'STATUS.SIBR.HI') Or (wStr = 'SIBR.HI') then AHint:= SWHint(Round(OnHintYPoint), SWHi, OnHintXPoint)
+   else if (wStr = 'STATUS.SIBR.LO') Or (wStr = 'SIBR.LO') then AHint:= SWHint(Round(OnHintYPoint), SWLo, OnHintXPoint)
+        else if (wStr = 'ESTATUS.SIBR.LO') Or (wStr = 'E.SIBR.LO') then AHint:= SWHint(Round(OnHintYPoint), ESWLo, OnHintXPoint)
+             else AHint:= GetSticker(TLineSeries(ATool.Series), OnHintXPoint, OnHintYPoint);
    MousePosition:= Mouse.CursorPos;
    isOnHint:= True;
    OnHintSerie:= TLineSeries(ATool.Series);
@@ -553,6 +574,19 @@ begin
    ChartToolset1DataPointHintTool1.Enabled:= True;
    ChartToolset1DataPointClickTool4.Enabled:= True;
    MenuItem1.Enabled:= True;
+end;
+
+procedure TApp.ChartToolset1PanDragTool1AfterMouseDown(ATool: TChartTool;
+  APoint: TPoint);
+begin
+  DateTimeLine.DisableRedrawing;
+end;
+
+procedure TApp.ChartToolset1PanDragTool1AfterMouseUp(ATool: TChartTool;
+  APoint: TPoint);
+begin
+  DateTimeLine.EnableRedrawing;
+  DateTimeLine.Repaint;
 end;
 
 procedure TApp.ChartToolset1UserDefinedTool1AfterMouseDown(ATool: TChartTool;
@@ -589,7 +623,7 @@ end;
 
 procedure TApp.AddChartClick(Sender: TObject);
 begin
-  if SourceCount > 0 then OpenChannelForm(SourceCount)
+  if SourceCount > 0 then OpenChannelForm()
   else Bin_DbToBin_Db();
 end;
 
@@ -625,6 +659,23 @@ begin
   end;
 end;
 
+procedure TApp.Chart1AxisList0GetMarkText(Sender: TObject; var AText: String;
+  AMark: Double);
+var AfterDot: Byte;
+begin
+   if Abs(AMark) > 1000000 then AText:= FloatToStrF(AMark, ffExponent, 0, 0)
+   else begin
+     if Abs(AMark) < 1 then AfterDot:= 5
+     else if Abs(AMark) < 100 then AfterDot:= 3
+          else if Abs(AMark) < 1000 then AfterDot:= 2
+               else if Abs(AMark) < 10000 then AfterDot:= 1
+                    else AfterDot:= 0;
+
+     AText:= FloatToStrF(AMark, ffFixed, 12, AfterDot);
+   end;
+   if AMark = 0 then AText:= '0';
+end;
+
 procedure TApp.ZoomOffClick(Sender: TObject);
 begin
   NavigationMode:= ZOOM_MODE;
@@ -641,11 +692,6 @@ procedure TApp.DistanceYOffClick(Sender: TObject);
 begin
   NavigationMode:= DISTANCE_MODE_Y;
   SetNavigation(NavigationMode);
-end;
-
-procedure TApp.FastModeChange(Sender: TObject);
-begin
-  SetFastMode(FastMode.Checked);
 end;
 
 procedure TApp.FitXClick(Sender: TObject);

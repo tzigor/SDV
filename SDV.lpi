@@ -102,6 +102,7 @@
         <Filename Value="toolconfiguration.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ToolConfigForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ToolConfiguration"/>
       </Unit>

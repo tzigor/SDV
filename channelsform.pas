@@ -6,25 +6,36 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Buttons,
-  LineSerieUtils, ChartUtils, TASeries, LCLType, TAGraph, DateUtils,
-  ToolsConfig;
+  LineSerieUtils, ChartUtils, TASeries, LCLType, ComCtrls, TAGraph, DateUtils,
+  ToolsConfig, Types;
 
 type
 
   { TShowChannelForm }
 
   TShowChannelForm = class(TForm)
+    FastLabel: TLabel;
+    FastMode: TCheckBox;
     MultiColumns: TCheckBox;
-    RemoveFileBtn: TButton;
     DrawBtn: TBitBtn;
     CloseList: TBitBtn;
     ChannelList: TListBox;
     FileList: TListBox;
+    RecordCount: TLabel;
+    RecordsNumber: TTrackBar;
+    SlowLabel: TLabel;
     procedure ChannelListDblClick(Sender: TObject);
     procedure CloseListClick(Sender: TObject);
     procedure DrawBtnClick(Sender: TObject);
+    procedure FastModeChange(Sender: TObject);
+    procedure FileListDrawItem(Control: TWinControl; Index: Integer;
+      ARect: TRect; State: TOwnerDrawState);
+    procedure FileListKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
+      );
     procedure FileListSelectionChange(Sender: TObject; User: boolean);
+    procedure FormCreate(Sender: TObject);
     procedure MultiColumnsChange(Sender: TObject);
+    procedure RecordsNumberChange(Sender: TObject);
     procedure RemoveFileBtnClick(Sender: TObject);
   private
 
@@ -71,6 +82,41 @@ begin
    ProgressDone;
 end;
 
+procedure TShowChannelForm.FastModeChange(Sender: TObject);
+begin
+  SetFastMode(FastMode.Checked);
+end;
+
+procedure TShowChannelForm.FileListDrawItem(Control: TWinControl;
+  Index: Integer; ARect: TRect; State: TOwnerDrawState);
+begin
+  with FileList do begin
+    if (odSelected in State) then begin
+       if Focused then begin
+         Canvas.Brush.Color:=clHighlight;
+         Canvas.Font.Color:=clWhite;
+       end
+       else begin
+         Canvas.Brush.Color:=clSilver;
+         Canvas.Font.Color:=clBlack;
+       end
+    end;
+    Canvas.FillRect(ARect);
+    Canvas.TextOut(ARect.Left, ARect.Top, Items[Index]);
+  end;
+end;
+
+procedure TShowChannelForm.FileListKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = 46) Or (Key = 8) then begin
+    Delete(DataSources, FileList.ItemIndex, 1);
+    Dec(SourceCount);
+    if SourceCount > 0 then PrepareChannelForm()
+    else ShowChannelForm.Close;
+  end;
+end;
+
 procedure TShowChannelForm.FileListSelectionChange(Sender: TObject;
   User: boolean);
 var i : Byte;
@@ -84,18 +130,26 @@ begin
   end;
 end;
 
+procedure TShowChannelForm.FormCreate(Sender: TObject);
+begin
+  SetFastMode(ShowChannelForm.FastMode.Checked);
+end;
+
 procedure TShowChannelForm.MultiColumnsChange(Sender: TObject);
 begin
   if MultiColumns.Checked then ChannelList.Columns:= 3
   else ChannelList.Columns:= 0;
 end;
 
+procedure TShowChannelForm.RecordsNumberChange(Sender: TObject);
+begin
+  RecordCount.Caption:= 'Divide by ' + IntToStr(RecordsNumber.Position);
+  FastModeDivider:= RecordsNumber.Position;
+end;
+
 procedure TShowChannelForm.RemoveFileBtnClick(Sender: TObject);
 begin
-  Delete(DataSources, FileList.ItemIndex, 1);
-  Dec(SourceCount);
-  if SourceCount > 0 then PrepareChannelForm(SourceCount)
-  else ShowChannelForm.Close;
+
 end;
 
 end.
