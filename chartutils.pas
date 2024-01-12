@@ -21,7 +21,7 @@ function GetChartCount: Byte;
 function GetChartNumber(ChartName: String): Byte;
 procedure ZoomChartCurrentExtent(Chart: TChart);
 function GetChart(ChartNubmber: Byte): TChart;
-procedure DateTimeLineLineSerieInit;
+procedure DateTimeLineSerieInit;
 procedure FindTimeRange;
 procedure ChartsNavigation(Value: Boolean);
 procedure SetChartsBGColor;
@@ -44,51 +44,53 @@ begin
   Result:= True;
   Value:= 0;
   Offset:= DataChannels[Channel].Offset;
-  case DataChannels[Channel].RepCode of
-  'F4': begin
-          Move(Frame.Data[Offset], F4, 4);
-          if (F4 = -999.25) then Result:= False
-          else Value:= F4;
-        end;
-  'F8': begin
-          Move(Bytes[DataOffset], F8, 8);
-          if (F8 = -999.25) then Result:= False
-          else Value:= F8;
-        end;
-  'I1': begin
-          Move(Frame.Data[Offset], I1, 1);
-          if (I1 = 127) then Result:= False
-          else Value:= I1;
-        end;
-  'U1': begin
-          Move(Frame.Data[Offset], U1, 1);
-          if (U1 = 255) then Result:= False
-          else Value:= U1;
-        end;
-  'I2': begin
-           Move(Frame.Data[Offset], I2, 2);
-           if (I2 = 32767) then Result:= False
-           else Value:= I2;
-        end;
-  'U2': begin
-           Move(Frame.Data[Offset], U2, 2);
-           if (U2 = 65535) then Result:= False
-           else Value:= U2;
-        end;
-  'U4': begin
-           Move(Frame.Data[Offset], U4, 4);
-           if (U4 = 4294967295) then Result:= False
-           else Value:= U4;
-        end;
-  'I4': begin
-          Move(Frame.Data[Offset], I4, 4);
-          if (I4 = 2147483647) then Result:= False
-          else Value:= I4;
-        end;
-  end;
+  if Channel = 0 then Value:= Frame.DateTime
+  else
+    case DataChannels[Channel].RepCode of
+    'F4': begin
+            Move(Frame.Data[Offset], F4, 4);
+            if (F4 = -999.25) then Result:= False
+            else Value:= F4;
+          end;
+    'F8': begin
+            Move(Bytes[DataOffset], F8, 8);
+            if (F8 = -999.25) then Result:= False
+            else Value:= F8;
+          end;
+    'I1': begin
+            Move(Frame.Data[Offset], I1, 1);
+            if (I1 = 127) then Result:= False
+            else Value:= I1;
+          end;
+    'U1': begin
+            Move(Frame.Data[Offset], U1, 1);
+            if (U1 = 255) then Result:= False
+            else Value:= U1;
+          end;
+    'I2': begin
+             Move(Frame.Data[Offset], I2, 2);
+             if (I2 = 32767) then Result:= False
+             else Value:= I2;
+          end;
+    'U2': begin
+             Move(Frame.Data[Offset], U2, 2);
+             if (U2 = 65535) then Result:= False
+             else Value:= U2;
+          end;
+    'U4': begin
+             Move(Frame.Data[Offset], U4, 4);
+             if (U4 = 4294967295) then Result:= False
+             else Value:= U4;
+          end;
+    'I4': begin
+            Move(Frame.Data[Offset], I4, 4);
+            if (I4 = 2147483647) then Result:= False
+            else Value:= I4;
+          end;
+    end;
 end;
 
-procedure DateTimeLineLineSerieInit;
+procedure DateTimeLineSerieInit;
 begin
   App.DateTimeLine.Visible:= False;
   App.DateTimeLineLineSerie.Clear;
@@ -107,16 +109,18 @@ var
   PrevDateTime    : TDateTime = 0;
   Sticker         : String = '';
   nPoins          : LongWord = 0;
+  DT:TDateTime;
 
 begin
   App.ChartScrollBox.Visible:= False;
   LineSerie.Clear;
-  LineSerie.Title:= Name;
+  LineSerie.Title:= AddLidZeros(IntToStr(SelectedSource + 1), 2) + '.' + Name;
   LineSerie.Legend.Visible:= True;
   SetLineSerieColor(LineSerie, GetColorBySerieName(LineSerie.Name));
   FramesCount:= Length(DataSources[SelectedSource].FrameRecords);
   ProgressInit(100, 'Process channel');
   iPrevPercent:= 0;
+  NewSerieDrawed:= True;
 
   if FramesCount < 60000 then begin
      ShowChannelForm.FastMode.Checked:= False;
@@ -130,16 +134,18 @@ begin
                          SelectedParam,
                          Value) then
       begin
-        if (DataSources[SelectedSource].FrameRecords[i].DateTime >= PrevDateTime) Or
-            Not App.RTCBugs.Checked then begin
-           LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, Sticker);
-           Sticker:= '';
-           Inc(nPoins);
-        end
-        else begin
-           Sticker:= 'Shift back in time';
+        DT:= App.StartChartsFrom.DateTime;
+        if DataSources[SelectedSource].FrameRecords[i].DateTime >= App.StartChartsFrom.DateTime then begin
+           if (DataSources[SelectedSource].FrameRecords[i].DateTime >= PrevDateTime) Or Not App.RTCBugs.Checked then begin
+              LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, Sticker);
+              Sticker:= '';
+              Inc(nPoins);
+           end
+           else begin
+              Sticker:= 'Shift back in time';
+           end;
+           PrevDateTime:= DataSources[SelectedSource].FrameRecords[i].DateTime;
         end;
-        PrevDateTime:= DataSources[SelectedSource].FrameRecords[i].DateTime;
       end;
 
     n:= Trunc(i * 100 / FramesCount);
@@ -149,21 +155,14 @@ begin
     end;
 
   end;
-  if LineSerie.Count > 0 then begin
-    if SourceCount > 1 then begin
-       if CompareDateTime(LineSerie.MinXValue, StartDateTime) < 0 then StartDateTime:= LineSerie.MinXValue;
-       if CompareDateTime(LineSerie.MaxXValue, EndDateTime) > 0 then EndDateTime:= LineSerie.MaxXValue;
-    end
-    else begin
        StartDateTime:= LineSerie.MinXValue;
        EndDateTime:= LineSerie.MaxXValue;
-    end;
-    DateTimeLineLineSerieInit
-  end;
+    //DateTimeLineSerieInit();
+    FindTimeRange();
   App.ChartScrollBox.Visible:= True;
 end;
 
-procedure FindTimeRange;
+procedure FindTimeRange();
 var i, j       : Byte;
     LineSerie  : TLineSeries;
     FirstSerie : Boolean;
@@ -185,7 +184,8 @@ begin
             end;
          end;
       end;
-   DateTimeLineLineSerieInit;
+   DateTimeLineSerieInit;
+   App.Timer.Enabled:= True;
 end;
 
 function GetChart(ChartNubmber: Byte): TChart;
@@ -217,14 +217,12 @@ begin
 end;
 
 function GetFirstChart: Byte;
-var i: Byte;
-    MinTop, n: Integer;
-    v : boolean;
+var i      : Byte;
+    MinTop : Integer;
+
 begin
   MinTop:= 65536;
   for i:=1 to MAX_CHART_NUMBER do begin
-     n:= GetChart(i).Top;
-     v:= GetChart(i).Visible;
      if GetChart(i).Visible AND (GetChart(i).Top <= MinTop) then begin
         MinTop:= GetChart(i).Top;
         Result:= i;
@@ -288,19 +286,19 @@ begin
   for i:=1 to MAX_CHART_NUMBER do GetChart(i).Visible:= visible;
 end;
 
-procedure ResetChartsZoom;
+procedure ResetChartsZoom();
 var i: byte;
 begin
   for i:=1 to MAX_CHART_NUMBER do GetChart(i).ZoomFull();
 end;
 
-procedure RepaintAll;
+procedure RepaintAll();
 var i: byte;
 begin
   for i:=1 to MAX_CHART_NUMBER do GetChart(i).Repaint;
 end;
 
-procedure SetChartsBGColor;
+procedure SetChartsBGColor();
 var i: byte;
 begin
   for i:=1 to MAX_CHART_NUMBER do GetChart(i).BackColor:= App.GChartBGColor.Selected;
@@ -330,7 +328,7 @@ var MinMax, wMinMax    : TMinMax;
 begin
   if Chart.Visible then begin
     MinMax.Min:= 1.7E308;
-    MinMax.Max:= 5.0E-324;
+    MinMax.Max:= 2.0E-324;
     for i:=0 to MAX_SERIE_NUMBER - 1 do begin
       Serie:= TLineSeries(Chart.Series[i]);
       if Serie.Count > 0 then begin

@@ -23,6 +23,7 @@ function GetMinMaxForCurrentExtent(Chart1LineSeries: TLineSeries): TMinMax;
 function GetLineMarker(Chart: TChart): TConstantLine;
 procedure SeriesReset();
 procedure SetAllLineSeriesColor();
+function GetSerieSource(SerieTitle: String): Byte;
 
 implementation
 uses Main;
@@ -98,13 +99,15 @@ begin
 end;
 
 function GetMinMaxForCurrentExtent(Chart1LineSeries: TLineSeries): TMinMax;
-var dr: TDoubleRect;
-    Max, Min: Double;
+var i, start, count : Longint;
+    dr              : TDoubleRect;
+    Max, Min        : Double;
+    CurY            : Double;
 begin
  if Chart1LineSeries.Count > 0 then begin
    dr:= Chart1LineSeries.ParentChart.CurrentExtent;
    Min:= 1.7E308;
-   Max:= 5.0E-324;
+   Max:= 2.0E-324;
    Chart1LineSeries.FindYRange(dr.a.X, dr.b.X, Min, Max);
    Result.Min:= Min;
    Result.Max:= Max;
@@ -148,6 +151,14 @@ begin
         Result:= i;
         Exit;
      end;
+end;
+
+function GetSerieSource(SerieTitle: String): Byte;
+var n: LongInt;
+begin
+  if (SerieTitle <> '') And (TryStrToInt(LeftStr(SerieTitle, 2), n)) then
+    Result:= n - 1
+  else Result:= 255;
 end;
 
 procedure SerieReset(LineSerie: TLineSeries);

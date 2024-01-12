@@ -26,15 +26,20 @@
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:zoom="15.108866"
-     inkscape:cx="90.70833"
-     inkscape:cy="78.662423"
+     inkscape:zoom="1.8886082"
+     inkscape:cx="367.20162"
+     inkscape:cy="109.86927"
      inkscape:window-width="1920"
      inkscape:window-height="1027"
      inkscape:window-x="1358"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1">
+    <sodipodi:guide
+       position="90.500947,255.53207"
+       orientation="0,-1"
+       id="guide11487" />
+  </sodipodi:namedview>
   <defs
      id="defs2">
     <linearGradient
@@ -201,7 +206,7 @@
          inkscape:export-ydpi="96" />
       <text
          xml:space="preserve"
-         style="font-size:38.0526px;line-height:1.25;font-family:'SLB Sans';-inkscape-font-specification:'SLB Sans';fill:#ff0000;stroke-width:1.18914"
+         style="font-size:38.0526px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;fill:#ff0000;stroke-width:1.18914;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal"
          x="79.211006"
          y="89.189705"
          id="text3250"
@@ -211,7 +216,7 @@
          transform="scale(1.0348798,0.96629578)"><tspan
            sodipodi:role="line"
            id="tspan3248"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'SLB Sans';-inkscape-font-specification:'SLB Sans Bold';fill:#ff0000;stroke-width:1.18914"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Calibri;-inkscape-font-specification:Calibri;fill:#ff0000;stroke-width:1.18914"
            x="79.211006"
            y="89.189705">X</tspan></text>
     </g>
@@ -438,7 +443,7 @@
          inkscape:export-ydpi="96" />
       <text
          xml:space="preserve"
-         style="font-size:3.87312px;line-height:1.25;font-family:'SLB Sans';-inkscape-font-specification:'SLB Sans';fill:#ff0000;stroke-width:0.121035"
+         style="font-size:3.87312px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;fill:#ff0000;stroke-width:0.121035;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal"
          x="47.167915"
          y="22.432091"
          id="text3250-3"
@@ -448,9 +453,104 @@
          transform="scale(1.0348798,0.96629579)"><tspan
            sodipodi:role="line"
            id="tspan3248-4"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'SLB Sans';-inkscape-font-specification:'SLB Sans Bold';fill:#ff0000;stroke-width:0.121035"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Calibri;-inkscape-font-specification:Calibri;fill:#ff0000;stroke-width:0.121035"
            x="47.167915"
            y="22.432091">Y</tspan></text>
     </g>
+    <rect
+       style="fill:#f2f2f2;stroke:#000000;stroke-width:0.0355464"
+       id="rect846-3-6"
+       width="6.5933013"
+       height="6.5933247"
+       x="15.633598"
+       y="23.128633"
+       ry="0"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\CloseCharts.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 16.093337,23.570874 v 1.506014 h 5.813916"
+       id="path1391"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\CloseCharts.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#0000ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 16.51362,23.816039 0.665448,0.770519 1.681133,-0.910613 0.717983,0.875589 2.04888,-0.893101"
+       id="path1506"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\CloseCharts.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 16.106948,25.652258 v 1.506015 h 5.813916"
+       id="path1391-3"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\CloseCharts.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#0000ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 16.527231,25.897424 0.665448,0.770519 1.681133,-0.910614 0.717983,0.87559 2.04888,-0.893102"
+       id="path1506-1"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\CloseCharts.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 16.12446,27.753674 v 1.506014 h 5.813916"
+       id="path1391-7"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\CloseCharts.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#0000ff;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 16.544743,27.998839 0.665448,0.770519 1.681133,-0.910613 0.717983,0.875589 2.04888,-0.893101"
+       id="path1506-5"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\CloseCharts.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#ff0000;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 16.933904,24.30636 4.011997,4.011998"
+       id="path1791"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\CloseCharts.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#ff0000;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 20.945901,24.201289 -4.011997,4.011998"
+       id="path1791-1"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\CloseCharts.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:53.3001px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;fill:#ff0000;stroke-width:1.66563"
+       x="57.705635"
+       y="40.91404"
+       id="text3165"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\SDV.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         sodipodi:role="line"
+         id="tspan3163"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Calibri;-inkscape-font-specification:'Calibri Bold';fill:#ff0000;stroke-width:1.66563"
+         x="57.705635"
+         y="40.91404">S</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:53.3001px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:Calibri;fill:#0000ff;stroke-width:1.66563"
+       x="79.912415"
+       y="41.356331"
+       id="text3165-1"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\SDV.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         sodipodi:role="line"
+         id="tspan3163-2"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Calibri;-inkscape-font-specification:'Calibri Bold';fill:#0000ff;stroke-width:1.66563"
+         x="79.912415"
+         y="41.356331">V</tspan></text>
   </g>
 </svg>

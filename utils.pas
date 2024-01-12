@@ -25,10 +25,16 @@ procedure SetNavigation(NavMode: Byte);
 procedure SetFastMode(Value: Boolean);
 function Expon2(n: Integer): Integer;
 procedure MakeScreenShot(Handle: HWND);
+function AddLidZeros(S: String; N: Byte): String;
 
 implementation
 
 uses Main, channelsform;
+
+function AddLidZeros(S: String; N: Byte): String;
+begin
+  Result:= AddChar('0', S, N - Length(S) + 1);
+end;
 
 function GetErrorMessage(error: Byte): PChar;
 begin
@@ -40,7 +46,7 @@ begin
   end;
 end;
 
-procedure LoadByteArray(const AFileName: string);
+procedure LoadByteArray(const AFileName: String);
 var
   AStream: TStream;
   ADataLeft: LongWord;
@@ -163,7 +169,7 @@ begin
                                        'Max value = ' + FloatToStrF(Serie.GetYMax, ffFixed, 12, AfterDot) + NewLine
   else AddStr:= '';
   sUnit:= ParametersUnits[StrToInt(MidStr(Serie.Name, 6, 1)), StrToInt(MidStr(Serie.Name, 12, 1))];
-  Result:= Serie.Title + ' = ' + FloatToStrF(y, ffFixed, 12, AfterDot) + ' ' + sUnit + NewLine + AddStr + DateTimeToStr(x);
+  Result:= Serie.Title + ' = ' + FloatToStrF(y, ffFixed, 12, AfterDot) + ' ' + sUnit + NewLine + AddStr + FormatDateTime('dd.mm.yy hh:nn:ss', x) //  DateTimeToStr(x);
 end;
 
 procedure StickLabel(ChartLineSerie: TLineSeries);

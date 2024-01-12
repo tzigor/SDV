@@ -11,14 +11,14 @@ uses
   StrUtils, DateTimePicker, channelsform, ChartUtils, LineSerieUtils, Types,
   TADrawUtils, TAChartUtils, TADataTools, TAChartCombos, TANavigation,
   ParamOptions, DateUtils, JSONParser, JSONScanner, fpJSON, FileUtil, Math,
-  ToolConfiguration, LCLIntf, Clipbrd, TAChartAxisUtils;
+  ToolConfiguration, LCLIntf, Clipbrd, Calendar, EditBtn, TAChartAxisUtils,
+  TALegend, TALegendPanel;
 
 type
 
   { TApp }
 
   TApp = class(TForm)
-    Button1: TButton;
     Chart1: TChart;
     Chart2: TChart;
     Chart3: TChart;
@@ -27,6 +27,8 @@ type
     Chart6: TChart;
     Chart7: TChart;
     Chart8: TChart;
+    MenuItem6: TMenuItem;
+    StartChartsFrom: TDateTimePicker;
     GChartBGColor: TColorBox;
     ChartExtentLink1: TChartExtentLink;
     ChartScrollBox: TScrollBox;
@@ -60,6 +62,7 @@ type
     FitX: TImage;
     FitXY: TImage;
     CloseCharts: TImage;
+    Label1: TLabel;
     MenuItem5: TMenuItem;
     ScreenShotFlash: TImage;
     ScreenShot: TImage;
@@ -70,7 +73,6 @@ type
     Label6: TLabel;
     GLineStyleBox: TChartComboBox;
     GLineWidthBox: TChartComboBox;
-    Memo1: TMemo;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
     Panel1: TPanel;
@@ -80,7 +82,7 @@ type
     GPointerStyleBox: TChartComboBox;
     GPointSizeBox: TComboBox;
     RTCBugs: TCheckBox;
-    TabSheet1: TTabSheet;
+    Timer: TTimer;
     ZoomOff: TImage;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
@@ -95,12 +97,14 @@ type
     ProcessProgress: TProgressBar;
     ZoomOn: TImage;
     procedure AddChartClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure Chart1AxisList0GetMarkText(Sender: TObject; var AText: String;
       AMark: Double);
     procedure Chart1DragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure Chart1DragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
+    procedure Chart1DrawLegend(ASender: TChart; ADrawer: IChartDrawer;
+      ALegendItems: TChartLegendItems; ALegendItemSize: TPoint;
+      const ALegendRect: TRect; AColCount, ARowCount: Integer);
     procedure ChartLinkChange(Sender: TObject);
     procedure ChartPointsChange(Sender: TObject);
     procedure ChartToolset1DataPointClickTool1PointClick(ATool: TChartTool;
@@ -126,6 +130,7 @@ type
     procedure CloseAppClick(Sender: TObject);
     procedure CloseChartsClick(Sender: TObject);
     procedure ColorsSyncChange(Sender: TObject);
+    procedure DateTimeLineExtentChanged(ASender: TChart);
     procedure DistanceToolGetDistanceText(ASender: TDataPointDistanceTool;
       var AText: String);
     procedure DistanceXOffClick(Sender: TObject);
@@ -146,10 +151,13 @@ type
     procedure MenuItem3Click(Sender: TObject);
     procedure MenuItem4Click(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
+    procedure MenuItem6Click(Sender: TObject);
     procedure PanOffClick(Sender: TObject);
     procedure ScreenShotClick(Sender: TObject);
     procedure ShowLabelClick(Sender: TObject);
     procedure OpenFileClick(Sender: TObject);
+    procedure TimerStopTimer(Sender: TObject);
+    procedure TimerTimer(Sender: TObject);
     procedure ZoomOffClick(Sender: TObject);
   private
 
@@ -195,9 +203,11 @@ var
   { Variables are initialized if OnHint event occur  }
   isOnHint           : Boolean = False;
   OnHintSerie        : TLineSeries;
+  OnHintPointIndex   : LongWord;
   OnHintXPoint       : Double;
   OnHintYPoint       : Double;
   SavedOnHintSerie   : TLineSeries;
+  NewSerieDrawed     : Boolean = False;
 
   NavigationMode     : Byte;
   SavedDateTimePoint : TDateTime;  { Date/Time point for time synchronization }
@@ -230,11 +240,13 @@ begin
 
   for i:= 1 to MAX_CHART_NUMBER do begin
      Chart:= GetChart(i);
+     Chart.Frame.Color:= RGBToColor(100, 100, 100);
      Chart.BackColor:= GChartBGColor.Selected;
      Chart.Margins.Top:= 10;
      Chart.Margins.Bottom:= 10;
      Chart.Margins.Left:= 10;
      Chart.Margins.Right:= 10;
+     Chart.MarginsExternal.Bottom:= 3;
      Chart.Legend.Visible:= True;
      Chart.Legend.Frame.Color:= clSilver;
      Chart.Legend.UseSidebar:= False;
@@ -242,6 +254,9 @@ begin
      Chart.Foot.Visible:= False;
   end;
   DateTimeIntervalChartSource1.DateTimeFormat:='hh:mm:ss'+#13#10+'DD.MM.YY';
+
+  for i:= 1 to MAX_CHART_NUMBER do
+     for j:= 1 to MAX_SERIE_NUMBER do GetLineSerie(i, j).Marks.Style:= smsLabel;
 
   if ChartPoints.Checked then PointersVisible(True)
   else PointersVisible(False);
@@ -255,9 +270,6 @@ begin
 
   NavigationMode:= PAN_MODE;
   SetNavigation(NavigationMode);
-
-  //ConfiguredTools:= TStringList.Create;
-  //jReadConfigTools();
 
 end;
 
@@ -299,7 +311,7 @@ begin
    HideLabel.Visible:= False;
    ShowLabel.Visible:= True;
    for i:= 1 to MAX_CHART_NUMBER do
-     for j:= 1 to MAX_SERIE_NUMBER do GetLineSerie(i, j).Marks.Style:= smsNone
+     for j:= 1 to MAX_SERIE_NUMBER do GetLineSerie(i, j).Marks.Style:= smsLabel
 end;
 
 procedure TApp.ShowLabelClick(Sender: TObject);
@@ -308,7 +320,7 @@ begin
    ShowLabel.Visible:= False;
    HideLabel.Visible:= True;
    for i:= 1 to MAX_CHART_NUMBER do
-     for j:= 1 to MAX_SERIE_NUMBER do GetLineSerie(i, j).Marks.Style:= smsLabel
+     for j:= 1 to MAX_SERIE_NUMBER do GetLineSerie(i, j).Marks.Style:= smsNone
 end;
 
 procedure TApp.MenuItem1Click(Sender: TObject);
@@ -345,17 +357,26 @@ begin
 end;
 
 procedure TApp.MenuItem4Click(Sender: TObject);
-var wDT, i : LongInt;
+var wDT, n : LongInt;
     XVal   : Double;
+    i, j   : Byte;
+    Source : Byte;
+    Serie  : TLineSeries;
 begin
   if Not (SavedOnHintSerie = OnHintSerie) then begin
     wDT:= SecondsBetween(SavedDateTimePoint, OnHintXPoint);
     if CompareDateTime(SavedDateTimePoint, OnHintXPoint) < 0 then wDT:= -wDT;
-    for i:=0 to OnHintSerie.Count - 1 do begin
-       XVal:= OnHintSerie.GetXValue(i);
-       XVal:= IncSecond(XVal, wDT);
-       OnHintSerie.SetXValue(i, XVal);
-    end;
+    Source:= GetSerieSource(OnHintSerie.Title);
+    for i:= 1 to MAX_CHART_NUMBER do
+     for j:= 1 to MAX_SERIE_NUMBER do begin
+        Serie:= GetLineSerie(i, j);
+        if GetSerieSource(Serie.Title) = Source then
+          for n:=0 to Serie.Count - 1 do begin
+            XVal:= Serie.GetXValue(n);
+            XVal:= IncSecond(XVal, wDT);
+            Serie.SetXValue(n, XVal);
+          end;
+     end;
     FindTimeRange;
   end;
 end;
@@ -365,6 +386,12 @@ begin
   MakeScreenShot(GetChart(SelectedChart).Handle);
 end;
 
+procedure TApp.MenuItem6Click(Sender: TObject);
+begin
+  OnHintSerie.Delete(OnHintPointIndex);
+  App.FitYClick(Sender);
+end;
+
 procedure TApp.PanOffClick(Sender: TObject);
 begin
   NavigationMode:= PAN_MODE;
@@ -372,9 +399,6 @@ begin
 end;
 
 procedure TApp.ScreenShotClick(Sender: TObject);
-var
-  MyBitmap : TBitmap;
-  ScreenDC : HDC;
 begin
   ScreenShotFlash.Visible:= True;
   Application.ProcessMessages;
@@ -398,7 +422,6 @@ begin
 end;
 
 procedure OpenChannelForm();
-var i : Byte;
 begin
   PrepareChannelForm();
   ShowChannelForm.Show;
@@ -428,7 +451,16 @@ end;
 procedure TApp.OpenFileClick(Sender: TObject);
 begin
   Bin_DbToBin_Db();
-  //ShowConfigForm();
+end;
+
+procedure TApp.TimerStopTimer(Sender: TObject);
+begin
+  App.FitXYClick(Sender);
+end;
+
+procedure TApp.TimerTimer(Sender: TObject);
+begin
+  App.Timer.Enabled:= False;
 end;
 
 procedure TApp.CloseAppClick(Sender: TObject);
@@ -451,6 +483,12 @@ end;
 procedure TApp.ColorsSyncChange(Sender: TObject);
 begin
   SetAllLineSeriesColor();
+end;
+
+procedure TApp.DateTimeLineExtentChanged(ASender: TChart);
+begin
+  if NewSerieDrawed then App.DateTimeLine.ZoomFull();
+  NewSerieDrawed:= False;
 end;
 
 procedure TApp.ChartLinkChange(Sender: TObject);
@@ -537,6 +575,7 @@ begin
         isOnHint:= False;
         OnHintSerie:= Nil;
         MenuItem1.Enabled:= False;
+        MenuItem6.Enabled:= False;
      end;
 end;
 
@@ -561,6 +600,7 @@ procedure TApp.ChartToolset1DataPointHintTool1Hint(ATool: TDataPointHintTool;
 var wStr: String;
 begin
    wStr:= TLineSeries(ATool.Series).Title;
+   OnHintPointIndex:= ATool.PointIndex;
    OnHintXPoint:= TLineSeries(ATool.Series).GetXValue(ATool.PointIndex);
    OnHintYPoint:= TLineSeries(ATool.Series).GetYValue(ATool.PointIndex);
    if (wStr = 'STATUS.SIBR.HI') Or (wStr = 'SIBR.HI') then AHint:= SWHint(Round(OnHintYPoint), SWHi, OnHintXPoint)
@@ -574,6 +614,7 @@ begin
    ChartToolset1DataPointHintTool1.Enabled:= True;
    ChartToolset1DataPointClickTool4.Enabled:= True;
    MenuItem1.Enabled:= True;
+   MenuItem6.Enabled:= True;
 end;
 
 procedure TApp.ChartToolset1PanDragTool1AfterMouseDown(ATool: TChartTool;
@@ -602,6 +643,13 @@ begin
   if Source = ShowChannelForm.ChannelList then Accept:=True;
 end;
 
+procedure TApp.Chart1DrawLegend(ASender: TChart; ADrawer: IChartDrawer;
+  ALegendItems: TChartLegendItems; ALegendItemSize: TPoint;
+  const ALegendRect: TRect; AColCount, ARowCount: Integer);
+begin
+
+end;
+
 procedure TApp.Chart1DragDrop(Sender, Source: TObject; X, Y: Integer);
 var Chart       : TChart;
     Serie       : Byte;
@@ -627,37 +675,37 @@ begin
   else Bin_DbToBin_Db();
 end;
 
-procedure TApp.Button1Click(Sender: TObject);
-var
-  JsonParser: TJSONParser;
-  JsonObject, JsonNestedObj: TJSONObject;
-  JsonEnum: TBaseJSONEnumerator;
-  cJsonStr: TFileStream;
-  i: integer;
-begin
-  cJsonStr:= TFileStream.Create('ChannelsConfig.json',fmOpenRead or fmShareDenyWrite);
-  JsonParser := TJSONParser.Create(cJsonStr, []);
-  try
-    JsonObject := JsonParser.Parse as TJSONObject;
-    JsonObject:=JsonObject.FindPath('SIB-R.channels.statusWords') as TJSONObject;
-    try
-      JsonEnum := JsonObject.GetEnumerator;
-      try
-        while JsonEnum.MoveNext do
-          //Memo1.Lines.Add(JsonEnum.Current.Key);
-            if JsonObject.Types[JsonEnum.Current.Key] = jtArray then
-                 for i:=0 to Pred(TJSONArray(JsonEnum.Current.Value).Count) do
-                   Memo1.Lines.Add(TJSONArray(JsonEnum.Current.Value).Items[i].AsString);
-      finally
-        FreeAndNil(JsonEnum)
-      end;
-    finally
-      FreeAndNil(JsonObject);
-    end;
-  finally
-    FreeAndNil(JsonParser);
-  end;
-end;
+//procedure TApp.Button1Click(Sender: TObject);
+//var
+//  JsonParser: TJSONParser;
+//  JsonObject, JsonNestedObj: TJSONObject;
+//  JsonEnum: TBaseJSONEnumerator;
+//  cJsonStr: TFileStream;
+//  i: integer;
+//begin
+//  cJsonStr:= TFileStream.Create('ChannelsConfig.json',fmOpenRead or fmShareDenyWrite);
+//  JsonParser := TJSONParser.Create(cJsonStr, []);
+//  try
+//    JsonObject := JsonParser.Parse as TJSONObject;
+//    JsonObject:=JsonObject.FindPath('SIB-R.channels.statusWords') as TJSONObject;
+//    try
+//      JsonEnum := JsonObject.GetEnumerator;
+//      try
+//        while JsonEnum.MoveNext do
+//          Memo1.Lines.Add(JsonEnum.Current.Key);
+//            if JsonObject.Types[JsonEnum.Current.Key] = jtArray then
+//                 for i:=0 to Pred(TJSONArray(JsonEnum.Current.Value).Count) do
+//                   Memo1.Lines.Add(TJSONArray(JsonEnum.Current.Value).Items[i].AsString);
+//      finally
+//        FreeAndNil(JsonEnum)
+//      end;
+//    finally
+//      FreeAndNil(JsonObject);
+//    end;
+//  finally
+//    FreeAndNil(JsonParser);
+//  end;
+//end;
 
 procedure TApp.Chart1AxisList0GetMarkText(Sender: TObject; var AText: String;
   AMark: Double);
@@ -723,7 +771,7 @@ begin
   if NavigationMode = DISTANCE_MODE_X then begin
      DTime:= ASender.Distance(cuAxis);
      Days:= DaysBetween(0, DTime);
-     AText:= 'Distance: Days-' + IntToStr(Days) + #13#10 + 'Time-' + TimeToStr(TimeOf(DTime));
+     AText:= 'Distance: Days - ' + IntToStr(Days) + #13#10 + 'Time - ' + TimeToStr(TimeOf(DTime));
   end
   else begin
      DTime:= ASender.Distance(cuAxis);
