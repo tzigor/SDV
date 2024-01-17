@@ -27,6 +27,7 @@ type
     Chart6: TChart;
     Chart7: TChart;
     Chart8: TChart;
+    Label7: TLabel;
     MenuItem6: TMenuItem;
     StartChartsFrom: TDateTimePicker;
     GChartBGColor: TColorBox;
@@ -82,6 +83,7 @@ type
     GPointerStyleBox: TChartComboBox;
     GPointSizeBox: TComboBox;
     RTCBugs: TCheckBox;
+    EndPoint: TDateTimePicker;
     Timer: TTimer;
     ZoomOff: TImage;
     MenuItem1: TMenuItem;
@@ -117,6 +119,8 @@ type
       APoint: TPoint);
     procedure ChartToolset1DataPointClickTool4PointClick(ATool: TChartTool;
       APoint: TPoint);
+    procedure ChartToolset1DataPointHintTool1AfterKeyDown(ATool: TChartTool;
+      APoint: TPoint);
     procedure ChartToolset1DataPointHintTool1AfterMouseMove(ATool: TChartTool;
       APoint: TPoint);
     procedure ChartToolset1DataPointHintTool1Hint(ATool: TDataPointHintTool;
@@ -138,8 +142,10 @@ type
     procedure FitXClick(Sender: TObject);
     procedure FitXYClick(Sender: TObject);
     procedure FitYClick(Sender: TObject);
+    procedure FormChangeBounds(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure GChartBGColorChange(Sender: TObject);
     procedure GLineStyleBoxChange(Sender: TObject);
     procedure GLineWidthBoxChange(Sender: TObject);
@@ -229,6 +235,7 @@ var i, j  : Byte;
     Chart : TChart;
 begin
   DecimalSeparator:= '.';
+  App.ChartScrollBox.Left:= 0;
   SetLength(DataSources, 0);
   ChartsVisible(False);
   ResetChartsZoom;
@@ -271,12 +278,22 @@ begin
   NavigationMode:= PAN_MODE;
   SetNavigation(NavigationMode);
 
+  EndPoint.DateTime:= Now;
+
 end;
+
 
 procedure TApp.FormResize(Sender: TObject);
 begin
   if ChartsCount > 1 then begin
      ChartsPosition;
+  end;
+end;
+
+procedure TApp.FormShow(Sender: TObject);
+begin
+  if ShowChannelForm.DockedToMain.Checked then begin
+    ShowChannelForm.Show;
   end;
 end;
 
@@ -438,6 +455,8 @@ begin
      TffStructure.Done;
      if ErrorCode = NO_ERROR then begin
         Insert(DataSource, DataSources, DATA_MAX_SIZE);
+        if Length(DataSources[CurrentSource].FrameRecords) > 50000 then ShowChannelForm.FastMode.Checked:= True
+        else ShowChannelForm.FastMode.Checked:= False;
         Inc(SourceCount);
         CurrentSource:= SourceCount - 1;
         OpenChannelForm();
@@ -566,6 +585,12 @@ begin
   ParamOptionsForm.Show;
 end;
 
+procedure TApp.ChartToolset1DataPointHintTool1AfterKeyDown(ATool: TChartTool;
+  APoint: TPoint);
+begin
+
+end;
+
 procedure TApp.ChartToolset1DataPointHintTool1AfterMouseMove(ATool: TChartTool;
   APoint: TPoint);
 begin
@@ -600,6 +625,7 @@ procedure TApp.ChartToolset1DataPointHintTool1Hint(ATool: TDataPointHintTool;
 var wStr: String;
 begin
    wStr:= TLineSeries(ATool.Series).Title;
+   Delete(wStr, 1, 3);
    OnHintPointIndex:= ATool.PointIndex;
    OnHintXPoint:= TLineSeries(ATool.Series).GetXValue(ATool.PointIndex);
    OnHintYPoint:= TLineSeries(ATool.Series).GetYValue(ATool.PointIndex);
@@ -752,6 +778,15 @@ procedure TApp.FitYClick(Sender: TObject);
 var i: Byte;
 begin
   for i:=1 to MAX_CHART_NUMBER do ZoomChartCurrentExtent(GetChart(i));
+end;
+
+procedure TApp.FormChangeBounds(Sender: TObject);
+begin
+  if ShowChannelForm.Showing And ShowChannelForm.DockedToMain.Checked then begin
+    ShowChannelForm.Left:= App.Left + 2;
+    ShowChannelForm.Top:= App.Top + 89;
+    ShowChannelForm.Height:= App.ChartScrollBox.Height - 32;
+  end;
 end;
 
 procedure TApp.FitXYClick(Sender: TObject);

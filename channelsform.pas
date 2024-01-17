@@ -6,16 +6,18 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Buttons,
-  LineSerieUtils, ChartUtils, TASeries, LCLType, ComCtrls, TAGraph, DateUtils,
-  ToolsConfig, Types;
+  LineSerieUtils, ChartUtils, TASeries, LCLType, ComCtrls, IniPropStorage,
+  TAGraph, DateUtils, ToolsConfig, Types;
 
 type
 
   { TShowChannelForm }
 
   TShowChannelForm = class(TForm)
+    DockedToMain: TCheckBox;
     FastLabel: TLabel;
     FastMode: TCheckBox;
+    IniPropStorage1: TIniPropStorage;
     MultiColumns: TCheckBox;
     DrawBtn: TBitBtn;
     CloseList: TBitBtn;
@@ -25,15 +27,20 @@ type
     RecordsNumber: TTrackBar;
     SlowLabel: TLabel;
     procedure ChannelListDblClick(Sender: TObject);
+    procedure ChannelListDrawItem(Control: TWinControl; Index: Integer;
+      ARect: TRect; State: TOwnerDrawState);
     procedure CloseListClick(Sender: TObject);
+    procedure DockedToMainChange(Sender: TObject);
     procedure DrawBtnClick(Sender: TObject);
     procedure FastModeChange(Sender: TObject);
+    procedure FileListClick(Sender: TObject);
     procedure FileListDrawItem(Control: TWinControl; Index: Integer;
       ARect: TRect; State: TOwnerDrawState);
     procedure FileListKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
       );
     procedure FileListSelectionChange(Sender: TObject; User: boolean);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure MultiColumnsChange(Sender: TObject);
     procedure RecordsNumberChange(Sender: TObject);
     procedure RemoveFileBtnClick(Sender: TObject);
@@ -53,15 +60,56 @@ uses Main, Utils, UserTypes;
 
 { TShowChannelForm }
 
+procedure DockForm();
+begin
+  if ShowChannelForm.DockedToMain.Checked then begin
+    App.ChartScrollBox.Left:= ShowChannelForm.Width;
+    ShowChannelForm.Left:= App.Left + 2;
+    ShowChannelForm.Top:= App.Top + 89;
+    ShowChannelForm.Height:= App.ChartScrollBox.Height - 32;
+    ShowChannelForm.CloseList.Enabled:= False;
+    ShowChannelForm.BorderIcons:= [];
+  end
+  else begin
+    App.ChartScrollBox.Left:= 0;
+    ShowChannelForm.CloseList.Enabled:= True;
+    ShowChannelForm.BorderIcons:= [biSystemMenu,biMinimize,biMaximize];
+  end;
+end;
+
 procedure TShowChannelForm.CloseListClick(Sender: TObject);
 begin
   ShowChannelForm.Close;
+end;
+
+procedure TShowChannelForm.DockedToMainChange(Sender: TObject);
+begin
+  DockForm();
 end;
 
 procedure TShowChannelForm.ChannelListDblClick(Sender: TObject);
 begin
   if ChannelList.ItemIndex = -1 then Exit;
   DrawBtnClick(Sender);
+end;
+
+procedure TShowChannelForm.ChannelListDrawItem(Control: TWinControl;
+  Index: Integer; ARect: TRect; State: TOwnerDrawState);
+begin
+   with ChannelList do begin
+     if StrInArray(Items[Index], AmplitudesChannels) then Canvas.Font.Color:= clBlue
+     else if StrInArray(Items[Index], PhaseChannels) then Canvas.Font.Color:= RGBToColor(200, 70, 70)
+           else if StrInArray(Items[Index], VoltChannels) then Canvas.Font.Color:= RGBToColor(255, 0, 0)
+                else if StrInArray(Items[Index], SystemChannels) then Canvas.Font.Color:= RGBToColor(200, 0, 200);
+
+     if (odSelected in State) then begin
+       Canvas.Brush.Color:=clBlue;
+       Canvas.Font.Color:=clWhite;
+     end;
+
+     Canvas.FillRect(ARect);
+     Canvas.TextOut(ARect.Left, ARect.Top, Items[Index]);
+    end
 end;
 
 procedure TShowChannelForm.DrawBtnClick(Sender: TObject);
@@ -85,6 +133,11 @@ end;
 procedure TShowChannelForm.FastModeChange(Sender: TObject);
 begin
   SetFastMode(FastMode.Checked);
+end;
+
+procedure TShowChannelForm.FileListClick(Sender: TObject);
+begin
+
 end;
 
 procedure TShowChannelForm.FileListDrawItem(Control: TWinControl;
@@ -120,10 +173,13 @@ end;
 procedure TShowChannelForm.FileListSelectionChange(Sender: TObject;
   User: boolean);
 var i : Byte;
+    n : LongWord;
 begin
   if SourceCount > 1 then begin
     CurrentSource:= FileList.ItemIndex;
     ChannelList.Clear;
+    if Length(DataSources[CurrentSource].FrameRecords) > 50000 then FastMode.Checked:= True
+    else FastMode.Checked:= False;
     for i:=0 to Length(DataSources[CurrentSource].TFFDataChannels) - 1 do begin
       ShowChannelForm.ChannelList.Items.Add(DataSources[CurrentSource].TFFDataChannels[i].DLIS);
     end;
@@ -133,6 +189,11 @@ end;
 procedure TShowChannelForm.FormCreate(Sender: TObject);
 begin
   SetFastMode(ShowChannelForm.FastMode.Checked);
+end;
+
+procedure TShowChannelForm.FormShow(Sender: TObject);
+begin
+  DockForm();
 end;
 
 procedure TShowChannelForm.MultiColumnsChange(Sender: TObject);

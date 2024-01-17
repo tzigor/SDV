@@ -109,7 +109,6 @@ var
   PrevDateTime    : TDateTime = 0;
   Sticker         : String = '';
   nPoins          : LongWord = 0;
-  DT:TDateTime;
 
 begin
   App.ChartScrollBox.Visible:= False;
@@ -134,8 +133,8 @@ begin
                          SelectedParam,
                          Value) then
       begin
-        DT:= App.StartChartsFrom.DateTime;
-        if DataSources[SelectedSource].FrameRecords[i].DateTime >= App.StartChartsFrom.DateTime then begin
+        if (DataSources[SelectedSource].FrameRecords[i].DateTime >= App.StartChartsFrom.DateTime) And
+           (DataSources[SelectedSource].FrameRecords[i].DateTime <= App.EndPoint.DateTime) then begin
            if (DataSources[SelectedSource].FrameRecords[i].DateTime >= PrevDateTime) Or Not App.RTCBugs.Checked then begin
               LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, Sticker);
               Sticker:= '';

@@ -26,6 +26,7 @@ procedure SetFastMode(Value: Boolean);
 function Expon2(n: Integer): Integer;
 procedure MakeScreenShot(Handle: HWND);
 function AddLidZeros(S: String; N: Byte): String;
+function StrInArray(Value: String; Arr: array of String): Boolean;
 
 implementation
 
@@ -270,6 +271,18 @@ begin
   finally
     FreeAndNil(MyBitmap);
   end;
+end;
+
+function StrInArray(Value: String; Arr: array of String): Boolean;
+var i, Len: Word;
+begin
+  Len:= Length(Arr);
+  for i:=0 to Len - 1 do
+    if Value = Arr[i] then begin
+       Result:= True;
+       Exit;
+    end;
+  Result:= False;
 end;
 
 end.

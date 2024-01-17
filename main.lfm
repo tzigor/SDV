@@ -1,32 +1,35 @@
 object App: TApp
-  Left = 1830
-  Height = 686
-  Top = -714
-  Width = 1199
+  Left = 1890
+  Height = 823
+  Top = -730
+  Width = 1354
   Caption = 'Smart Data Viewer v0.1'
-  ClientHeight = 686
-  ClientWidth = 1199
+  ClientHeight = 823
+  ClientWidth = 1354
   Color = clWhite
+  OnChangeBounds = FormChangeBounds
   OnCreate = FormCreate
   OnResize = FormResize
+  OnShow = FormShow
   LCLVersion = '3.0.0.2'
   WindowState = wsMaximized
   object PageControl1: TPageControl
     Left = 0
-    Height = 686
+    Height = 823
     Top = 0
-    Width = 1199
+    Width = 1354
     ActivePage = ChartPage
     Align = alClient
     Anchors = [akTop, akLeft, akRight]
+    DockSite = True
     TabIndex = 0
     TabOrder = 0
     object ChartPage: TTabSheet
       Caption = 'Chart'
-      ClientHeight = 658
-      ClientWidth = 1191
+      ClientHeight = 795
+      ClientWidth = 1346
       object CloseApp: TBitBtn
-        Left = 1115
+        Left = 1270
         Height = 25
         Top = 2
         Width = 75
@@ -46,7 +49,7 @@ object App: TApp
       object ProcessProgress: TProgressBar
         Left = 96
         Height = 15
-        Top = 642
+        Top = 779
         Width = 320
         Anchors = [akLeft, akBottom]
         TabOrder = 1
@@ -55,7 +58,7 @@ object App: TApp
       object ProcessLabel: TLabel
         Left = 0
         Height = 15
-        Top = 642
+        Top = 779
         Width = 85
         Anchors = [akLeft, akBottom]
         Caption = 'Process channel'
@@ -727,14 +730,14 @@ object App: TApp
       end
       object ChartScrollBox: TScrollBox
         Left = 0
-        Height = 606
+        Height = 743
         Top = 34
-        Width = 1189
+        Width = 1345
         HorzScrollBar.Page = 75
         VertScrollBar.Page = 37
         Anchors = [akTop, akLeft, akRight, akBottom]
-        ClientHeight = 602
-        ClientWidth = 1185
+        ClientHeight = 739
+        ClientWidth = 1341
         Color = clWhite
         ParentBackground = False
         ParentColor = False
@@ -743,8 +746,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 492
-          Width = 1187
+          Top = 611
+          Width = 1343
           AllowPanning = False
           AllowZoom = False
           AntialiasingMode = amOn
@@ -806,8 +809,8 @@ object App: TApp
         object DateTimeLine: TChart
           Left = 0
           Height = 37
-          Top = 565
-          Width = 1187
+          Top = 702
+          Width = 1343
           AllowPanning = False
           AllowZoom = False
           AntialiasingMode = amOff
@@ -869,8 +872,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 420
-          Width = 1187
+          Top = 523
+          Width = 1343
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -933,8 +936,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 347
-          Width = 1187
+          Top = 433
+          Width = 1343
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -997,8 +1000,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 275
-          Width = 1187
+          Top = 345
+          Width = 1343
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1061,8 +1064,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 202
-          Width = 1187
+          Top = 255
+          Width = 1343
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1125,8 +1128,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 129
-          Width = 1187
+          Top = 166
+          Width = 1343
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1189,8 +1192,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 51
-          Top = 73
-          Width = 1187
+          Top = 95
+          Width = 1343
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1253,8 +1256,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 59
-          Top = 8
-          Width = 1187
+          Top = 16
+          Width = 1343
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1316,7 +1319,7 @@ object App: TApp
         end
       end
       object CloseCharts: TImage
-        Left = 1080
+        Left = 1235
         Height = 25
         Hint = 'Close all charts'
         Top = 3
@@ -1383,7 +1386,7 @@ object App: TApp
         TabOrder = 7
       end
       object ScreenShot: TImage
-        Left = 1040
+        Left = 1195
         Height = 25
         Hint = 'Charts to clipboard'
         Top = 4
@@ -1445,7 +1448,7 @@ object App: TApp
         ShowHint = True
       end
       object ScreenShotFlash: TImage
-        Left = 1040
+        Left = 1195
         Height = 25
         Top = 4
         Width = 25
@@ -1547,11 +1550,46 @@ object App: TApp
         HideDateTimeParts = []
         MonthNames = 'Long'
       end
+      object Label7: TLabel
+        Left = 736
+        Height = 15
+        Top = 10
+        Width = 54
+        Caption = 'End point:'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        ParentFont = False
+      end
+      object EndPoint: TDateTimePicker
+        Left = 795
+        Height = 23
+        Top = 6
+        Width = 83
+        CenturyFrom = 1941
+        DateDisplayOrder = ddoDMY
+        MaxDate = 2958465
+        MinDate = -53780
+        TabOrder = 9
+        TrailingSeparator = False
+        TextForNullDate = 'NULL'
+        LeadingZeros = True
+        Kind = dtkDate
+        TimeFormat = tf24
+        TimeDisplay = tdHMS
+        DateMode = dmComboBox
+        Date = 44562
+        Time = 0.347868865741475
+        UseDefaultSeparators = True
+        HideDateTimeParts = []
+        MonthNames = 'Long'
+      end
     end
     object OptionsPage: TTabSheet
       Caption = 'Options'
-      ClientHeight = 658
-      ClientWidth = 1191
+      ClientHeight = 795
+      ClientWidth = 1346
       object Label2: TLabel
         Left = 8
         Height = 15
@@ -1744,6 +1782,7 @@ object App: TApp
       OnAfterMouseDown = ChartToolset1UserDefinedTool1AfterMouseDown
     end
     object ChartToolset1DataPointHintTool1: TDataPointHintTool
+      OnAfterKeyDown = ChartToolset1DataPointHintTool1AfterKeyDown
       OnAfterMouseMove = ChartToolset1DataPointHintTool1AfterMouseMove
       ActiveCursor = crCross
       OnHint = ChartToolset1DataPointHintTool1Hint
