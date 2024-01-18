@@ -24,6 +24,7 @@ function GetLineMarker(Chart: TChart): TConstantLine;
 procedure SeriesReset();
 procedure SetAllLineSeriesColor();
 function GetSerieSource(SerieTitle: String): Byte;
+function AddConstLineSerie(AChart: TChart; AName: String; Pos: Double): TConstantLine;
 
 implementation
 uses Main;
@@ -45,6 +46,19 @@ begin
     Marks.Style:= smsLabel;
     Marks.LinkPen.Color:= clGray;
   end;
+  AChart.AddSeries(Result);
+end;
+
+function AddConstLineSerie(AChart: TChart; AName: String; Pos: Double): TConstantLine;
+begin
+  Result := TConstantLine.Create(AChart);
+  TConstantLine(Result).Name:= AChart.Name + AName;
+  TConstantLine(Result).AxisIndex:= 1;
+  TConstantLine(Result).LineStyle:= lsVertical;
+  TConstantLine(Result).SeriesColor:= App.VertLineColor.Selected;
+  TConstantLine(Result).Pen.Style:= App.VertLineStyle.PenStyle;
+  TConstantLine(Result).Pen.Width:= App.VertLineWidth.PenWidth;
+  TConstantLine(Result).Position:= Pos;
   AChart.AddSeries(Result);
 end;
 

@@ -63,7 +63,8 @@ uses Main, Utils, UserTypes;
 procedure DockForm();
 begin
   if ShowChannelForm.DockedToMain.Checked then begin
-    App.ChartScrollBox.Left:= ShowChannelForm.Width;
+    App.ChartScrollBox.Left:= ShowChannelForm.Width - 4;
+    App.ChartScrollBox.Width:= App.Width - ShowChannelForm.Width;
     ShowChannelForm.Left:= App.Left + 2;
     ShowChannelForm.Top:= App.Top + 89;
     ShowChannelForm.Height:= App.ChartScrollBox.Height - 32;
@@ -71,6 +72,7 @@ begin
     ShowChannelForm.BorderIcons:= [];
   end
   else begin
+    App.ChartScrollBox.Width:= App.Width - 4;
     App.ChartScrollBox.Left:= 0;
     ShowChannelForm.CloseList.Enabled:= True;
     ShowChannelForm.BorderIcons:= [biSystemMenu,biMinimize,biMaximize];

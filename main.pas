@@ -27,10 +27,30 @@ type
     Chart6: TChart;
     Chart7: TChart;
     Chart8: TChart;
-    Label7: TLabel;
-    MenuItem6: TMenuItem;
-    StartChartsFrom: TDateTimePicker;
+    ColorsSync: TCheckBox;
     GChartBGColor: TColorBox;
+    VertLineColor: TColorBox;
+    GLineStyleBox: TChartComboBox;
+    VertLineStyle: TChartComboBox;
+    GLineWidthBox: TChartComboBox;
+    VertLineWidth: TChartComboBox;
+    GPointerStyleBox: TChartComboBox;
+    GPointSizeBox: TComboBox;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    KeepDistance: TCheckBox;
+    Label10: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    MenuItem6: TMenuItem;
+    AddVerticalLine: TMenuItem;
+    StartChartsFrom: TDateTimePicker;
     ChartExtentLink1: TChartExtentLink;
     ChartScrollBox: TScrollBox;
     ChartToolset1: TChartToolset;
@@ -38,7 +58,6 @@ type
     ChartToolset1DataPointClickTool2: TDataPointClickTool;
     ChartToolset1DataPointClickTool3: TDataPointClickTool;
     ChartToolset1DataPointClickTool4: TDataPointClickTool;
-    ColorsSync: TCheckBox;
     DateTimeLine: TChart;
     DateTimeLineLineSerie: TLineSeries;
     ExtHint: TCheckBox;
@@ -67,21 +86,12 @@ type
     MenuItem5: TMenuItem;
     ScreenShotFlash: TImage;
     ScreenShot: TImage;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    GLineStyleBox: TChartComboBox;
-    GLineWidthBox: TChartComboBox;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
     Panel1: TPanel;
     PanOff: TImage;
     PanOn: TImage;
     OptionsPage: TTabSheet;
-    GPointerStyleBox: TChartComboBox;
-    GPointSizeBox: TComboBox;
     RTCBugs: TCheckBox;
     EndPoint: TDateTimePicker;
     Timer: TTimer;
@@ -99,6 +109,7 @@ type
     ProcessProgress: TProgressBar;
     ZoomOn: TImage;
     procedure AddChartClick(Sender: TObject);
+    procedure AddVerticalLineClick(Sender: TObject);
     procedure Chart1AxisList0GetMarkText(Sender: TObject; var AText: String;
       AMark: Double);
     procedure Chart1DragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -152,6 +163,7 @@ type
     procedure GPointerStyleBoxChange(Sender: TObject);
     procedure GPointSizeBoxChange(Sender: TObject);
     procedure HideLabelClick(Sender: TObject);
+    procedure KeepDistanceChange(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem3Click(Sender: TObject);
@@ -280,6 +292,9 @@ begin
 
   EndPoint.DateTime:= Now;
 
+  if KeepDistance.Checked then DistanceTool.Options:= [dpdoPermanent]
+  else DistanceTool.Options:= [];
+
 end;
 
 
@@ -329,6 +344,12 @@ begin
    ShowLabel.Visible:= True;
    for i:= 1 to MAX_CHART_NUMBER do
      for j:= 1 to MAX_SERIE_NUMBER do GetLineSerie(i, j).Marks.Style:= smsLabel
+end;
+
+procedure TApp.KeepDistanceChange(Sender: TObject);
+begin
+  if KeepDistance.Checked then DistanceTool.Options:= [dpdoPermanent]
+  else DistanceTool.Options:= []
 end;
 
 procedure TApp.ShowLabelClick(Sender: TObject);
@@ -624,23 +645,25 @@ procedure TApp.ChartToolset1DataPointHintTool1Hint(ATool: TDataPointHintTool;
   const APoint: TPoint; var AHint: String);
 var wStr: String;
 begin
-   wStr:= TLineSeries(ATool.Series).Title;
-   Delete(wStr, 1, 3);
-   OnHintPointIndex:= ATool.PointIndex;
-   OnHintXPoint:= TLineSeries(ATool.Series).GetXValue(ATool.PointIndex);
-   OnHintYPoint:= TLineSeries(ATool.Series).GetYValue(ATool.PointIndex);
-   if (wStr = 'STATUS.SIBR.HI') Or (wStr = 'SIBR.HI') then AHint:= SWHint(Round(OnHintYPoint), SWHi, OnHintXPoint)
-   else if (wStr = 'STATUS.SIBR.LO') Or (wStr = 'SIBR.LO') then AHint:= SWHint(Round(OnHintYPoint), SWLo, OnHintXPoint)
-        else if (wStr = 'ESTATUS.SIBR.LO') Or (wStr = 'E.SIBR.LO') then AHint:= SWHint(Round(OnHintYPoint), ESWLo, OnHintXPoint)
-             else AHint:= GetSticker(TLineSeries(ATool.Series), OnHintXPoint, OnHintYPoint);
-   MousePosition:= Mouse.CursorPos;
-   isOnHint:= True;
-   OnHintSerie:= TLineSeries(ATool.Series);
-   SetNavigation(NAVIGATION_OFF);
-   ChartToolset1DataPointHintTool1.Enabled:= True;
-   ChartToolset1DataPointClickTool4.Enabled:= True;
-   MenuItem1.Enabled:= True;
-   MenuItem6.Enabled:= True;
+   if NPos('VerticalLine', ATool.Series.Name, 1) = 0 then begin
+     wStr:= TLineSeries(ATool.Series).Title;
+     Delete(wStr, 1, 3);
+     OnHintPointIndex:= ATool.PointIndex;
+     OnHintXPoint:= TLineSeries(ATool.Series).GetXValue(ATool.PointIndex);
+     OnHintYPoint:= TLineSeries(ATool.Series).GetYValue(ATool.PointIndex);
+     if (wStr = 'STATUS.SIBR.HI') Or (wStr = 'SIBR.HI') then AHint:= SWHint(Round(OnHintYPoint), SWHi, OnHintXPoint)
+     else if (wStr = 'STATUS.SIBR.LO') Or (wStr = 'SIBR.LO') then AHint:= SWHint(Round(OnHintYPoint), SWLo, OnHintXPoint)
+          else if (wStr = 'ESTATUS.SIBR.LO') Or (wStr = 'E.SIBR.LO') then AHint:= SWHint(Round(OnHintYPoint), ESWLo, OnHintXPoint)
+               else AHint:= GetSticker(TLineSeries(ATool.Series), OnHintXPoint, OnHintYPoint);
+     MousePosition:= Mouse.CursorPos;
+     isOnHint:= True;
+     OnHintSerie:= TLineSeries(ATool.Series);
+     SetNavigation(NAVIGATION_OFF);
+     ChartToolset1DataPointHintTool1.Enabled:= True;
+     ChartToolset1DataPointClickTool4.Enabled:= True;
+     MenuItem1.Enabled:= True;
+     MenuItem6.Enabled:= True;
+   end;
 end;
 
 procedure TApp.ChartToolset1PanDragTool1AfterMouseDown(ATool: TChartTool;
@@ -699,6 +722,14 @@ procedure TApp.AddChartClick(Sender: TObject);
 begin
   if SourceCount > 0 then OpenChannelForm()
   else Bin_DbToBin_Db();
+end;
+
+procedure TApp.AddVerticalLineClick(Sender: TObject);
+var i: Byte;
+begin
+  for i:=1 to MAX_CHART_NUMBER do begin
+    if GetChart(i).Visible then AddConstLineSerie(GetChart(i), 'VerticalLine', OnHintXPoint)
+  end;
 end;
 
 //procedure TApp.Button1Click(Sender: TObject);

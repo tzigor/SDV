@@ -18,10 +18,11 @@ Const
   NewLine = #13#10;
   Tab     = #09;
 
-  MIN_FILE_LENGTH  = 100;
-  DATA_MAX_SIZE    = 4294967295;
-  MAX_CHART_NUMBER = 8;
-  MAX_SERIE_NUMBER = 8;
+  MIN_FILE_LENGTH      = 100;
+  DATA_MAX_SIZE        = 4294967295;
+  MAX_CHART_NUMBER     = 8;
+  MAX_SERIE_NUMBER     = 8;
+  MAX_VERTLINE_NUMBER  = 10;
 
   { Error codes }
   NO_ERROR               = 0;

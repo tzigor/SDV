@@ -19,9 +19,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Main"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="782"/>
-        <CursorPos X="47" Y="794"/>
+        <TopLine Value="713"/>
+        <CursorPos Y="731"/>
         <UsageCount Value="208"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -30,8 +29,9 @@
         <Filename Value="usertypes.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UserTypes"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="17" Y="11"/>
+        <CursorPos X="49" Y="27"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
       </Unit>
@@ -73,7 +73,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="9"/>
         <TopLine Value="57"/>
-        <CursorPos X="67" Y="70"/>
+        <CursorPos X="70" Y="64"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -83,8 +83,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="LineSerieUtils"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="140"/>
-        <CursorPos X="33" Y="160"/>
+        <TopLine Value="45"/>
+        <CursorPos X="71" Y="54"/>
         <UsageCount Value="211"/>
         <Loaded Value="True"/>
       </Unit>
@@ -93,8 +93,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ChartUtils"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="176"/>
-        <CursorPos X="83" Y="258"/>
+        <TopLine Value="281"/>
+        <CursorPos X="85" Y="303"/>
         <UsageCount Value="211"/>
         <Loaded Value="True"/>
       </Unit>
@@ -135,148 +135,159 @@
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="C:\lazarus\components\tachart\tatools.pas"/>
-        <UnitName Value="TATools"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="1182"/>
-        <CursorPos X="88" Y="1205"/>
-        <UsageCount Value="4"/>
-      </Unit>
-      <Unit>
         <Filename Value="C:\lazarus\lcl\include\wincontrol.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="5453"/>
         <CursorPos Y="5473"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="5"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2374"/>
         <CursorPos Y="2393"/>
+        <UsageCount Value="5"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\components\tachart\tacustomseries.pas"/>
+        <UnitName Value="TACustomSeries"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1005"/>
+        <CursorPos Y="1025"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\include\menuitem.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="66"/>
+        <CursorPos Y="85"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\components\tachart\tachartaxis.pas"/>
+        <UnitName Value="TAChartAxis"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1452"/>
+        <CursorPos Y="1472"/>
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="28">
       <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="178" Column="42" TopLine="154"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="70" Column="38" TopLine="67"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="175" Column="49" TopLine="157"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="716" Column="94" TopLine="703"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="220" TopLine="218"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="174" Column="73" TopLine="15"/>
+        <Caret Line="715" Column="94" TopLine="702"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="287" Column="26" TopLine="270"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="42" Column="43" TopLine="24"/>
+        <Caret Line="714" Column="94" TopLine="701"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="285" Column="26" TopLine="269"/>
+        <Caret Line="713" Column="94" TopLine="700"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="281" Column="73" TopLine="281"/>
+        <Caret Line="712" Column="94" TopLine="699"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="304" Column="27" TopLine="281"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="43" Column="41" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="186" Column="69" TopLine="162"/>
+        <Caret Line="711" Column="94" TopLine="698"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="299" Column="79" TopLine="281"/>
+        <Caret Line="722" Column="94" TopLine="709"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="237" Column="3" TopLine="233"/>
+        <Caret Line="723" Column="94" TopLine="710"/>
       </Position>
       <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="180" Column="2" TopLine="162"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="75" Column="97" TopLine="68"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="79" Column="96" TopLine="68"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="181" Column="103" TopLine="167"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="71" Column="52" TopLine="68"/>
+        <Filename Value="lineserieutils.pas"/>
+        <Caret Line="57" Column="91" TopLine="41"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="296" Column="26" TopLine="293"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="71" Column="53" TopLine="66"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="191" Column="53" TopLine="171"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="187" Column="77" TopLine="165"/>
+        <Caret Line="729" Column="94" TopLine="716"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="470" Column="66" TopLine="253"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="71" Column="94" TopLine="61"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="190" Column="2" TopLine="183"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="88" Column="34" TopLine="61"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="202" Column="22" TopLine="179"/>
-      </Position>
-      <Position>
-        <Filename Value="channelsform.pas"/>
-        <Caret Line="189" TopLine="179"/>
+        <Caret Line="317" Column="3" TopLine="315"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="791" Column="34" TopLine="782"/>
+        <Caret Line="731" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="730" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="731" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="730" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="731" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="730" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="731" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="730" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="731" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="730" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="731" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="730" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="731" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="730" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="731" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="730" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="733" TopLine="720"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="731" TopLine="720"/>
       </Position>
     </JumpHistory>
     <RunParams>
