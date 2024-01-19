@@ -29,6 +29,9 @@ type
     Chart8: TChart;
     ColorsSync: TCheckBox;
     GChartBGColor: TColorBox;
+    Memo1: TMemo;
+    DeleteVertLine: TMenuItem;
+    DelAllVertLines: TMenuItem;
     VertLineColor: TColorBox;
     GLineStyleBox: TChartComboBox;
     VertLineStyle: TChartComboBox;
@@ -146,6 +149,8 @@ type
     procedure CloseChartsClick(Sender: TObject);
     procedure ColorsSyncChange(Sender: TObject);
     procedure DateTimeLineExtentChanged(ASender: TChart);
+    procedure DelAllVertLinesClick(Sender: TObject);
+    procedure DeleteVertLineClick(Sender: TObject);
     procedure DistanceToolGetDistanceText(ASender: TDataPointDistanceTool;
       var AText: String);
     procedure DistanceXOffClick(Sender: TObject);
@@ -208,6 +213,7 @@ var
   DataSources        : TDataSources; { Data source for charts }
   SourceCount        : Byte = 0;
   ChartsCount        : Byte = 0;
+  VertLineCount      : Byte = 0;
   CurrentChart       : Byte = 0;
   CurrentSource      : Byte = 0;
   CurrentSerie       : Byte = 1;
@@ -375,6 +381,7 @@ begin
   App.ChartScrollBox.Visible:= False;
   Chart:= GetChart(SelectedChart);
   for i:=1 to MAX_SERIE_NUMBER do SerieReset(GetLineSerie(SelectedChart, i));
+  DeleteVertLines(Chart);
   Chart.Visible:= False;
   Dec(ChartsCount);
   FindTimeRange;
@@ -512,8 +519,11 @@ procedure TApp.CloseChartsClick(Sender: TObject);
 var i, j: Byte;
 begin
   ChartsVisible(False);
-  for i:=1 to MAX_CHART_NUMBER do
+  for i:=1 to MAX_CHART_NUMBER do begin
     for j:=1 to MAX_SERIE_NUMBER do SerieReset(GetLineSerie(i, j));
+    DeleteVertLines(GetChart(i));
+  end;
+  VertLineCount:= 0;
   ChartsCount:= 0;
   DateTimeLineLineSerie.Clear;
   DateTimeLine.Visible:= False;
@@ -529,6 +539,25 @@ procedure TApp.DateTimeLineExtentChanged(ASender: TChart);
 begin
   if NewSerieDrawed then App.DateTimeLine.ZoomFull();
   NewSerieDrawed:= False;
+end;
+
+procedure TApp.DelAllVertLinesClick(Sender: TObject);
+var i: Byte;
+begin
+  for i:=1 to MAX_CHART_NUMBER do DeleteVertLines(GetChart(i));
+  VertLineCount:= 0;
+end;
+
+procedure TApp.DeleteVertLineClick(Sender: TObject);
+var i, n : Byte;
+begin
+  if OnHintSerie <> Nil then begin
+    n:= StrToInt(RightStr(OnHintSerie.Name, 2));
+    for i:=1 to MAX_CHART_NUMBER do
+      DeleteVerticalLine(GetChart(i), n);
+    Dec(VertLineCount);
+    DeleteVertLine.Enabled:= False;
+  end;
 end;
 
 procedure TApp.ChartLinkChange(Sender: TObject);
@@ -622,6 +651,8 @@ begin
         OnHintSerie:= Nil;
         MenuItem1.Enabled:= False;
         MenuItem6.Enabled:= False;
+        AddVerticalLine.Enabled:= False;
+        DeleteVertLine.Enabled:= False;
      end;
 end;
 
@@ -655,15 +686,19 @@ begin
      else if (wStr = 'STATUS.SIBR.LO') Or (wStr = 'SIBR.LO') then AHint:= SWHint(Round(OnHintYPoint), SWLo, OnHintXPoint)
           else if (wStr = 'ESTATUS.SIBR.LO') Or (wStr = 'E.SIBR.LO') then AHint:= SWHint(Round(OnHintYPoint), ESWLo, OnHintXPoint)
                else AHint:= GetSticker(TLineSeries(ATool.Series), OnHintXPoint, OnHintYPoint);
-     MousePosition:= Mouse.CursorPos;
-     isOnHint:= True;
-     OnHintSerie:= TLineSeries(ATool.Series);
-     SetNavigation(NAVIGATION_OFF);
-     ChartToolset1DataPointHintTool1.Enabled:= True;
-     ChartToolset1DataPointClickTool4.Enabled:= True;
      MenuItem1.Enabled:= True;
      MenuItem6.Enabled:= True;
+     AddVerticalLine.Enabled:= True;
+   end
+   else begin
+     DeleteVertLine.Enabled:= True;
    end;
+   MousePosition:= Mouse.CursorPos;
+   isOnHint:= True;
+   OnHintSerie:= TLineSeries(ATool.Series);
+   SetNavigation(NAVIGATION_OFF);
+   ChartToolset1DataPointHintTool1.Enabled:= True;
+   ChartToolset1DataPointClickTool4.Enabled:= True;
 end;
 
 procedure TApp.ChartToolset1PanDragTool1AfterMouseDown(ATool: TChartTool;
@@ -725,10 +760,14 @@ begin
 end;
 
 procedure TApp.AddVerticalLineClick(Sender: TObject);
-var i: Byte;
+var i    : Byte;
+    nStr : String;
 begin
+  Inc(VertLineCount);
+  if VertLineCount < 10 then nStr:= '0'+ IntToStr(VertLineCount)
+  else nStr:= IntToStr(VertLineCount);
   for i:=1 to MAX_CHART_NUMBER do begin
-    if GetChart(i).Visible then AddConstLineSerie(GetChart(i), 'VerticalLine', OnHintXPoint)
+    if GetChart(i).Visible then AddConstLineSerie(GetChart(i), 'VerticalLine' + nStr, OnHintXPoint)
   end;
 end;
 

@@ -15,6 +15,7 @@ procedure SetLineSerieColor(LineSerie: TLineSeries; AColor: TColor);
 function GetColorIndex(n: Byte): Byte;
 function GetColorBySerieName(LineSerieName: String): TColor;
 function GetLineSerie(ChartNumber, LineSerieNumber: Byte): TLineSeries;
+function GetConstLineSerie(ChartNumber, LineSerieNumber: Byte): TConstantLine;
 procedure PointersVisible(Visible: Boolean);
 procedure ZoomCurrentExtent(Chart1LineSeries: TLineSeries);
 function GetFreeLineSerie(ChartNum: Byte): Byte;
@@ -86,12 +87,17 @@ end;
 
 function GetLineSerie(ChartNumber, LineSerieNumber: Byte): TLineSeries;
 begin
-   Result:= TLineSeries(TChart(App.FindComponent('Chart' + IntToStr(ChartNumber))).Series[LineSerieNumber - 1]);
+  Result:= TLineSeries(TChart(App.FindComponent('Chart' + IntToStr(ChartNumber))).Series[LineSerieNumber - 1]);
+end;
+
+function GetConstLineSerie(ChartNumber, LineSerieNumber: Byte): TConstantLine;
+begin
+  Result:= TConstantLine(App.FindComponent('Chart' + IntToStr(ChartNumber) + 'VerticalLine' + IntToStr(LineSerieNumber)));
 end;
 
 function GetLineMarker(Chart: TChart): TConstantLine;
 begin
-   Result:= TConstantLine(Chart.Series[8]);
+  Result:= TConstantLine(Chart.Series[8]);
 end;
 
 procedure SetLineSerieColor(LineSerie: TLineSeries; AColor: TColor);

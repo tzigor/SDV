@@ -22,7 +22,7 @@ Const
   DATA_MAX_SIZE        = 4294967295;
   MAX_CHART_NUMBER     = 8;
   MAX_SERIE_NUMBER     = 8;
-  MAX_VERTLINE_NUMBER  = 10;
+  MAX_VERTLINE_NUMBER  = 99;
 
   { Error codes }
   NO_ERROR               = 0;

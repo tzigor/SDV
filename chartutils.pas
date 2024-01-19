@@ -25,6 +25,8 @@ procedure DateTimeLineSerieInit;
 procedure FindTimeRange;
 procedure ChartsNavigation(Value: Boolean);
 procedure SetChartsBGColor;
+procedure DeleteVerticalLine(Chart: TChart; n: Byte);
+procedure DeleteVertLines(Chart: TChart);
 
 implementation
 uses Main, LineSerieUtils, channelsform;
@@ -341,6 +343,35 @@ begin
     dr.b.Y:= MinMax.Max;
     Chart.LogicalExtent:= dr;
   end;
+end;
+
+procedure DeleteVerticalLine(Chart: TChart; n: Byte);
+var i   : Byte;
+    nStr: String;
+begin
+  if VertLineCount < 10 then nStr:= '0'+ IntToStr(n)
+  else nStr:= IntToStr(n);
+  for i:=9 to Chart.SeriesCount do begin
+    if NPos('VerticalLine' + nStr, Chart.Series[i - 1].Name, 1) > 0 then begin
+       Chart.Series[i - 1].Destroy;
+       Exit;
+    end;
+  end;
+end;
+
+procedure DeleteVertLines(Chart: TChart);
+var i, n: Byte;
+begin
+  n:= Chart.SeriesCount;
+  i:= 0;
+  repeat
+    if NPos('VerticalLine', Chart.Series[i].Name, 1) > 0 then begin
+      Chart.Series[i].Destroy;
+      Dec(n);
+      Dec(i);
+    end;
+    Inc(i);
+  until i >= n;
 end;
 
 end.

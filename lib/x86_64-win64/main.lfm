@@ -1,7 +1,7 @@
 object App: TApp
-  Left = 1997
+  Left = 1802
   Height = 818
-  Top = -675
+  Top = -711
   Width = 1354
   Caption = 'Smart Data Viewer v0.1'
   ClientHeight = 818
@@ -1320,7 +1320,7 @@ object App: TApp
         Left = 1235
         Height = 25
         Hint = 'Close all charts'
-        Top = 3
+        Top = 1
         Width = 25
         Anchors = [akTop, akRight]
         OnClick = CloseChartsClick
@@ -1843,6 +1843,16 @@ object App: TApp
           TabOrder = 2
         end
       end
+      object Memo1: TMemo
+        Left = 442
+        Height = 426
+        Top = 46
+        Width = 374
+        Lines.Strings = (
+          'Memo1'
+        )
+        TabOrder = 2
+      end
     end
   end
   object OpenDialog: TOpenDialog
@@ -1994,7 +2004,17 @@ object App: TApp
     end
     object AddVerticalLine: TMenuItem
       Caption = 'Add vertical line'
+      Enabled = False
       OnClick = AddVerticalLineClick
+    end
+    object DeleteVertLine: TMenuItem
+      Caption = 'Delete vertical line'
+      Enabled = False
+      OnClick = DeleteVertLineClick
+    end
+    object DelAllVertLines: TMenuItem
+      Caption = 'Delete all vertical lines'
+      OnClick = DelAllVertLinesClick
     end
   end
   object Timer: TTimer
