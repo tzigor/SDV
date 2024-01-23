@@ -26,6 +26,8 @@ procedure SeriesReset();
 procedure SetAllLineSeriesColor();
 function GetSerieSource(SerieTitle: String): Byte;
 function AddConstLineSerie(AChart: TChart; AName: String; Pos: Double): TConstantLine;
+function GetFreeVerticalLine(): String;
+procedure CropSerie(Serie: TLineSeries);
 
 implementation
 uses Main;
@@ -39,7 +41,6 @@ begin
     Pointer.Style := App.GPointerStyleBox.PointerStyle;
     Pointer.VertSize:= App.GPointSizeBox.ItemIndex + 2;
     Pointer.HorizSize:= App.GPointSizeBox.ItemIndex + 2;
-
     LinePen.Width:= App.GLineWidthBox.PenWidth;
     LinePen.Style := App.GLineStyleBox.PenStyle;
     ShowLines := true;
@@ -53,7 +54,7 @@ end;
 function AddConstLineSerie(AChart: TChart; AName: String; Pos: Double): TConstantLine;
 begin
   Result := TConstantLine.Create(AChart);
-  TConstantLine(Result).Name:= AChart.Name + AName;
+  TConstantLine(Result).Legend.Visible:= False;
   TConstantLine(Result).AxisIndex:= 1;
   TConstantLine(Result).LineStyle:= lsVertical;
   TConstantLine(Result).SeriesColor:= App.VertLineColor.Selected;
@@ -119,10 +120,8 @@ begin
 end;
 
 function GetMinMaxForCurrentExtent(Chart1LineSeries: TLineSeries): TMinMax;
-var i, start, count : Longint;
-    dr              : TDoubleRect;
+var dr              : TDoubleRect;
     Max, Min        : Double;
-    CurY            : Double;
 begin
  if Chart1LineSeries.Count > 0 then begin
    dr:= Chart1LineSeries.ParentChart.CurrentExtent;
@@ -173,6 +172,32 @@ begin
      end;
 end;
 
+function GetFreeVerticalLine(): String;
+var i, j, n   : Byte;
+    nStr      : String;
+    LineExist : Boolean;
+    Chart     : TChart;
+begin
+  for j:=1 to MAX_VERTLINE_NUMBER do begin
+    if j < 10 then nStr:= '0'+ IntToStr(j)
+    else nStr:= IntToStr(j);
+    LineExist:= False;
+    for i:=1 to MAX_CHART_NUMBER do begin
+      Chart:= GetChart(i);
+      for n:=9 to Chart.SeriesCount do
+        if NPos('VerticalLine' + nStr, Chart.Series[n - 1].Name, 1) > 0 then begin
+           LineExist:= True;
+           Break;
+        end;
+    end;
+    if Not LineExist then begin
+       Result:= 'VerticalLine' + nStr;
+       Exit;
+    end;
+  end;
+  Result:= '';
+end;
+
 function GetSerieSource(SerieTitle: String): Byte;
 var n: LongInt;
 begin
@@ -193,6 +218,19 @@ var i, j: Byte;
 begin
   for i:= 1 to MAX_CHART_NUMBER do
      for j:= 1 to MAX_SERIE_NUMBER do SerieReset(GetLineSerie(i, j));
+end;
+
+procedure CropSerie(Serie: TLineSeries);
+var i                         : Byte;
+    n, FirstIndex, LastIndex, nToDel : Integer;
+begin
+  if Serie.Count > 0 then begin
+     FirstIndex:= Serie.ExtentPointIndexFirst;
+     LastIndex:= Serie.ExtentPointIndexLast;
+     nToDel:= Serie.Count;
+     for n:=nToDel-1 downto LastIndex do Serie.Delete(n);
+     for n:=0 to FirstIndex do Serie.Delete(0);
+  end;
 end;
 
 end.

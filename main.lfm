@@ -1,7 +1,7 @@
 object App: TApp
-  Left = 1802
+  Left = 1714
   Height = 818
-  Top = -711
+  Top = -638
   Width = 1354
   Caption = 'Smart Data Viewer v0.1'
   ClientHeight = 818
@@ -1592,6 +1592,15 @@ object App: TApp
         TabOrder = 10
         OnChange = KeepDistanceChange
       end
+      object CropBtn: TButton
+        Left = 1000
+        Height = 25
+        Top = 3
+        Width = 75
+        Caption = 'Crop'
+        TabOrder = 11
+        OnClick = CropBtnClick
+      end
     end
     object OptionsPage: TTabSheet
       Caption = 'Options'
@@ -1835,7 +1844,7 @@ object App: TApp
           Top = 8
           Width = 200
           DefaultColorColor = clAqua
-          Selected = clAqua
+          Selected = clHighlight
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbCustomColors]
           DropDownCount = 10
           ItemHeight = 16
@@ -2015,6 +2024,10 @@ object App: TApp
     object DelAllVertLines: TMenuItem
       Caption = 'Delete all vertical lines'
       OnClick = DelAllVertLinesClick
+    end
+    object CropChartMenuItem: TMenuItem
+      Caption = 'Crop Chart'
+      OnClick = CropChartMenuItemClick
     end
   end
   object Timer: TTimer

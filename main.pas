@@ -19,6 +19,7 @@ type
   { TApp }
 
   TApp = class(TForm)
+    CropBtn: TButton;
     Chart1: TChart;
     Chart2: TChart;
     Chart3: TChart;
@@ -32,6 +33,7 @@ type
     Memo1: TMemo;
     DeleteVertLine: TMenuItem;
     DelAllVertLines: TMenuItem;
+    CropChartMenuItem: TMenuItem;
     VertLineColor: TColorBox;
     GLineStyleBox: TChartComboBox;
     VertLineStyle: TChartComboBox;
@@ -148,6 +150,8 @@ type
     procedure CloseAppClick(Sender: TObject);
     procedure CloseChartsClick(Sender: TObject);
     procedure ColorsSyncChange(Sender: TObject);
+    procedure CropBtnClick(Sender: TObject);
+    procedure CropChartMenuItemClick(Sender: TObject);
     procedure DateTimeLineExtentChanged(ASender: TChart);
     procedure DelAllVertLinesClick(Sender: TObject);
     procedure DeleteVertLineClick(Sender: TObject);
@@ -535,6 +539,21 @@ begin
   SetAllLineSeriesColor();
 end;
 
+procedure TApp.CropBtnClick(Sender: TObject);
+var i: Byte;
+begin
+  for i:=1 to MAX_CHART_NUMBER do begin
+     CropChart(GetChart(i));
+  end;
+  FindTimeRange();
+end;
+
+procedure TApp.CropChartMenuItemClick(Sender: TObject);
+begin
+  CropChart(GetChart(SelectedChart));
+  FindTimeRange();
+end;
+
 procedure TApp.DateTimeLineExtentChanged(ASender: TChart);
 begin
   if NewSerieDrawed then App.DateTimeLine.ZoomFull();
@@ -764,10 +783,9 @@ var i    : Byte;
     nStr : String;
 begin
   Inc(VertLineCount);
-  if VertLineCount < 10 then nStr:= '0'+ IntToStr(VertLineCount)
-  else nStr:= IntToStr(VertLineCount);
+  nStr:= GetFreeVerticalLine();
   for i:=1 to MAX_CHART_NUMBER do begin
-    if GetChart(i).Visible then AddConstLineSerie(GetChart(i), 'VerticalLine' + nStr, OnHintXPoint)
+    if GetChart(i).Visible then AddConstLineSerie(GetChart(i), nStr, OnHintXPoint)
   end;
 end;
 

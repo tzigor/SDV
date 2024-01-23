@@ -27,6 +27,7 @@ procedure ChartsNavigation(Value: Boolean);
 procedure SetChartsBGColor;
 procedure DeleteVerticalLine(Chart: TChart; n: Byte);
 procedure DeleteVertLines(Chart: TChart);
+procedure CropChart(Chart: TChart);
 
 implementation
 uses Main, LineSerieUtils, channelsform;
@@ -372,6 +373,16 @@ begin
     end;
     Inc(i);
   until i >= n;
+end;
+
+procedure CropChart(Chart: TChart);
+var i                         : Byte;
+    n, FirstIndex, LastIndex, nToDel : Integer;
+    Serie : TLineSeries;
+begin
+  if Chart.Visible then begin
+    for i:=0 to MAX_SERIE_NUMBER - 1 do CropSerie(TLineSeries(Chart.Series[i]));
+  end;
 end;
 
 end.
