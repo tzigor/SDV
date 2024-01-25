@@ -27,7 +27,9 @@ procedure SetAllLineSeriesColor();
 function GetSerieSource(SerieTitle: String): Byte;
 function AddConstLineSerie(AChart: TChart; AName: String; Pos: Double): TConstantLine;
 function GetFreeVerticalLine(): String;
+function GetFreeHorizontalLine(): String;
 procedure CropSerie(Serie: TLineSeries);
+function AddHorLineSerie(AChart: TChart; AName: String; Pos: Double): TConstantLine;
 
 implementation
 uses Main;
@@ -54,12 +56,27 @@ end;
 function AddConstLineSerie(AChart: TChart; AName: String; Pos: Double): TConstantLine;
 begin
   Result := TConstantLine.Create(AChart);
+  TConstantLine(Result).Name:= AName;
   TConstantLine(Result).Legend.Visible:= False;
   TConstantLine(Result).AxisIndex:= 1;
   TConstantLine(Result).LineStyle:= lsVertical;
   TConstantLine(Result).SeriesColor:= App.VertLineColor.Selected;
   TConstantLine(Result).Pen.Style:= App.VertLineStyle.PenStyle;
   TConstantLine(Result).Pen.Width:= App.VertLineWidth.PenWidth;
+  TConstantLine(Result).Position:= Pos;
+  AChart.AddSeries(Result);
+end;
+
+function AddHorLineSerie(AChart: TChart; AName: String; Pos: Double): TConstantLine;
+begin
+  Result := TConstantLine.Create(AChart);
+  TConstantLine(Result).Name:= AName;
+  TConstantLine(Result).Legend.Visible:= False;
+  TConstantLine(Result).AxisIndex:= 1;
+  TConstantLine(Result).LineStyle:= lsHorizontal;
+  TConstantLine(Result).SeriesColor:= App.HorLineColor.Selected;
+  TConstantLine(Result).Pen.Style:= App.HorLineStyle.PenStyle;
+  TConstantLine(Result).Pen.Width:= App.HorLineWidth.PenWidth;
   TConstantLine(Result).Position:= Pos;
   AChart.AddSeries(Result);
 end;
@@ -94,6 +111,11 @@ end;
 function GetConstLineSerie(ChartNumber, LineSerieNumber: Byte): TConstantLine;
 begin
   Result:= TConstantLine(App.FindComponent('Chart' + IntToStr(ChartNumber) + 'VerticalLine' + IntToStr(LineSerieNumber)));
+end;
+
+function GetHorLineSerie(ChartNumber, LineSerieNumber: Byte): TConstantLine;
+begin
+  Result:= TConstantLine(App.FindComponent('Chart' + IntToStr(ChartNumber) + 'HorizontalLine' + IntToStr(LineSerieNumber)));
 end;
 
 function GetLineMarker(Chart: TChart): TConstantLine;
@@ -184,7 +206,7 @@ begin
     LineExist:= False;
     for i:=1 to MAX_CHART_NUMBER do begin
       Chart:= GetChart(i);
-      for n:=9 to Chart.SeriesCount do
+      for n:=MAX_SERIE_NUMBER + 1 to Chart.SeriesCount do
         if NPos('VerticalLine' + nStr, Chart.Series[n - 1].Name, 1) > 0 then begin
            LineExist:= True;
            Break;
@@ -192,6 +214,32 @@ begin
     end;
     if Not LineExist then begin
        Result:= 'VerticalLine' + nStr;
+       Exit;
+    end;
+  end;
+  Result:= '';
+end;
+
+function GetFreeHorizontalLine(): String;
+var i, j, n   : Byte;
+    nStr      : String;
+    LineExist : Boolean;
+    Chart     : TChart;
+begin
+  for j:=1 to MAX_VERTLINE_NUMBER do begin
+    if j < 10 then nStr:= '0'+ IntToStr(j)
+    else nStr:= IntToStr(j);
+    LineExist:= False;
+    for i:=1 to MAX_CHART_NUMBER do begin
+      Chart:= GetChart(i);
+      for n:=MAX_SERIE_NUMBER + 1 to Chart.SeriesCount do
+        if NPos('HorizontalLine' + nStr, Chart.Series[n - 1].Name, 1) > 0 then begin
+           LineExist:= True;
+           Break;
+        end;
+    end;
+    if Not LineExist then begin
+       Result:= 'HorizontalLine' + nStr;
        Exit;
     end;
   end;
@@ -221,15 +269,17 @@ begin
 end;
 
 procedure CropSerie(Serie: TLineSeries);
-var i                         : Byte;
-    n, FirstIndex, LastIndex, nToDel : Integer;
+var n, FirstIndex, LastIndex, nToDel : Integer;
 begin
   if Serie.Count > 0 then begin
      FirstIndex:= Serie.ExtentPointIndexFirst;
      LastIndex:= Serie.ExtentPointIndexLast;
-     nToDel:= Serie.Count;
-     for n:=nToDel-1 downto LastIndex do Serie.Delete(n);
-     for n:=0 to FirstIndex do Serie.Delete(0);
+     nToDel:= Serie.Count - 1;
+     if ((FirstIndex = nToDel) And (LastIndex = nToDel)) Or ((FirstIndex = 0) And (LastIndex = 0)) then Serie.Clear
+     else begin
+       if LastIndex < nToDel then for n:=nToDel downto LastIndex do Serie.Delete(n);
+       if FirstIndex < nToDel then for n:=0 to FirstIndex do Serie.Delete(0);
+     end;
   end;
 end;
 

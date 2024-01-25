@@ -1,0 +1,88 @@
+object LimitForm: TLimitForm
+  Left = 1734
+  Height = 182
+  Top = -735
+  Width = 233
+  BorderIcons = []
+  BorderStyle = bsSingle
+  Caption = 'Limits'
+  ClientHeight = 182
+  ClientWidth = 233
+  Constraints.MaxHeight = 182
+  Constraints.MaxWidth = 233
+  Constraints.MinHeight = 182
+  Constraints.MinWidth = 233
+  Position = poMainFormCenter
+  LCLVersion = '3.0.0.2'
+  object Label1: TLabel
+    Left = 16
+    Height = 15
+    Top = 14
+    Width = 57
+    Caption = 'Parameter:'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clNavy
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentColor = False
+    ParentFont = False
+  end
+  object Parameter: TLabel
+    Left = 80
+    Height = 21
+    Top = 8
+    Width = 71
+    Caption = 'Parameter'
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -16
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 16
+    Height = 15
+    Top = 59
+    Width = 52
+    Caption = 'Minimun:'
+  end
+  object Label3: TLabel
+    Left = 16
+    Height = 15
+    Top = 98
+    Width = 58
+    Caption = 'Maximum:'
+  end
+  object Minimum: TFloatSpinEdit
+    Left = 88
+    Height = 23
+    Top = 53
+    Width = 128
+    TabOrder = 0
+  end
+  object Maximum: TFloatSpinEdit
+    Left = 88
+    Height = 23
+    Top = 92
+    Width = 128
+    TabOrder = 1
+  end
+  object OkBtn: TButton
+    Left = 141
+    Height = 25
+    Top = 144
+    Width = 75
+    Caption = 'Ok'
+    TabOrder = 2
+    OnClick = OkBtnClick
+  end
+  object CancelBtn: TButton
+    Left = 16
+    Height = 25
+    Top = 144
+    Width = 75
+    Caption = 'Cancel'
+    TabOrder = 3
+    OnClick = CancelBtnClick
+  end
+end

@@ -26,8 +26,12 @@ procedure FindTimeRange;
 procedure ChartsNavigation(Value: Boolean);
 procedure SetChartsBGColor;
 procedure DeleteVerticalLine(Chart: TChart; n: Byte);
+procedure DeleteHorizontalLine(Chart: TChart; n: Byte);
 procedure DeleteVertLines(Chart: TChart);
+procedure DeleteHorLines(Chart: TChart);
 procedure CropChart(Chart: TChart);
+procedure RemoveEmptyCharts();
+procedure DeleteChart(Chart: TChart);
 
 implementation
 uses Main, LineSerieUtils, channelsform;
@@ -95,13 +99,15 @@ end;
 
 procedure DateTimeLineSerieInit;
 begin
-  App.DateTimeLine.Visible:= False;
-  App.DateTimeLineLineSerie.Clear;
-  App.DateTimeLineLineSerie.AddXY(StartDateTime, 0);
-  App.DateTimeLineLineSerie.AddXY(EndDateTime, 0);
-  App.DateTimeLine.Visible:= True;
-  Application.ProcessMessages;
-  App.DateTimeLine.ZoomFull();
+  if ChartsCount > 0 then begin
+    App.DateTimeLine.Visible:= False;
+    App.DateTimeLineLineSerie.Clear;
+    App.DateTimeLineLineSerie.AddXY(StartDateTime, 0);
+    App.DateTimeLineLineSerie.AddXY(EndDateTime, 0);
+    App.DateTimeLine.Visible:= True;
+    Application.ProcessMessages;
+    App.DateTimeLine.ZoomFull();
+  end;
 end;
 
 procedure DrawSerie(LineSerie: TLineSeries; SelectedSource, SelectedParam: Word; Name: String);
@@ -157,11 +163,11 @@ begin
     end;
 
   end;
-       StartDateTime:= LineSerie.MinXValue;
-       EndDateTime:= LineSerie.MaxXValue;
-    //DateTimeLineSerieInit();
-    FindTimeRange();
+  StartDateTime:= LineSerie.MinXValue;
+  EndDateTime:= LineSerie.MaxXValue;
+  FindTimeRange();
   App.ChartScrollBox.Visible:= True;
+  ProgressDone();
 end;
 
 procedure FindTimeRange();
@@ -169,25 +175,27 @@ var i, j       : Byte;
     LineSerie  : TLineSeries;
     FirstSerie : Boolean;
 begin
-  FirstSerie:= True;
-  for i:=1 to MAX_CHART_NUMBER do
-    if GetChart(i).Visible then
-      for j:=1 to MAX_SERIE_NUMBER do begin
-         LineSerie:= GetLineSerie(i, j);
-         if LineSerie.Count > 0 then begin
-            if FirstSerie then begin
-               StartDateTime:= LineSerie.MinXValue;
-               EndDateTime:= LineSerie.MaxXValue;
-               FirstSerie:= False;
-            end
-            else begin
-               if CompareDateTime(LineSerie.MinXValue, StartDateTime) < 0 then StartDateTime:= LineSerie.MinXValue;
-               if CompareDateTime(LineSerie.MaxXValue, EndDateTime) > 0 then EndDateTime:= LineSerie.MaxXValue;
-            end;
-         end;
-      end;
-   DateTimeLineSerieInit;
-   App.Timer.Enabled:= True;
+  if ChartsCount > 0 then begin
+    FirstSerie:= True;
+    for i:=1 to MAX_CHART_NUMBER do
+      if GetChart(i).Visible then
+        for j:=1 to MAX_SERIE_NUMBER do begin
+           LineSerie:= GetLineSerie(i, j);
+           if LineSerie.Count > 0 then begin
+              if FirstSerie then begin
+                 StartDateTime:= LineSerie.MinXValue;
+                 EndDateTime:= LineSerie.MaxXValue;
+                 FirstSerie:= False;
+              end
+              else begin
+                 if CompareDateTime(LineSerie.MinXValue, StartDateTime) < 0 then StartDateTime:= LineSerie.MinXValue;
+                 if CompareDateTime(LineSerie.MaxXValue, EndDateTime) > 0 then EndDateTime:= LineSerie.MaxXValue;
+              end;
+           end;
+        end;
+     DateTimeLineSerieInit;
+     App.Timer.Enabled:= True;
+  end;
 end;
 
 function GetChart(ChartNubmber: Byte): TChart;
@@ -346,15 +354,63 @@ begin
   end;
 end;
 
+procedure DeleteChart(Chart: TChart);
+begin
+  DeleteVertLines(Chart);
+  DeleteHorLines(Chart);
+  Chart.Visible:= False;
+  Dec(ChartsCount);
+  FindTimeRange;
+  if ChartsCount > 0 then ChartsPosition()
+  else begin
+     App.DateTimeLineLineSerie.Clear;
+     App.DateTimeLine.Visible:= False;
+  end;
+end;
+
+procedure RemoveEmptyChart(Chart: TChart);
+var i          : Byte;
+    SerieExist : Boolean = False;
+begin
+  if Chart.Visible then begin
+    for i:=1 to MAX_SERIE_NUMBER do begin
+       if TLineSeries(Chart.Series[i - 1]).Count > 0 then SerieExist:= True;
+    end;
+    if Not SerieExist then DeleteChart(Chart);
+  end;
+end;
+
+procedure RemoveEmptyCharts();
+var i : Byte;
+begin
+  for i:=1 to MAX_CHART_NUMBER do RemoveEmptyChart(GetChart(i))
+end;
+
 procedure DeleteVerticalLine(Chart: TChart; n: Byte);
 var i   : Byte;
     nStr: String;
 begin
   if VertLineCount < 10 then nStr:= '0'+ IntToStr(n)
   else nStr:= IntToStr(n);
-  for i:=9 to Chart.SeriesCount do begin
+  for i:=MAX_SERIE_NUMBER + 1 to Chart.SeriesCount do begin
     if NPos('VerticalLine' + nStr, Chart.Series[i - 1].Name, 1) > 0 then begin
        Chart.Series[i - 1].Destroy;
+       Dec(VertLineCount);
+       Exit;
+    end;
+  end;
+end;
+
+procedure DeleteHorizontalLine(Chart: TChart; n: Byte);
+var i   : Byte;
+    nStr: String;
+begin
+  if VertLineCount < 10 then nStr:= '0'+ IntToStr(n)
+  else nStr:= IntToStr(n);
+  for i:=MAX_SERIE_NUMBER + 1 to Chart.SeriesCount do begin
+    if NPos('HorizontalLine' + nStr, Chart.Series[i - 1].Name, 1) > 0 then begin
+       Chart.Series[i - 1].Destroy;
+       Dec(HorLineCount);
        Exit;
     end;
   end;
@@ -368,6 +424,23 @@ begin
   repeat
     if NPos('VerticalLine', Chart.Series[i].Name, 1) > 0 then begin
       Chart.Series[i].Destroy;
+      Dec(VertLineCount);
+      Dec(n);
+      Dec(i);
+    end;
+    Inc(i);
+  until i >= n;
+end;
+
+procedure DeleteHorLines(Chart: TChart);
+var i, n: Byte;
+begin
+  n:= Chart.SeriesCount;
+  i:= 0;
+  repeat
+    if NPos('HorizontalLine', Chart.Series[i].Name, 1) > 0 then begin
+      Chart.Series[i].Destroy;
+      Dec(HorLineCount);
       Dec(n);
       Dec(i);
     end;
@@ -376,12 +449,11 @@ begin
 end;
 
 procedure CropChart(Chart: TChart);
-var i                         : Byte;
-    n, FirstIndex, LastIndex, nToDel : Integer;
-    Serie : TLineSeries;
+var i : Byte;
 begin
   if Chart.Visible then begin
     for i:=0 to MAX_SERIE_NUMBER - 1 do CropSerie(TLineSeries(Chart.Series[i]));
+    RemoveEmptyChart(Chart);
   end;
 end;
 

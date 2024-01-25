@@ -1,21 +1,22 @@
 object App: TApp
-  Left = 1714
-  Height = 818
-  Top = -638
+  Left = 1882
+  Height = 824
+  Top = -725
   Width = 1354
-  Caption = 'Smart Data Viewer v0.1'
-  ClientHeight = 818
+  Caption = 'Smart Data Viewer v0.2.1'
+  ClientHeight = 824
   ClientWidth = 1354
   Color = clWhite
   OnChangeBounds = FormChangeBounds
   OnCreate = FormCreate
+  OnDropFiles = FormDropFiles
   OnResize = FormResize
   OnShow = FormShow
   LCLVersion = '3.0.0.2'
   WindowState = wsMaximized
   object PageControl1: TPageControl
     Left = 0
-    Height = 818
+    Height = 824
     Top = 0
     Width = 1354
     ActivePage = ChartPage
@@ -25,7 +26,7 @@ object App: TApp
     TabOrder = 0
     object ChartPage: TTabSheet
       Caption = 'Chart'
-      ClientHeight = 790
+      ClientHeight = 796
       ClientWidth = 1346
       object CloseApp: TBitBtn
         Left = 1270
@@ -48,7 +49,7 @@ object App: TApp
       object ProcessProgress: TProgressBar
         Left = 96
         Height = 15
-        Top = 774
+        Top = 780
         Width = 320
         Anchors = [akLeft, akBottom]
         TabOrder = 1
@@ -57,7 +58,7 @@ object App: TApp
       object ProcessLabel: TLabel
         Left = 0
         Height = 15
-        Top = 774
+        Top = 780
         Width = 85
         Anchors = [akLeft, akBottom]
         Caption = 'Process channel'
@@ -729,13 +730,13 @@ object App: TApp
       end
       object ChartScrollBox: TScrollBox
         Left = 0
-        Height = 738
+        Height = 744
         Top = 34
         Width = 1345
         HorzScrollBar.Page = 75
         VertScrollBar.Page = 37
         Anchors = [akTop, akLeft, akRight, akBottom]
-        ClientHeight = 734
+        ClientHeight = 740
         ClientWidth = 1341
         Color = clWhite
         ParentBackground = False
@@ -745,11 +746,10 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 608
+          Top = 613
           Width = 1343
           AllowPanning = False
           AllowZoom = False
-          AntialiasingMode = amOn
           AxisList = <          
             item
               Grid.Color = clSilver
@@ -801,14 +801,13 @@ object App: TApp
           OnExtentChanged = DateTimeLineExtentChanged
           Anchors = [akLeft, akRight]
           Color = clWhite
-          DragMode = dmAutomatic
           OnDragDrop = Chart1DragDrop
           OnDragOver = Chart1DragOver
         end
         object DateTimeLine: TChart
           Left = 0
           Height = 37
-          Top = 697
+          Top = 703
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -870,7 +869,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 519
+          Top = 524
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -926,7 +925,6 @@ object App: TApp
           OnExtentChanged = DateTimeLineExtentChanged
           Anchors = [akLeft, akRight]
           Color = clWhite
-          DragMode = dmAutomatic
           OnDragDrop = Chart1DragDrop
           OnDragOver = Chart1DragOver
         end
@@ -934,7 +932,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 430
+          Top = 432
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -990,7 +988,6 @@ object App: TApp
           OnExtentChanged = DateTimeLineExtentChanged
           Anchors = [akLeft, akRight]
           Color = clWhite
-          DragMode = dmAutomatic
           OnDragDrop = Chart1DragDrop
           OnDragOver = Chart1DragOver
         end
@@ -998,7 +995,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 343
+          Top = 346
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -1054,7 +1051,6 @@ object App: TApp
           OnExtentChanged = DateTimeLineExtentChanged
           Anchors = [akLeft, akRight]
           Color = clWhite
-          DragMode = dmAutomatic
           OnDragDrop = Chart1DragDrop
           OnDragOver = Chart1DragOver
         end
@@ -1062,7 +1058,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 254
+          Top = 256
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -1118,7 +1114,6 @@ object App: TApp
           OnExtentChanged = DateTimeLineExtentChanged
           Anchors = [akLeft, akRight]
           Color = clWhite
-          DragMode = dmAutomatic
           OnDragDrop = Chart1DragDrop
           OnDragOver = Chart1DragOver
         end
@@ -1126,7 +1121,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 165
+          Top = 166
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -1182,7 +1177,6 @@ object App: TApp
           OnExtentChanged = DateTimeLineExtentChanged
           Anchors = [akLeft, akRight]
           Color = clWhite
-          DragMode = dmAutomatic
           OnDragDrop = Chart1DragDrop
           OnDragOver = Chart1DragOver
         end
@@ -1190,7 +1184,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 51
-          Top = 94
+          Top = 95
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -1246,7 +1240,6 @@ object App: TApp
           OnExtentChanged = DateTimeLineExtentChanged
           Anchors = [akLeft, akRight]
           Color = clWhite
-          DragMode = dmAutomatic
           OnDragDrop = Chart1DragDrop
           OnDragOver = Chart1DragOver
         end
@@ -1311,7 +1304,6 @@ object App: TApp
           OnExtentChanged = DateTimeLineExtentChanged
           Anchors = [akLeft, akRight]
           Color = clWhite
-          DragMode = dmAutomatic
           OnDragDrop = Chart1DragDrop
           OnDragOver = Chart1DragOver
         end
@@ -1320,56 +1312,95 @@ object App: TApp
         Left = 1235
         Height = 25
         Hint = 'Close all charts'
-        Top = 1
+        Top = 5
         Width = 25
         Anchors = [akTop, akRight]
         OnClick = CloseChartsClick
         ParentShowHint = False
         Picture.Data = {
-          1754506F727461626C654E6574776F726B477261706869634E05000089504E47
-          0D0A1A0A0000000D4948445200000019000000190806000000C4E98563000000
-          097048597300000EC300000EC301C76FA8640000001974455874536F66747761
-          7265007777772E696E6B73636170652E6F72679BEE3C1A000004DB4944415448
-          89BD967F4894771CC75FCFFDF07EECFC7DC9BCE66C4DC8D420428A3668D026A4
-          B9E2A850986713C92829D63F21FD532B1056A324166B19CC741B9A2BA7498ECB
-          615B8CF46CFA148A126A285766B9F49EDBDDF9E3EE9EFDF1CCD34B8D31B67DE0
-          F9E3F97EDFDFCFFBF9FC787FBE8FD0D8D8389A9C9C6CE43FB2E1E161AF263939
-          D9E8F178A22C160BF1F1F1AF3C303D0DA3A32A56AD0ABE1227CB303A2A60B1C8
-          00A8004E9D3A85C3E1A0A949C3ECECE243C1205CBDAA253BDB4861A11EA75358
-          FA239E4CF0FDB931B2B28C5CBBA60DADAB1682BCCF3C0C6EF8187D713182DB0D
-          405B9B9A9C1C23BDBD2A1A1B7D5CBA34C5BE7D06BCDE79A2B131819A430F8848
-          5FCFDE4FD772E3D8CF1C3A3413DAD72C2429B0FC8461F83A0CC354DF08B61537
-          4948D1535DED232141093D3555A6B47486D2523D070ECC70F16204AF8F7472B6
-          27076D400220D23B867F81DFB048025BB6104C4F57803D1D7CFB7B0E674F3C0F
-          11CC596EAE9F75EB027CF38D961339BF72BE7F1B5AAF42305B52827FFBF6307C
-          2812499278E6F3A1AEAA22D16623A2BF9FD71E7430959BCBD3AA2A822653D841
-          9B0D74BDBD24161622480A81949FCFF8D1A3303E0E804EA753C0A228BAF2F2F2
-          64B3D91C7AD6C4C5C9BD1A8D2C2B8D223B341AF9ADF8F830CCD69818F9852084
-          3057F47A79C5827DB3D92C5BAD5659144517A228BA2449925F7EDC4343722023
-          23E4C4BF71A3EC7EFC58962449F6DCB923076363437B334545B2E4722DF22149
-          922C8AA24BA574501B83838361E990CD66BC4D4D04333200503B1C683FB4D2F3
-          6507861D3B102626941A141531555101C27CB7F97C02F7EEA9C30B5F53534357
-          571795955A5EBC101611F9D314225D97838D65D9CB12389D02C78FEBC8CD35D0
-          DFAF0A2799B38C8C20454506A6A795F76010BEBB9548B6F616932B52948864A5
-          3927AD05210251545352A267FF7E03EBD707B0DBBD1414CCAB3A4C279B3707B0
-          D9663878508FD5EAA7A22282DC5C3F759F0F10BD673C2C9DCED6017EBB32C5E5
-          ABF1A4A40439726486B56B971E379A971776EFF6E374AA686F57535FEFC33C22
-          2A35989C5452181B8B30314186BB9DE8D33BD8FA6303316F9A16395E92646060
-          80BB77EF02B06993B2F6A47980C4B2B2D08871E6E430B0772F996565981E3D22
-          C9D9C1E49EF7E92C2FC76F5C3CC8232323311A8D08A228BAEAEAEAA2DADADAC2
-          006B3C1ECEF7F511E5576AF0434202A757AF4606626667F9A2AF8FB7BD5E007A
-          2223F92435158F5A1DE6232D2D8DC3870F4B4BEAE4EFE8C03D342407D2D397D4
-          D1923A696D6DA5BBBB1B00F5FDFBCBEA607454E0FA7525C3B2D98CF7C68DD0AC
-          533B1C18AC5604B71B4912B0DBE7CBAD02686969A1B3B393DACF9EA2CBDE3E4F
-          5052C2544505925BC5C9933A8A8B0DD4D66A6968589EE8D9865D14EE0A323121
-          8493CCD907497DA8FF989FA6EEF2337C5D15C1CE9D0692928234377BA9AEF651
-          59194177B73A44F4CBF19B8C442B825D3DD64E73512D7979CBE8C49CFF1E7D3D
-          E7B8D96A243AD3C657DB22C8CFF763B77BD1FE75D1E9F570F9B28F820203F9F9
-          7EEAEB356466EA286D6A2670EC2384E7CF09BEFB4E580384EB44A5E28DF262E2
-          366878F8504D53930F9329FC2E01B05864CE9C99A6B3534D43C31C260E6F4BCB
-          222CA0B4F0850B17A20281005959594B82FEA9994C2692929224411445D7EDDB
-          B7A3EC76FBBF4A00B072E54A4A4B4B25E1FFF8EFFA13CAFE9E06BAE1B3700000
-          000049454E44AE426082
+          07544269746D61703E0A0000424D3E0A0000000000007A0000006C0000001900
+          000019000000010020000000000000000000C30E0000C30E0000000000000000
+          000000FF00000000FF00000000FFFF0000000100000000000000000000000000
+          0000000000000000000000000000000000000000000000000000010000000100
+          000001000000B1B1B1E7D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0
+          D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0
+          D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0
+          D0F1D0D0D0F1B1B1B1E7D0D0D0F1909090FF4A4A4AFF4A4A4AFF4A4A4AFF4A4A
+          4AFF4A4A4AFF4A4A4AFF4A4A4AFF4A4A4AFF4A4A4AFF4A4A4AFF4A4A4AFF4A4A
+          4AFF4A4A4AFF4A4A4AFF4A4A4AFF4A4A4AFF4A4A4AFF4A4A4AFF4A4A4AFF4A4A
+          4AFF4A4A4AFF656565FFD0D0D0F1D0D0D0F1656565FF626262FFA7A7A7FFA7A7
+          A7FFA7A7A7FFA7A7A7FFA7A7A7FFA7A7A7FFA7A7A7FFA7A7A7FFA7A7A7FFA7A7
+          A7FFA7A7A7FFA7A7A7FFA7A7A7FFA7A7A7FFA7A7A7FFA7A7A7FFA7A7A7FFA7A7
+          A7FFA7A7A7FFA7A7A7FFB3B3B3FFD0D0D0F1D0D0D0F1656565FF8C8C8CFFF2F2
+          F2FFF2F2F2FFF69E9EFFF97878FFF3E6E6FFF2F2F2FFF2F2F2FFF2F2F2FFF2F2
+          F2FFF2F2F2FFF2F2F2FFF5BFBFFFF88A8AFFF3E6E6FFF2F2F2FFF2F2F2FFF2F2
+          F2FFF2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFD0D0D0F1D0D0D0F1656565FF8C8C
+          8CFFF0F0F2FF8F6CD6FF99288CFFF69A9BFFFC3434FFF88C8CFFF2EDEDFFF2F2
+          F2FFF2F2F2FFF2F2F2FFF3D8D8FFFC3434FFF88C8CFFFC3737FFF96B6BFFE0C1
+          D6FF3B3BFCFF2626FDFFD3D3F4FFF2F2F2FFF2F2F2FFD0D0D0F1D0D0D0F16565
+          65FF8C8C8CFFB198DEFF0000FFFF0000FFFF6666FAFFF1ECEDFFF79191FFFC33
+          33FFF79191FFF2F0F0FFF2EAEAFFFC3C3CFFF5C1C1FFF2F2F2FFF2F2F2FFE1AA
+          BFFF2C0FE1FF0000FFFF0000FFFF9998F6FFF2F2F2FFF2F2F2FFD0D0D0F1D0D0
+          D0F1656565FF8C8C8CFFDA7B9AFF0E0CFCFF0000FFFF0000FFFF6666FAFFF1F1
+          F2FFF3E4E4FFF97474FFFC3C3CFFFB4848FFF6A1A1FFF2F2F2FFF2F2F2FFDEDE
+          F3FF2B2BFDFF0000FFFF0000FFFF3817DDFFF13742FFF79B9BFFF2F2F2FFD0D0
+          D0F1D0D0D0F1AEAEAEFFC1C1C1FFF2F2F2FFC3C3F5FF1111FEFF0000FFFF0000
+          FFFF6161FAFFF1F1F2FFF2F2F2FFF3D9D9FFF6A0A0FFF2F2F2FFF2F2F2FFDEDE
+          F3FF2B2BFDFF0000FFFF0000FFFF3636FCFFE5E5F3FFF3E4E4FFF6ACACFFF2F2
+          F2FFD0D0D0F1D0D0D0F1F2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFC3C3F5FF1111
+          FEFF0000FFFF0000FFFF6161FAFFF1F1F2FFF2F2F2FFF2F2F2FFF2F2F2FFDEDE
+          F3FF2B2BFDFF0000FFFF0000FFFF3636FCFFE5E5F3FFF2F2F2FFF2F2F2FFF2F2
+          F2FFF2F2F2FFD0D0D0F1D0D0D0F1797979FF383838FF383838FF383838FF3838
+          38FF2D2D5FFF0404F1FF0000FFFF0000FFFF1616AFFF383839FF383838FF3333
+          48FF0A0ADCFF0000FFFF0000FFFF0D0DD3FF353543FF383838FF383838FF3838
+          38FF383838FF626262FFD0D0D0F1D0D0D0F1545454FF797979FFB9B9B9FFB9B9
+          B9FFB9B9B9FFB9B9B9FF9595C7FF0D0DFAFF0000FFFF0000FFFF4A4AE3FFA9A9
+          BFFF2121F3FF0000FFFF0000FFFF2929EFFFAFAFBDFFB9B9B9FFB9B9B9FFB9B9
+          B9FFB9B9B9FFB9B9B9FFC6C6C6FFD0D0D0F1D0D0D0F1545454FF9D9D9DFFF2F2
+          F2FFF2F2F2FFF88282FFF96E6EFFF3E1E1FFC3C3F5FF1111FEFF0000FFFF0000
+          FFFF1111FEFF0000FFFF0000FFFF371CE2FFE6D4E2FFF2F2F2FFF2F2F2FFF2F2
+          F2FFF2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFD0D0D0F1D0D0D0F1545454FF9D9D
+          9DFFF2F2F2FFF69E9EFFFA5555FFF6A6A6FFFC3636FFF88282FFC3BBEDFF1010
+          FEFF0000FFFF0000FFFF0000FFFF380DD3FFE992A0FFFC3C3CFFFA6060FFF4C9
+          C9FFF2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFD0D0D0F1D0D0D0F15454
+          54FF9D9D9DFFF5B9B9FFFC4141FFF2EBEBFFF2F2F2FFF2F0F0FFF79999FFE72F
+          44FF2415EFFF0000FFFF0000FFFF0000FFFF5C51EFFFF1F1F2FFF2F2F2FFF5C2
+          C2FFFA5858FFFC3D3DFFF6A1A1FFF2EFEFFFF2F2F2FFF2F2F2FFD0D0D0F1D0D0
+          D0F1545454FF9D9D9DFFF78D8DFFF3E0E0FFF2F2F2FFF2F2F2FFF2F2F2FFDEDE
+          F3FF2C2AFBFF0000FFFF0000FFFF0401FCFF0000FFFF0000FFFF6161FAFFF1F1
+          F2FFF2F2F2FFF2F2F2FFF3D6D6FFF97171FFFC3535FFF79696FFF2F2F2FFD0D0
+          D0F1D0D0D0F1B1B1B1FFCFCFCFFFF2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFDEDE
+          F3FF2C2CFDFF0000FFFF0000FFFF3632F8FFBB89C6FF1111FEFF0000FFFF0000
+          FFFF6161FAFFF1F1F2FFF2F2F2FFF2F2F2FFF2F2F2FFF3E9E9FFF5BEBEFFF2F2
+          F2FFD0D0D0F1D0D0D0F1F2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFDEDE
+          F3FF2C2CFDFF0000FFFF0000FFFF3636FCFFE5E5F3FFF2F2F2FFC3C3F5FF1111
+          FEFF0000FFFF0000FFFF6161FAFFF1F1F2FFF2F2F2FFF2F2F2FFF2F2F2FFF2F2
+          F2FFF2F2F2FFD0D0D0F1D0D0D0F1575757FF141414FF141414FF141414FF1212
+          27FF0404D5FF0000FFFF0000FFFF0404CAFF131321FF141414FF141414FF1414
+          14FF101042FF0101EEFF0000FFFF0000FFFF0808A1FF141415FF141414FF1414
+          14FF141414FF515151FFD0D0D0F1D0D0D0F1484848FF9B9B9BFFDDDDDDFFCBCB
+          E0FF2828F9FF0000FFFF0000FFFF3131F7FFD1D1DFFFDDDDDDFFDDDDDDFFDDDD
+          DDFFDDDDDDFFDDDDDDFFB2B2E4FF1010FDFF0000FFFF0000FFFF5858F1FFDCDC
+          DDFFDDDDDDFFDDDDDDFFE4E4E4FFD0D0D0F1D0D0D0F1484848FFA9A9A9FFE6E6
+          F3FF2B2BFDFF0000FFFF0000FFFF372EF4FFE5E5F3FFF2F2F2FFF2F2F2FFF2F2
+          F2FFF2F2F2FFF2F2F2FFF88080FFFA6060FFC09ED4FF0E0EFEFF0000FFFF0000
+          FFFF6666FAFFF1F1F2FFF2F2F2FFF2F2F2FFD0D0D0F1D0D0D0F1484848FFA9A9
+          A9FFA8A8F6FF0000FFFF0000FFFF372CF2FFED414FFFFA6565FFF3DCDCFFF2F2
+          F2FFF2F2F2FFF2F2F2FFF6A6A6FFFB5353FFF5BCBCFFFB5454FFC6366CFF0E0A
+          FAFF0000FFFF0000FFFFA6A6F6FFF2F2F2FFF2F2F2FFD0D0D0F1D0D0D0F14848
+          48FFA9A9A9FFEB8E9AFF521FCAFF5555FAFFE5E5F3FFF2F2F2FFF5B1B1FFFC3A
+          3AFFF97171FFF3E5E5FFF4CACAFFFC3B3BFFF3E8E8FFF2F2F2FFF2F2F2FFF3DB
+          DBFFC45F95FF1103F1FF0402FDFFBDB0E9FFF2F2F2FFF2F2F2FFD0D0D0F1D0D0
+          D0F1484848FFA9A9A9FFF6A4A4FFF2EDEDFFF2F2F2FFF2F2F2FFF2F2F2FFF2F2
+          F2FFF2F0F0FFF79C9CFFFC3434FFFC3030FFF3D6D6FFF2F2F2FFF2F2F2FFF2F2
+          F2FFF2F2F2FFF2F2F2FFE1D8EBFFDB819EFFFC3636FFF88585FFF2F2F2FFD0D0
+          D0F1D0D0D0F1C5C5C5FFDFDFDFFFF2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFF2F2
+          F2FFF2F2F2FFF2F2F2FFF2F2F2FFF2EBEBFFF4D2D2FFF2F2F2FFF2F2F2FFF2F2
+          F2FFF2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFF2F1F1FFF3D8D8FFF2F2
+          F2FFD0D0D0F1B1B1B1E7D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0
+          D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0
+          D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0D0F1D0D0
+          D0F1D0D0D0F1B1B1B1E7
         }
         ShowHint = True
       end
@@ -1593,7 +1624,7 @@ object App: TApp
         OnChange = KeepDistanceChange
       end
       object CropBtn: TButton
-        Left = 1000
+        Left = 1008
         Height = 25
         Top = 3
         Width = 75
@@ -1601,10 +1632,20 @@ object App: TApp
         TabOrder = 11
         OnClick = CropBtnClick
       end
+      object LinkToolCurves: TCheckBox
+        Left = 896
+        Height = 19
+        Top = 15
+        Width = 101
+        Caption = 'Link tool curves'
+        Checked = True
+        State = cbChecked
+        TabOrder = 12
+      end
     end
     object OptionsPage: TTabSheet
       Caption = 'Options'
-      ClientHeight = 790
+      ClientHeight = 796
       ClientWidth = 1346
       object GroupBox1: TGroupBox
         Left = 8
@@ -1862,6 +1903,96 @@ object App: TApp
         )
         TabOrder = 2
       end
+      object GroupBox3: TGroupBox
+        Left = 8
+        Height = 128
+        Top = 376
+        Width = 313
+        Caption = 'Horizontal line parameters'
+        ClientHeight = 108
+        ClientWidth = 309
+        ParentBackground = False
+        TabOrder = 3
+        object Label11: TLabel
+          Left = 8
+          Height = 15
+          Top = 44
+          Width = 52
+          Caption = 'Line style:'
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          ParentColor = False
+          ParentFont = False
+        end
+        object HorLineStyle: TChartComboBox
+          Left = 96
+          Height = 22
+          Top = 40
+          Width = 200
+          PenPattern = '1|1'
+          PenStyle = psDash
+          PointerStyle = psNone
+          ItemHeight = 16
+          ItemIndex = 1
+          TabOrder = 0
+          OnChange = GLineStyleBoxChange
+        end
+        object Label12: TLabel
+          Left = 8
+          Height = 15
+          Top = 76
+          Width = 58
+          Caption = 'Line width:'
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          ParentColor = False
+          ParentFont = False
+        end
+        object HorLineWidth: TChartComboBox
+          Left = 96
+          Height = 22
+          Top = 72
+          Width = 200
+          Mode = ccmPenWidth
+          PenPattern = '1|1'
+          PenWidth = 2
+          PointerStyle = psNone
+          ItemHeight = 16
+          ItemIndex = 1
+          TabOrder = 1
+          OnChange = GLineWidthBoxChange
+        end
+        object Label13: TLabel
+          Left = 8
+          Height = 15
+          Top = 12
+          Width = 55
+          Caption = 'Line color:'
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          ParentColor = False
+          ParentFont = False
+        end
+        object HorLineColor: TColorBox
+          Left = 96
+          Height = 22
+          Top = 8
+          Width = 200
+          DefaultColorColor = clAqua
+          Selected = clFuchsia
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbCustomColors]
+          DropDownCount = 10
+          ItemHeight = 16
+          OnChange = GChartBGColorChange
+          TabOrder = 2
+        end
+      end
     end
   end
   object OpenDialog: TOpenDialog
@@ -1908,8 +2039,8 @@ object App: TApp
       OnAfterMouseDown = ChartToolset1UserDefinedTool1AfterMouseDown
     end
     object ChartToolset1DataPointHintTool1: TDataPointHintTool
-      OnAfterKeyDown = ChartToolset1DataPointHintTool1AfterKeyDown
       OnAfterMouseMove = ChartToolset1DataPointHintTool1AfterMouseMove
+      GrabRadius = 3
       ActiveCursor = crCross
       OnHint = ChartToolset1DataPointHintTool1Hint
     end
@@ -1928,6 +2059,7 @@ object App: TApp
     end
     object ChartToolset1DataPointClickTool4: TDataPointClickTool
       Shift = [ssLeft]
+      OnAfterKeyDown = ChartToolset1DataPointClickTool4AfterKeyDown
       OnPointClick = ChartToolset1DataPointClickTool4PointClick
     end
     object DistanceTool: TDataPointDistanceTool
@@ -1946,6 +2078,11 @@ object App: TApp
       PointerStart.VertSize = 5000
       PointerStart.Visible = True
       OnGetDistanceText = DistanceToolGetDistanceText
+    end
+    object ChartToolset1DataPointDragTool1: TDataPointDragTool
+      Shift = [ssLeft]
+      ActiveCursor = crVSplit
+      Targets = [nptPoint, nptXList, nptYList]
     end
   end
   object ChartExtentLink1: TChartExtentLink
@@ -2024,6 +2161,25 @@ object App: TApp
     object DelAllVertLines: TMenuItem
       Caption = 'Delete all vertical lines'
       OnClick = DelAllVertLinesClick
+    end
+    object AddHorizontalLine: TMenuItem
+      Caption = 'Add horizontal line'
+      Enabled = False
+      OnClick = AddHorizontalLineClick
+    end
+    object DelHorizontalLine: TMenuItem
+      Caption = 'Delete horizontal line'
+      Enabled = False
+      OnClick = DelHorizontalLineClick
+    end
+    object DelAllHorLines: TMenuItem
+      Caption = 'Delete all horizontal lines'
+      OnClick = DelAllHorLinesClick
+    end
+    object LimitsItem: TMenuItem
+      Caption = 'Limits'
+      Enabled = False
+      OnClick = LimitsItemClick
     end
     object CropChartMenuItem: TMenuItem
       Caption = 'Crop Chart'

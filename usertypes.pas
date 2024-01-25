@@ -23,6 +23,7 @@ Const
   MAX_CHART_NUMBER     = 8;
   MAX_SERIE_NUMBER     = 8;
   MAX_VERTLINE_NUMBER  = 99;
+  MAX_HORLINE_NUMBER  = 99;
 
   { Error codes }
   NO_ERROR               = 0;

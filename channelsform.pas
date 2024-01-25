@@ -33,7 +33,6 @@ type
     procedure DockedToMainChange(Sender: TObject);
     procedure DrawBtnClick(Sender: TObject);
     procedure FastModeChange(Sender: TObject);
-    procedure FileListClick(Sender: TObject);
     procedure FileListDrawItem(Control: TWinControl; Index: Integer;
       ARect: TRect; State: TOwnerDrawState);
     procedure FileListKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
@@ -43,7 +42,6 @@ type
     procedure FormShow(Sender: TObject);
     procedure MultiColumnsChange(Sender: TObject);
     procedure RecordsNumberChange(Sender: TObject);
-    procedure RemoveFileBtnClick(Sender: TObject);
   private
 
   public
@@ -137,11 +135,6 @@ begin
   SetFastMode(FastMode.Checked);
 end;
 
-procedure TShowChannelForm.FileListClick(Sender: TObject);
-begin
-
-end;
-
 procedure TShowChannelForm.FileListDrawItem(Control: TWinControl;
   Index: Integer; ARect: TRect; State: TOwnerDrawState);
 begin
@@ -210,10 +203,6 @@ begin
   FastModeDivider:= RecordsNumber.Position;
 end;
 
-procedure TShowChannelForm.RemoveFileBtnClick(Sender: TObject);
-begin
-
-end;
 
 end.
 

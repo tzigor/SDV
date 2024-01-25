@@ -1,7 +1,7 @@
 object ShowChannelForm: TShowChannelForm
-  Left = 2702
+  Left = 2722
   Height = 697
-  Top = -567
+  Top = -637
   Width = 240
   Caption = 'Channels'
   ClientHeight = 697
@@ -11,6 +11,7 @@ object ShowChannelForm: TShowChannelForm
   FormStyle = fsStayOnTop
   OnCreate = FormCreate
   OnShow = FormShow
+  Position = poMainFormCenter
   SessionProperties = 'MultiColumns.Checked;DockedToMain.Checked'
   LCLVersion = '3.0.0.2'
   object ChannelList: TListBox
@@ -57,7 +58,6 @@ object ShowChannelForm: TShowChannelForm
     ItemHeight = 0
     Style = lbOwnerDrawVariable
     TabOrder = 3
-    OnClick = FileListClick
     OnDrawItem = FileListDrawItem
     OnKeyDown = FileListKeyDown
     OnSelectionChange = FileListSelectionChange

@@ -13,6 +13,8 @@ function GetErrorMessage(error: Byte): PChar;
 procedure LoadByteArray(const AFileName: string);
 procedure SaveByteArray(AByteArray: TBytes; const AFileName: string);
 function LoadSourceFile(FileExt: String; MinFileSize: LongWord): Boolean;
+function LoadSourceByteArray(FileName: String; MinFileSize: LongWord): Boolean;
+procedure LoadFile();
 function ReadCurrentByte(): Byte;
 function isEndOfFile(): Boolean;
 procedure IncDataOffset(n: LongWord);
@@ -30,7 +32,7 @@ function StrInArray(Value: String; Arr: array of String): Boolean;
 
 implementation
 
-uses Main, channelsform;
+uses Main, channelsform, ParseBinDb;
 
 function AddLidZeros(S: String; N: Byte): String;
 begin
@@ -68,23 +70,48 @@ begin
   end;
 end;
 
+function LoadSourceByteArray(FileName: String; MinFileSize: LongWord): Boolean;
+begin
+   Result:= False;
+   LoadByteArray(FileName);
+   if Bytes <> Nil then begin
+      CurrentFileSize:= Length(Bytes);
+      DataOffset:= 0;
+      if CurrentFileSize >= MinFileSize then begin
+         EndOfFile:= False;
+         Result:= True;
+         CurrentOpenedFile:= FileName;
+      end;
+   end;
+end;
+
 function LoadSourceFile(FileExt: String; MinFileSize: LongWord): Boolean; // Load bin file to the Bytes array
 begin
   Result:= False;
   App.OpenDialog.Filter:= 'bin files|*.' + FileExt + '|all files|*.*|';
   App.OpenDialog.DefaultExt:= '.' + FileExt;
-  if App.OpenDialog.Execute then begin
-     LoadByteArray(App.OpenDialog.FileName);
-     if Bytes <> Nil then begin
-        CurrentFileSize:= Length(Bytes);
-        DataOffset:= 0;
-        if CurrentFileSize >= MinFileSize then begin
-           EndOfFile:= False;
-           Result:= True;
-           CurrentOpenedFile:= App.OpenDialog.FileName;
-        end;
-     end;
-  end;
+  if App.OpenDialog.Execute then Result:= LoadSourceByteArray(App.OpenDialog.FileName, MinFileSize);
+end;
+
+procedure LoadFile();
+var DataSource  : TDataSource;
+begin
+   SetNavigation(NAVIGATION_OFF);
+   DataSource.SourceName:= CurrentOpenedFile;
+   DataSource.FrameRecords:= BinDbParser(3);
+   DataSource.TFFDataChannels:= TffStructure.GetTFFDataChannels;
+   TffStructure.Done;
+   if ErrorCode = NO_ERROR then begin
+      Insert(DataSource, DataSources, DATA_MAX_SIZE);
+      if Length(DataSources[CurrentSource].FrameRecords) > 50000 then ShowChannelForm.FastMode.Checked:= True
+      else ShowChannelForm.FastMode.Checked:= False;
+      Inc(SourceCount);
+      CurrentSource:= SourceCount - 1;
+      OpenChannelForm();
+   end
+   else Application.MessageBox(GetErrorMessage(ErrorCode),'Error', MB_ICONERROR + MB_OK);
+   Application.ProcessMessages;
+   SetNavigation(NavigationMode);
 end;
 
 procedure SaveByteArray(AByteArray: TBytes; const AFileName: string);

@@ -12,13 +12,15 @@ uses
   TADrawUtils, TAChartUtils, TADataTools, TAChartCombos, TANavigation,
   ParamOptions, DateUtils, JSONParser, JSONScanner, fpJSON, FileUtil, Math,
   ToolConfiguration, LCLIntf, Clipbrd, Calendar, EditBtn, TAChartAxisUtils,
-  TALegend, TALegendPanel;
+  TALegend, TALegendPanel, LimitsForm;
 
 type
 
   { TApp }
 
   TApp = class(TForm)
+    ChartToolset1DataPointDragTool1: TDataPointDragTool;
+    LinkToolCurves: TCheckBox;
     CropBtn: TButton;
     Chart1: TChart;
     Chart2: TChart;
@@ -30,14 +32,24 @@ type
     Chart8: TChart;
     ColorsSync: TCheckBox;
     GChartBGColor: TColorBox;
+    GroupBox3: TGroupBox;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
     Memo1: TMemo;
     DeleteVertLine: TMenuItem;
     DelAllVertLines: TMenuItem;
     CropChartMenuItem: TMenuItem;
+    AddHorizontalLine: TMenuItem;
+    DelHorizontalLine: TMenuItem;
+    DelAllHorLines: TMenuItem;
+    LimitsItem: TMenuItem;
     VertLineColor: TColorBox;
     GLineStyleBox: TChartComboBox;
+    HorLineColor: TColorBox;
     VertLineStyle: TChartComboBox;
     GLineWidthBox: TChartComboBox;
+    HorLineStyle: TChartComboBox;
     VertLineWidth: TChartComboBox;
     GPointerStyleBox: TChartComboBox;
     GPointSizeBox: TComboBox;
@@ -100,6 +112,7 @@ type
     RTCBugs: TCheckBox;
     EndPoint: TDateTimePicker;
     Timer: TTimer;
+    HorLineWidth: TChartComboBox;
     ZoomOff: TImage;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
@@ -114,6 +127,7 @@ type
     ProcessProgress: TProgressBar;
     ZoomOn: TImage;
     procedure AddChartClick(Sender: TObject);
+    procedure AddHorizontalLineClick(Sender: TObject);
     procedure AddVerticalLineClick(Sender: TObject);
     procedure Chart1AxisList0GetMarkText(Sender: TObject; var AText: String;
       AMark: Double);
@@ -133,9 +147,9 @@ type
       APoint: TPoint);
     procedure ChartToolset1DataPointClickTool3PointClick(ATool: TChartTool;
       APoint: TPoint);
-    procedure ChartToolset1DataPointClickTool4PointClick(ATool: TChartTool;
+    procedure ChartToolset1DataPointClickTool4AfterKeyDown(ATool: TChartTool;
       APoint: TPoint);
-    procedure ChartToolset1DataPointHintTool1AfterKeyDown(ATool: TChartTool;
+    procedure ChartToolset1DataPointClickTool4PointClick(ATool: TChartTool;
       APoint: TPoint);
     procedure ChartToolset1DataPointHintTool1AfterMouseMove(ATool: TChartTool;
       APoint: TPoint);
@@ -153,8 +167,10 @@ type
     procedure CropBtnClick(Sender: TObject);
     procedure CropChartMenuItemClick(Sender: TObject);
     procedure DateTimeLineExtentChanged(ASender: TChart);
+    procedure DelAllHorLinesClick(Sender: TObject);
     procedure DelAllVertLinesClick(Sender: TObject);
     procedure DeleteVertLineClick(Sender: TObject);
+    procedure DelHorizontalLineClick(Sender: TObject);
     procedure DistanceToolGetDistanceText(ASender: TDataPointDistanceTool;
       var AText: String);
     procedure DistanceXOffClick(Sender: TObject);
@@ -164,6 +180,7 @@ type
     procedure FitYClick(Sender: TObject);
     procedure FormChangeBounds(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormDropFiles(Sender: TObject; const FileNames: array of string);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GChartBGColorChange(Sender: TObject);
@@ -173,6 +190,7 @@ type
     procedure GPointSizeBoxChange(Sender: TObject);
     procedure HideLabelClick(Sender: TObject);
     procedure KeepDistanceChange(Sender: TObject);
+    procedure LimitsItemClick(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem3Click(Sender: TObject);
@@ -218,6 +236,7 @@ var
   SourceCount        : Byte = 0;
   ChartsCount        : Byte = 0;
   VertLineCount      : Byte = 0;
+  HorLineCount       : Byte = 0;
   CurrentChart       : Byte = 0;
   CurrentSource      : Byte = 0;
   CurrentSerie       : Byte = 1;
@@ -231,6 +250,7 @@ var
   { Variables are initialized if OnHint event occur  }
   isOnHint           : Boolean = False;
   OnHintSerie        : TLineSeries;
+  OnHintSerieIndex   : Integer;
   OnHintPointIndex   : LongWord;
   OnHintXPoint       : Double;
   OnHintYPoint       : Double;
@@ -305,8 +325,19 @@ begin
   if KeepDistance.Checked then DistanceTool.Options:= [dpdoPermanent]
   else DistanceTool.Options:= [];
 
+  AllowDropFiles:=True;
+
 end;
 
+procedure TApp.FormDropFiles(Sender: TObject; const FileNames: array of string);
+var  n: Integer;
+begin
+  for n := Low(FileNames) to High(FileNames) do
+  begin
+    if ExtractFileExt(FileNames[n]) = '.bin_db' then
+       if LoadSourceByteArray(FileNames[n], 100) then LoadFile();
+  end;
+end;
 
 procedure TApp.FormResize(Sender: TObject);
 begin
@@ -362,6 +393,14 @@ begin
   else DistanceTool.Options:= []
 end;
 
+procedure TApp.LimitsItemClick(Sender: TObject);
+begin
+  LimitForm.Parameter.Caption:= OnHintSerie.Title;
+  LimitForm.Minimum.Value:= OnHintSerie.GetYMin;
+  LimitForm.Maximum.Value:= OnHintSerie.GetYMax;
+  LimitForm.Show;
+end;
+
 procedure TApp.ShowLabelClick(Sender: TObject);
 var i, j: Byte;
 begin
@@ -385,17 +424,10 @@ begin
   App.ChartScrollBox.Visible:= False;
   Chart:= GetChart(SelectedChart);
   for i:=1 to MAX_SERIE_NUMBER do SerieReset(GetLineSerie(SelectedChart, i));
-  DeleteVertLines(Chart);
-  Chart.Visible:= False;
-  Dec(ChartsCount);
-  FindTimeRange;
-  if ChartsCount > 0 then ChartsPosition()
-  else begin
-     DateTimeLineLineSerie.Clear;
-     DateTimeLine.Visible:= False;
-  end;
+  DeleteChart(Chart);
   MenuItem4.Enabled:= False;
   App.ChartScrollBox.Visible:= True;
+  if ChartsCount = 0 then OpenChannelForm();
 end;
 
 procedure TApp.MenuItem3Click(Sender: TObject);
@@ -415,17 +447,27 @@ begin
   if Not (SavedOnHintSerie = OnHintSerie) then begin
     wDT:= SecondsBetween(SavedDateTimePoint, OnHintXPoint);
     if CompareDateTime(SavedDateTimePoint, OnHintXPoint) < 0 then wDT:= -wDT;
-    Source:= GetSerieSource(OnHintSerie.Title);
-    for i:= 1 to MAX_CHART_NUMBER do
-     for j:= 1 to MAX_SERIE_NUMBER do begin
-        Serie:= GetLineSerie(i, j);
-        if GetSerieSource(Serie.Title) = Source then
-          for n:=0 to Serie.Count - 1 do begin
-            XVal:= Serie.GetXValue(n);
-            XVal:= IncSecond(XVal, wDT);
-            Serie.SetXValue(n, XVal);
-          end;
-     end;
+
+    if LinkToolCurves.Checked then begin
+        Source:= GetSerieSource(OnHintSerie.Title);
+        for i:= 1 to MAX_CHART_NUMBER do
+         for j:= 1 to MAX_SERIE_NUMBER do begin
+            Serie:= GetLineSerie(i, j);
+            if GetSerieSource(Serie.Title) = Source then
+              for n:=0 to Serie.Count - 1 do begin
+                XVal:= Serie.GetXValue(n);
+                XVal:= IncSecond(XVal, wDT);
+                Serie.SetXValue(n, XVal);
+              end;
+         end;
+     end
+     else
+       for n:=0 to OnHintSerie.Count - 1 do begin
+          XVal:= OnHintSerie.GetXValue(n);
+          XVal:= IncSecond(XVal, wDT);
+          OnHintSerie.SetXValue(n, XVal);
+       end;
+
     FindTimeRange;
   end;
 end;
@@ -461,7 +503,7 @@ begin
   ShowChannelForm.ChannelList.Clear;
   ShowChannelForm.FileList.Clear;
   for i:=1 to SourceCount do begin
-    ShowChannelForm.FileList.Items.Add(ExtractFileName(DataSources[i - 1].SourceName));
+    ShowChannelForm.FileList.Items.Add(IntToStr(i) + '.' + ExtractFileName(DataSources[i - 1].SourceName));
   end;
   for i:=0 to Length(DataSources[SourceCount - 1].TFFDataChannels) - 1 do begin
     ShowChannelForm.ChannelList.Items.Add(DataSources[SourceCount - 1].TFFDataChannels[i].DLIS);
@@ -477,25 +519,9 @@ begin
 end;
 
 procedure Bin_DbToBin_Db();
-var DataSource     : TDataSource;
 begin
   if LoadSourceFile('bin_db', 100) then begin
-     SetNavigation(NAVIGATION_OFF);
-     DataSource.SourceName:= CurrentOpenedFile;
-     DataSource.FrameRecords:= BinDbParser(3);
-     DataSource.TFFDataChannels:= TffStructure.GetTFFDataChannels;
-     TffStructure.Done;
-     if ErrorCode = NO_ERROR then begin
-        Insert(DataSource, DataSources, DATA_MAX_SIZE);
-        if Length(DataSources[CurrentSource].FrameRecords) > 50000 then ShowChannelForm.FastMode.Checked:= True
-        else ShowChannelForm.FastMode.Checked:= False;
-        Inc(SourceCount);
-        CurrentSource:= SourceCount - 1;
-        OpenChannelForm();
-     end
-     else Application.MessageBox(GetErrorMessage(ErrorCode),'Error', MB_ICONERROR + MB_OK);
-     Application.ProcessMessages;
-     SetNavigation(NavigationMode);
+     LoadFile();
   end;
 end;
 
@@ -532,6 +558,7 @@ begin
   DateTimeLineLineSerie.Clear;
   DateTimeLine.Visible:= False;
   MenuItem4.Enabled:= False;
+  OpenChannelForm();
 end;
 
 procedure TApp.ColorsSyncChange(Sender: TObject);
@@ -542,10 +569,11 @@ end;
 procedure TApp.CropBtnClick(Sender: TObject);
 var i: Byte;
 begin
-  for i:=1 to MAX_CHART_NUMBER do begin
-     CropChart(GetChart(i));
-  end;
+  for i:=1 to MAX_CHART_NUMBER do CropChart(GetChart(i));
+  RemoveEmptyCharts();
   FindTimeRange();
+  NavigationMode:= PAN_MODE;
+  SetNavigation(NavigationMode);
 end;
 
 procedure TApp.CropChartMenuItemClick(Sender: TObject);
@@ -558,6 +586,11 @@ procedure TApp.DateTimeLineExtentChanged(ASender: TChart);
 begin
   if NewSerieDrawed then App.DateTimeLine.ZoomFull();
   NewSerieDrawed:= False;
+end;
+
+procedure TApp.DelAllHorLinesClick(Sender: TObject);
+begin
+  DeleteHorLines(GetChart(SelectedChart));
 end;
 
 procedure TApp.DelAllVertLinesClick(Sender: TObject);
@@ -574,9 +607,18 @@ begin
     n:= StrToInt(RightStr(OnHintSerie.Name, 2));
     for i:=1 to MAX_CHART_NUMBER do
       DeleteVerticalLine(GetChart(i), n);
-    Dec(VertLineCount);
     DeleteVertLine.Enabled:= False;
   end;
+end;
+
+procedure TApp.DelHorizontalLineClick(Sender: TObject);
+var n : Byte;
+begin
+  if OnHintSerie <> Nil then begin
+      n:= StrToInt(RightStr(OnHintSerie.Name, 2));
+      DeleteHorizontalLine(GetChart(SelectedChart), n);
+      DelHorizontalLine.Enabled:= False;
+   end;
 end;
 
 procedure TApp.ChartLinkChange(Sender: TObject);
@@ -625,6 +667,12 @@ begin
   App.FitYClick(ATool);
 end;
 
+procedure TApp.ChartToolset1DataPointClickTool4AfterKeyDown(ATool: TChartTool;
+  APoint: TPoint);
+begin
+
+end;
+
 procedure TApp.ChartToolset1DataPointClickTool4PointClick(ATool: TChartTool;
   APoint: TPoint);
 begin
@@ -654,24 +702,24 @@ begin
   ParamOptionsForm.Show;
 end;
 
-procedure TApp.ChartToolset1DataPointHintTool1AfterKeyDown(ATool: TChartTool;
-  APoint: TPoint);
-begin
-
-end;
-
 procedure TApp.ChartToolset1DataPointHintTool1AfterMouseMove(ATool: TChartTool;
   APoint: TPoint);
+var wM : TPoint;
 begin
+  wM:= Mouse.CursorPos;
   if isOnHint then
-     if (Abs(MousePosition.X - Mouse.CursorPos.X) > 5) Or (Abs(MousePosition.Y - Mouse.CursorPos.Y) > 5) then begin
+     if (Abs(Abs(MousePosition.X) - Abs(wM.X)) > 5) Or
+        (Abs(Abs(MousePosition.Y) - Abs(wM.Y)) > 5) then begin
         SetNavigation(NavigationMode);
         isOnHint:= False;
         OnHintSerie:= Nil;
         MenuItem1.Enabled:= False;
         MenuItem6.Enabled:= False;
         AddVerticalLine.Enabled:= False;
+        AddHorizontalLine.Enabled:= False;
         DeleteVertLine.Enabled:= False;
+        DelHorizontalLine.Enabled:= False;
+        LimitsItem.Enabled:= False;
      end;
 end;
 
@@ -695,29 +743,37 @@ procedure TApp.ChartToolset1DataPointHintTool1Hint(ATool: TDataPointHintTool;
   const APoint: TPoint; var AHint: String);
 var wStr: String;
 begin
-   if NPos('VerticalLine', ATool.Series.Name, 1) = 0 then begin
+   if (NPos('VerticalLine', ATool.Series.Name, 1) = 0) And (NPos('HorizontalLine', ATool.Series.Name, 1) = 0) then begin
      wStr:= TLineSeries(ATool.Series).Title;
      Delete(wStr, 1, 3);
      OnHintPointIndex:= ATool.PointIndex;
      OnHintXPoint:= TLineSeries(ATool.Series).GetXValue(ATool.PointIndex);
      OnHintYPoint:= TLineSeries(ATool.Series).GetYValue(ATool.PointIndex);
-     if (wStr = 'STATUS.SIBR.HI') Or (wStr = 'SIBR.HI') then AHint:= SWHint(Round(OnHintYPoint), SWHi, OnHintXPoint)
-     else if (wStr = 'STATUS.SIBR.LO') Or (wStr = 'SIBR.LO') then AHint:= SWHint(Round(OnHintYPoint), SWLo, OnHintXPoint)
-          else if (wStr = 'ESTATUS.SIBR.LO') Or (wStr = 'E.SIBR.LO') then AHint:= SWHint(Round(OnHintYPoint), ESWLo, OnHintXPoint)
+     if (wStr = 'STATUS.SIBR.HI') Or (wStr = 'SIBR.HI')  Or (wStr = 'STATUS.HI') then AHint:= SWHint(Round(OnHintYPoint), SWHi, OnHintXPoint)
+     else if (wStr = 'STATUS.SIBR.LO') Or (wStr = 'SIBR.LO') Or (wStr = 'STATUS.LO') then AHint:= SWHint(Round(OnHintYPoint), SWLo, OnHintXPoint)
+          else if (wStr = 'ESTATUS.SIBR.LO') Or (wStr = 'E.SIBR.LO') Or (wStr = 'ESTATUS.LO') then AHint:= SWHint(Round(OnHintYPoint), ESWLo, OnHintXPoint)
                else AHint:= GetSticker(TLineSeries(ATool.Series), OnHintXPoint, OnHintYPoint);
      MenuItem1.Enabled:= True;
      MenuItem6.Enabled:= True;
      AddVerticalLine.Enabled:= True;
+     AddHorizontalLine.Enabled:= True;
+     LimitsItem.Enabled:= True;
+     SetNavigation(NAVIGATION_OFF);
+     ATool.Enabled:= True;
+     ChartToolset1DataPointClickTool4.Enabled:= True;
    end
-   else begin
-     DeleteVertLine.Enabled:= True;
-   end;
+   else if NPos('HorizontalLine', ATool.Series.Name, 1) > 0 then begin
+          ATool.Chart.Cursor:= crVSplit;
+          DelHorizontalLine.Enabled:= True;
+          SetNavigation(NAVIGATION_OFF);
+          ATool.Enabled:= True;
+          ChartToolset1DataPointClickTool4.Enabled:= False;
+          //ChartToolset1DataPointDragTool1.AffectedSeries:= IntToStr(TLineSeries(ATool.Series).Index);
+        end;
    MousePosition:= Mouse.CursorPos;
    isOnHint:= True;
    OnHintSerie:= TLineSeries(ATool.Series);
-   SetNavigation(NAVIGATION_OFF);
-   ChartToolset1DataPointHintTool1.Enabled:= True;
-   ChartToolset1DataPointClickTool4.Enabled:= True;
+   OnHintSerieIndex:= OnHintSerie.Index;
 end;
 
 procedure TApp.ChartToolset1PanDragTool1AfterMouseDown(ATool: TChartTool;
@@ -776,6 +832,12 @@ procedure TApp.AddChartClick(Sender: TObject);
 begin
   if SourceCount > 0 then OpenChannelForm()
   else Bin_DbToBin_Db();
+end;
+
+procedure TApp.AddHorizontalLineClick(Sender: TObject);
+begin
+  Inc(HorLineCount);
+  AddHorLineSerie(GetChart(SelectedChart), GetFreeHorizontalLine(), OnHintYPoint)
 end;
 
 procedure TApp.AddVerticalLineClick(Sender: TObject);
@@ -887,14 +949,15 @@ end;
 
 procedure TApp.DistanceToolGetDistanceText(ASender: TDataPointDistanceTool;
   var AText: String);
-var Days     : Word;
-    DTime    : Double;
-    AfterDot : Byte;
+var Days, y, mon, d, h, m, s, ms : Word;
+    DTime          : Double;
+    AfterDot       : Byte;
 begin
   if NavigationMode = DISTANCE_MODE_X then begin
      DTime:= ASender.Distance(cuAxis);
      Days:= DaysBetween(0, DTime);
-     AText:= 'Distance: Days - ' + IntToStr(Days) + #13#10 + 'Time - ' + TimeToStr(TimeOf(DTime));
+     DecodeDateTime(DTime, y, mon, d, h, m, s, ms);
+     AText:= 'Distance: Days - ' + IntToStr(Days) + #13#10 + 'h - ' + IntToStr(h) + ', m - ' + IntToStr(m) + ', s - ' + IntToStr(s);
   end
   else begin
      DTime:= ASender.Distance(cuAxis);

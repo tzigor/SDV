@@ -307,6 +307,7 @@ begin
   SetLength(Bytes, 0);
   Bytes:= Nil;
   TffFrames.Done;
+  ProgressDone();
 end;
 
 end.
