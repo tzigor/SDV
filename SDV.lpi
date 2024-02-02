@@ -26,6 +26,12 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="TAChartAggPas"/>
+      </Item>
+      <Item>
+        <PackageName Value="aggpaslcl"/>
+      </Item>
+      <Item>
         <PackageName Value="DateTimeCtrlsDsgn"/>
       </Item>
       <Item>
@@ -113,6 +119,7 @@
         <Filename Value="limitsform.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="LimitForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="LimitsForm"/>
       </Unit>
@@ -155,6 +162,9 @@
       </Item>
       <Item>
         <Name Value="EFOpenError"/>
+      </Item>
+      <Item>
+        <Name Value="EReadError"/>
       </Item>
     </Exceptions>
   </Debugging>

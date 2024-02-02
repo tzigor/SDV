@@ -1,22 +1,23 @@
 object ShowChannelForm: TShowChannelForm
-  Left = 2722
-  Height = 697
-  Top = -637
+  Left = 2456
+  Height = 698
+  Top = -670
   Width = 240
   Caption = 'Channels'
-  ClientHeight = 697
+  ClientHeight = 698
   ClientWidth = 240
   Constraints.MinHeight = 300
   Constraints.MinWidth = 240
   FormStyle = fsStayOnTop
   OnCreate = FormCreate
+  OnResize = FormResize
   OnShow = FormShow
   Position = poMainFormCenter
-  SessionProperties = 'MultiColumns.Checked;DockedToMain.Checked'
+  SessionProperties = 'DockedToMain.Checked;MultiColumns.Checked'
   LCLVersion = '3.0.0.2'
   object ChannelList: TListBox
     Left = 8
-    Height = 458
+    Height = 459
     Top = 200
     Width = 224
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -31,7 +32,7 @@ object ShowChannelForm: TShowChannelForm
   object CloseList: TBitBtn
     Left = 157
     Height = 25
-    Top = 666
+    Top = 667
     Width = 75
     Anchors = [akRight, akBottom]
     Caption = 'Close'
@@ -41,7 +42,7 @@ object ShowChannelForm: TShowChannelForm
   object DrawBtn: TBitBtn
     Left = 8
     Height = 25
-    Top = 666
+    Top = 667
     Width = 75
     Anchors = [akLeft, akBottom]
     Caption = 'Draw'

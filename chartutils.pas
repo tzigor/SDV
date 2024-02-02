@@ -32,6 +32,9 @@ procedure DeleteHorLines(Chart: TChart);
 procedure CropChart(Chart: TChart);
 procedure RemoveEmptyCharts();
 procedure DeleteChart(Chart: TChart);
+procedure ChartStartDateLimit(Chart: TChart);
+procedure ChartEndDateLimit(Chart: TChart);
+function GetFirstVisibleChart: Byte;
 
 implementation
 uses Main, LineSerieUtils, channelsform;
@@ -150,7 +153,7 @@ begin
               Inc(nPoins);
            end
            else begin
-              Sticker:= 'Shift back in time';
+              if App.ShowBackInTime.Checked then Sticker:= 'Shift back in time';
            end;
            PrevDateTime:= DataSources[SelectedSource].FrameRecords[i].DateTime;
         end;
@@ -243,8 +246,21 @@ end;
 function GetFreeChart: Byte;
 var i: Byte;
 begin
+  Result:= 0;
   for i:=1 to MAX_CHART_NUMBER do begin
      if GetChart(i).Visible = false then begin
+        Result:= i;
+        Break;
+     end;
+  end;
+end;
+
+function GetFirstVisibleChart: Byte;
+var i: Byte;
+begin
+  Result:= 0;
+  for i:=1 to MAX_CHART_NUMBER do begin
+     if GetChart(i).Visible then begin
         Result:= i;
         Break;
      end;
@@ -454,6 +470,22 @@ begin
   if Chart.Visible then begin
     for i:=0 to MAX_SERIE_NUMBER - 1 do CropSerie(TLineSeries(Chart.Series[i]));
     RemoveEmptyChart(Chart);
+  end;
+end;
+
+procedure ChartStartDateLimit(Chart: TChart);
+var i : Byte;
+begin
+  if Chart.Visible then begin
+    for i:=0 to MAX_SERIE_NUMBER - 1 do SerieStartDateLimit(TLineSeries(Chart.Series[i]));
+  end;
+end;
+
+procedure ChartEndDateLimit(Chart: TChart);
+var i : Byte;
+begin
+  if Chart.Visible then begin
+    for i:=0 to MAX_SERIE_NUMBER - 1 do SerieEndDateLimit(TLineSeries(Chart.Series[i]));
   end;
 end;
 

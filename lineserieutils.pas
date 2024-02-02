@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Graphics, UserTypes, TASeries, TAGraph, LCLType,
   TAChartAxis, TATypes, TALegend, TAChartUtils, StrUtils, ChartUtils, Forms,
-  Controls, Dialogs;
+  Controls, Dialogs, DateUtils;
 
 function AddLineSerie(AChart: TChart; AName: String): TLineSeries;
 procedure SetLineSeriesStyle();
@@ -30,6 +30,10 @@ function GetFreeVerticalLine(): String;
 function GetFreeHorizontalLine(): String;
 procedure CropSerie(Serie: TLineSeries);
 function AddHorLineSerie(AChart: TChart; AName: String; Pos: Double): TConstantLine;
+procedure SerieStartDateLimit(Serie: TLineSeries);
+procedure SerieEndDateLimit(Serie: TLineSeries);
+function AddMagLine(AChart: TChart; Pos: Double): TConstantLine;
+function GetMagLine(Chart: TChart): TConstantLine;
 
 implementation
 uses Main;
@@ -40,6 +44,7 @@ begin
   with TLineSeries(Result) do
   begin
     Name:= AChart.Name + AName;
+    AxisIndexY:= 1;
     Pointer.Style := App.GPointerStyleBox.PointerStyle;
     Pointer.VertSize:= App.GPointSizeBox.ItemIndex + 2;
     Pointer.HorizSize:= App.GPointSizeBox.ItemIndex + 2;
@@ -49,6 +54,7 @@ begin
     Legend.Visible:= False;
     Marks.Style:= smsLabel;
     Marks.LinkPen.Color:= clGray;
+    Marks.LabelBrush.Color:= App.LabelColor.Selected;;
   end;
   AChart.AddSeries(Result);
 end;
@@ -64,6 +70,7 @@ begin
   TConstantLine(Result).Pen.Style:= App.VertLineStyle.PenStyle;
   TConstantLine(Result).Pen.Width:= App.VertLineWidth.PenWidth;
   TConstantLine(Result).Position:= Pos;
+  TConstantLine(Result).ZPosition:= 0;
   AChart.AddSeries(Result);
 end;
 
@@ -78,6 +85,21 @@ begin
   TConstantLine(Result).Pen.Style:= App.HorLineStyle.PenStyle;
   TConstantLine(Result).Pen.Width:= App.HorLineWidth.PenWidth;
   TConstantLine(Result).Position:= Pos;
+  AChart.AddSeries(Result);
+end;
+
+function AddMagLine(AChart: TChart; Pos: Double): TConstantLine;
+begin
+  Result := TConstantLine.Create(AChart);
+  TConstantLine(Result).Name:= 'MagLine';
+  TConstantLine(Result).Legend.Visible:= False;
+  TConstantLine(Result).AxisIndex:= 1;
+  TConstantLine(Result).LineStyle:= lsVertical;
+  TConstantLine(Result).SeriesColor:= App.VertLineColor.Selected;
+  TConstantLine(Result).Pen.Style:= App.VertLineStyle.PenStyle;
+  TConstantLine(Result).Pen.Width:= App.VertLineWidth.PenWidth;
+  TConstantLine(Result).Position:= Pos;
+  TConstantLine(Result).ZPosition:= 100;
   AChart.AddSeries(Result);
 end;
 
@@ -117,6 +139,11 @@ function GetHorLineSerie(ChartNumber, LineSerieNumber: Byte): TConstantLine;
 begin
   Result:= TConstantLine(App.FindComponent('Chart' + IntToStr(ChartNumber) + 'HorizontalLine' + IntToStr(LineSerieNumber)));
 end;
+
+//function GetMagLine(ChartNumber: Byte): TConstantLine;
+//begin
+//  Result:= TConstantLine(App.FindComponent('Chart' + IntToStr(ChartNumber) + 'MagLine'));
+//end;
 
 function GetLineMarker(Chart: TChart): TConstantLine;
 begin
@@ -220,6 +247,17 @@ begin
   Result:= '';
 end;
 
+function GetMagLine(Chart: TChart): TConstantLine;
+var n   : Byte;
+begin
+  Result:= Nil;
+  for n:=MAX_SERIE_NUMBER + 1 to Chart.SeriesCount do
+    if NPos('MagLine', Chart.Series[n - 1].Name, 1) > 0 then begin
+       Result:= TConstantLine(Chart.Series[n - 1]);
+       Break;
+    end;
+end;
+
 function GetFreeHorizontalLine(): String;
 var i, j, n   : Byte;
     nStr      : String;
@@ -280,6 +318,30 @@ begin
        if LastIndex < nToDel then for n:=nToDel downto LastIndex do Serie.Delete(n);
        if FirstIndex < nToDel then for n:=0 to FirstIndex do Serie.Delete(0);
      end;
+  end;
+end;
+
+procedure SerieStartDateLimit(Serie: TLineSeries);
+var Stop : Boolean;
+begin
+  if Serie.Count > 0 then begin
+     Stop:= False;
+     repeat
+       if DateOf(Serie.GetXValue(0)) < App.StartChartsFrom.Date then Serie.Delete(0)
+       else Stop:= True;
+     until (Serie.Count = 0) Or Stop;
+  end;
+end;
+
+procedure SerieEndDateLimit(Serie: TLineSeries);
+var Stop : Boolean;
+begin
+  if Serie.Count > 0 then begin
+    Stop:= False;
+    repeat
+       if DateOf(Serie.GetXValue(Serie.Count - 1)) > App.EndPoint.Date then Serie.Delete(Serie.Count - 1)
+       else Stop:= True;
+    until (Serie.Count = 0) Or Stop;
   end;
 end;
 

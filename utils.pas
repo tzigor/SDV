@@ -193,8 +193,8 @@ var AfterDot : Byte;
 begin
   if Abs(y) > 10000 then AfterDot:= 0
   else AfterDot:= 3;
-  if App.ExtHint.Checked then AddStr:= 'Min value = ' + FloatToStrF(Serie.GetYMin, ffFixed, 12, AfterDot) + ', ' +
-                                       'Max value = ' + FloatToStrF(Serie.GetYMax, ffFixed, 12, AfterDot) + NewLine
+  if App.ExtHint.Checked then AddStr:= 'Min = ' + FloatToStrF(Serie.GetYMin, ffFixed, 12, AfterDot) + ', ' +
+                                       'Max = ' + FloatToStrF(Serie.GetYMax, ffFixed, 12, AfterDot) + NewLine
   else AddStr:= '';
   sUnit:= ParametersUnits[StrToInt(MidStr(Serie.Name, 6, 1)), StrToInt(MidStr(Serie.Name, 12, 1))];
   Result:= Serie.Title + ' = ' + FloatToStrF(y, ffFixed, 12, AfterDot) + ' ' + sUnit + NewLine + AddStr + FormatDateTime('dd.mm.yy hh:nn:ss', x) //  DateTimeToStr(x);

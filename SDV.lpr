@@ -10,9 +10,9 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, tachartlazaruspkg, datetimectrls, Main, UserTypes, Utils, TffObjects,
-  ParseBinDb, ChannelsForm, LineSerieUtils, ParamOptions, ToolsConfig,
-  ToolConfiguration, LimitsForm
+  Forms, tachartlazaruspkg, tachartaggpas, datetimectrls, Main, UserTypes,
+  Utils, TffObjects, ParseBinDb, ChannelsForm, LineSerieUtils, ParamOptions,
+  ToolsConfig, ToolConfiguration, LimitsForm
   { you can add units after this };
 
 {$R *.res}

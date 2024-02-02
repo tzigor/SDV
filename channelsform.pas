@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Buttons,
   LineSerieUtils, ChartUtils, TASeries, LCLType, ComCtrls, IniPropStorage,
-  TAGraph, DateUtils, ToolsConfig, Types;
+  TAGraph, DateUtils, ToolsConfig, Types, StrUtils;
 
 type
 
@@ -39,6 +39,7 @@ type
       );
     procedure FileListSelectionChange(Sender: TObject; User: boolean);
     procedure FormCreate(Sender: TObject);
+    procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure MultiColumnsChange(Sender: TObject);
     procedure RecordsNumberChange(Sender: TObject);
@@ -113,7 +114,9 @@ begin
 end;
 
 procedure TShowChannelForm.DrawBtnClick(Sender: TObject);
-var Chart      : TChart;
+var Chart, ExChart : TChart;
+    i, ExChartIndx : Byte;
+    nStr, wStr           : String;
 begin
    if ChartsCount < MAX_CHART_NUMBER then begin
       CurrentChart:= GetFreeChart;
@@ -125,6 +128,20 @@ begin
       ParametersUnits[CurrentChart, CurrentSerie]:= DataSources[CurrentSource].TFFDataChannels[ChannelList.ItemIndex].Units;
       DrawSerie(GetLineSerie(CurrentChart, CurrentSerie), CurrentSource, ChannelList.ItemIndex, ChannelList.Items[ChannelList.ItemIndex]);
       ChartsPosition();
+
+      ExChartIndx:= GetFirstVisibleChart();
+      if (ExChartIndx > 0) And (CurrentChart <> ExChartIndx) then begin
+        ExChart:= GetChart(ExChartIndx);
+        for i:=MAX_SERIE_NUMBER + 1 to ExChart.SeriesCount do begin
+          if i - MAX_SERIE_NUMBER < 10 then nStr:= '0'+ IntToStr(i - MAX_SERIE_NUMBER)
+          else nStr:= IntToStr(i - MAX_SERIE_NUMBER);
+          wStr:= ExChart.Series[i - 1].Name;
+          if NPos('VerticalLine' + nStr, ExChart.Series[i - 1].Name, 1) > 0 then begin
+             AddConstLineSerie(Chart, ExChart.Series[i - 1].Name, TConstantLine(ExChart.Series[i - 1]).Position);
+          end;
+        end;
+      end;
+
    end
    else Application.MessageBox('Too many charts','Error', MB_ICONERROR + MB_OK);
    ProgressDone;
@@ -184,6 +201,14 @@ end;
 procedure TShowChannelForm.FormCreate(Sender: TObject);
 begin
   SetFastMode(ShowChannelForm.FastMode.Checked);
+end;
+
+procedure TShowChannelForm.FormResize(Sender: TObject);
+begin
+  if ShowChannelForm.DockedToMain.Checked then begin
+    App.ChartScrollBox.Left:= ShowChannelForm.Width - 4;
+    App.ChartScrollBox.Width:= App.Width - ShowChannelForm.Width;
+  end;
 end;
 
 procedure TShowChannelForm.FormShow(Sender: TObject);

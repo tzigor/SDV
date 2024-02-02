@@ -12,14 +12,22 @@ uses
   TADrawUtils, TAChartUtils, TADataTools, TAChartCombos, TANavigation,
   ParamOptions, DateUtils, JSONParser, JSONScanner, fpJSON, FileUtil, Math,
   ToolConfiguration, LCLIntf, Clipbrd, Calendar, EditBtn, TAChartAxisUtils,
-  TALegend, TALegendPanel, LimitsForm;
+  TALegend, TALegendPanel, TATransformations, LimitsForm;
 
 type
 
   { TApp }
 
   TApp = class(TForm)
+    SaveImageBtn: TButton;
+    catUser: TChartAxisTransformations;
+
+      catUserUserDefinedAxisTransform1: TUserDefinedAxisTransform;
     ChartToolset1DataPointDragTool1: TDataPointDragTool;
+    ChartToolset2: TChartToolset;
+    ChartToolset2ZoomMouseWheelTool1: TZoomMouseWheelTool;
+    GroupBox4: TGroupBox;
+    Label14: TLabel;
     LinkToolCurves: TCheckBox;
     CropBtn: TButton;
     Chart1: TChart;
@@ -44,9 +52,12 @@ type
     DelHorizontalLine: TMenuItem;
     DelAllHorLines: TMenuItem;
     LimitsItem: TMenuItem;
+    ShowMagnifier: TMenuItem;
+    ShowBackInTime: TCheckBox;
     VertLineColor: TColorBox;
     GLineStyleBox: TChartComboBox;
     HorLineColor: TColorBox;
+    LabelColor: TColorBox;
     VertLineStyle: TChartComboBox;
     GLineWidthBox: TChartComboBox;
     HorLineStyle: TChartComboBox;
@@ -129,19 +140,16 @@ type
     procedure AddChartClick(Sender: TObject);
     procedure AddHorizontalLineClick(Sender: TObject);
     procedure AddVerticalLineClick(Sender: TObject);
+    procedure catUserUserDefinedAxisTransform1AxisToGraph(AX: Double; out
+      AT: Double);
     procedure Chart1AxisList0GetMarkText(Sender: TObject; var AText: String;
       AMark: Double);
     procedure Chart1DragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure Chart1DragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
-    procedure Chart1DrawLegend(ASender: TChart; ADrawer: IChartDrawer;
-      ALegendItems: TChartLegendItems; ALegendItemSize: TPoint;
-      const ALegendRect: TRect; AColCount, ARowCount: Integer);
     procedure ChartLinkChange(Sender: TObject);
     procedure ChartPointsChange(Sender: TObject);
     procedure ChartToolset1DataPointClickTool1PointClick(ATool: TChartTool;
-      APoint: TPoint);
-    procedure ChartToolset1DataPointClickTool2AfterMouseUp(ATool: TChartTool;
       APoint: TPoint);
     procedure ChartToolset1DataPointClickTool2PointClick(ATool: TChartTool;
       APoint: TPoint);
@@ -150,6 +158,8 @@ type
     procedure ChartToolset1DataPointClickTool4AfterKeyDown(ATool: TChartTool;
       APoint: TPoint);
     procedure ChartToolset1DataPointClickTool4PointClick(ATool: TChartTool;
+      APoint: TPoint);
+    procedure ChartToolset1DataPointHintTool1AfterKeyDown(ATool: TChartTool;
       APoint: TPoint);
     procedure ChartToolset1DataPointHintTool1AfterMouseMove(ATool: TChartTool;
       APoint: TPoint);
@@ -160,6 +170,8 @@ type
     procedure ChartToolset1PanDragTool1AfterMouseUp(ATool: TChartTool;
       APoint: TPoint);
     procedure ChartToolset1UserDefinedTool1AfterMouseDown(ATool: TChartTool;
+      APoint: TPoint);
+    procedure ChartToolset1ZoomMouseWheelTool3AfterMouseMove(ATool: TChartTool;
       APoint: TPoint);
     procedure CloseAppClick(Sender: TObject);
     procedure CloseChartsClick(Sender: TObject);
@@ -175,6 +187,7 @@ type
       var AText: String);
     procedure DistanceXOffClick(Sender: TObject);
     procedure DistanceYOffClick(Sender: TObject);
+    procedure EndPointChange(Sender: TObject);
     procedure FitXClick(Sender: TObject);
     procedure FitXYClick(Sender: TObject);
     procedure FitYClick(Sender: TObject);
@@ -198,9 +211,12 @@ type
     procedure MenuItem5Click(Sender: TObject);
     procedure MenuItem6Click(Sender: TObject);
     procedure PanOffClick(Sender: TObject);
+    procedure SaveImageBtnClick(Sender: TObject);
     procedure ScreenShotClick(Sender: TObject);
     procedure ShowLabelClick(Sender: TObject);
     procedure OpenFileClick(Sender: TObject);
+    procedure ShowMagnifierClick(Sender: TObject);
+    procedure StartChartsFromChange(Sender: TObject);
     procedure TimerStopTimer(Sender: TObject);
     procedure TimerTimer(Sender: TObject);
     procedure ZoomOffClick(Sender: TObject);
@@ -247,6 +263,7 @@ var
   ChartPointIndex    : LongInt;
   LabelSticked       : Boolean;
   MousePosition      : TPoint;
+  MouseOnLeftMarks   : Boolean;
   { Variables are initialized if OnHint event occur  }
   isOnHint           : Boolean = False;
   OnHintSerie        : TLineSeries;
@@ -325,7 +342,7 @@ begin
   if KeepDistance.Checked then DistanceTool.Options:= [dpdoPermanent]
   else DistanceTool.Options:= [];
 
-  AllowDropFiles:=True;
+  AllowDropFiles:= True;
 
 end;
 
@@ -341,7 +358,7 @@ end;
 
 procedure TApp.FormResize(Sender: TObject);
 begin
-  if ChartsCount > 1 then begin
+  if ChartsCount > 0 then begin
      ChartsPosition;
   end;
 end;
@@ -489,6 +506,11 @@ begin
   SetNavigation(NavigationMode);
 end;
 
+procedure TApp.SaveImageBtnClick(Sender: TObject);
+begin
+  ShowMessage(IntToStr(SizeOf(DataSources)));
+end;
+
 procedure TApp.ScreenShotClick(Sender: TObject);
 begin
   ScreenShotFlash.Visible:= True;
@@ -509,6 +531,7 @@ begin
     ShowChannelForm.ChannelList.Items.Add(DataSources[SourceCount - 1].TFFDataChannels[i].DLIS);
   end;
   ShowChannelForm.FileList.ItemIndex:= SourceCount - 1;
+  ShowChannelForm.ChannelList.ItemIndex:=0;
   CurrentSource:= SourceCount - 1;
 end;
 
@@ -528,6 +551,32 @@ end;
 procedure TApp.OpenFileClick(Sender: TObject);
 begin
   Bin_DbToBin_Db();
+end;
+
+procedure TApp.ShowMagnifierClick(Sender: TObject);
+var dr    : TDoubleRect;
+    Chart : TChart;
+    Delta : Double;
+begin
+  Chart:= GetChart(SelectedChart);
+  dr:= Chart.CurrentExtent;
+  Delta:= dr.b.x - dr.a.x;
+  AddMagLine(Chart, dr.a.x + Delta / 2 );
+  //T := TChartAxisTransformations.Create(self);
+  //Chart.AxisList[1].Transformations := T;
+  //transf := TAutoscaleAxisTransform.Create(T);
+  //transf.Transformations := T;
+  //Chart.AxisList[1].Transformations:= catUser;
+  catUserUserDefinedAxisTransform1.Enabled:= True;
+end;
+
+procedure TApp.StartChartsFromChange(Sender: TObject);
+var i: Byte;
+begin
+  for i:=1 to MAX_CHART_NUMBER do ChartStartDateLimit(GetChart(i));
+  RemoveEmptyCharts();
+  FindTimeRange();
+  SetNavigation(NavigationMode);
 end;
 
 procedure TApp.TimerStopTimer(Sender: TObject);
@@ -653,8 +702,35 @@ end;
 
 procedure TApp.ChartToolset1DataPointClickTool2PointClick(ATool: TChartTool;
   APoint: TPoint);
+var i, j  : Byte;
+    Serie : TLineSeries;
+    Chart : TChart;
+    n     : Integer;
+    Found : Boolean;
 begin
-  App.ChartToolset1DataPointClickTool1PointClick(ATool, APoint);
+ if isOnHint then begin
+   for i:=1 to MAX_CHART_NUMBER do begin
+     Chart:= GetChart(i);
+     if Chart.Visible then begin
+        for j:=1 to MAX_SERIE_NUMBER do begin
+          Serie:= GetLineSerie(i, j);
+          if Serie.Count > 0 then begin
+             n:= 0;
+             Found:= False;
+             repeat
+               if Serie.GetXValue(n) = OnHintXPoint then Found:= True;
+               Inc(n);
+             until (n - 1 >= Serie.Count - 1) Or Found;
+             if Found then begin
+                Serie.ListSource.Item[n]^.Text:= GetSticker(Serie, OnHintXPoint, Serie.GetYValue(n));
+             end;
+             LabelSticked:= True;
+          end;
+        end;
+     end;
+   end;
+   isOnHint:= False;
+  end;
 end;
 
 procedure TApp.ChartToolset1DataPointClickTool3PointClick(ATool: TChartTool;
@@ -702,6 +778,12 @@ begin
   ParamOptionsForm.Show;
 end;
 
+procedure TApp.ChartToolset1DataPointHintTool1AfterKeyDown(ATool: TChartTool;
+  APoint: TPoint);
+begin
+
+end;
+
 procedure TApp.ChartToolset1DataPointHintTool1AfterMouseMove(ATool: TChartTool;
   APoint: TPoint);
 var wM : TPoint;
@@ -721,29 +803,17 @@ begin
         DelHorizontalLine.Enabled:= False;
         LimitsItem.Enabled:= False;
      end;
-end;
-
-procedure TApp.ChartToolset1DataPointClickTool2AfterMouseUp(ATool: TChartTool;
-  APoint: TPoint);
-var i, j  : Byte;
-    Chart : TChart;
-begin
- if LabelSticked then begin
-   for i:=1 to MAX_CHART_NUMBER do begin
-     Chart:= GetChart(i);
-     if Chart.Visible then
-        for j:=1 to MAX_SERIE_NUMBER do
-          StickLabel(GetLineSerie(i, j));
-   end;
-   LabelSticked:= False;
-  end;
+     if LabelSticked then RepaintAll();
 end;
 
 procedure TApp.ChartToolset1DataPointHintTool1Hint(ATool: TDataPointHintTool;
   const APoint: TPoint; var AHint: String);
 var wStr: String;
 begin
-   if (NPos('VerticalLine', ATool.Series.Name, 1) = 0) And (NPos('HorizontalLine', ATool.Series.Name, 1) = 0) then begin
+   if (NPos('VerticalLine', ATool.Series.Name, 1) = 0) And
+      (NPos('HorizontalLine', ATool.Series.Name, 1) = 0) And
+      (NPos('MagLine', ATool.Series.Name, 1) = 0) then
+   begin
      wStr:= TLineSeries(ATool.Series).Title;
      Delete(wStr, 1, 3);
      OnHintPointIndex:= ATool.PointIndex;
@@ -768,8 +838,13 @@ begin
           SetNavigation(NAVIGATION_OFF);
           ATool.Enabled:= True;
           ChartToolset1DataPointClickTool4.Enabled:= False;
-          //ChartToolset1DataPointDragTool1.AffectedSeries:= IntToStr(TLineSeries(ATool.Series).Index);
-        end;
+        end
+        else if NPos('MagLine', ATool.Series.Name, 1) > 0 then begin
+                ATool.Chart.Cursor:= crHSplit;
+                SetNavigation(NAVIGATION_OFF);
+                ATool.Enabled:= True;
+                ChartToolset1DataPointClickTool4.Enabled:= False;
+             end;
    MousePosition:= Mouse.CursorPos;
    isOnHint:= True;
    OnHintSerie:= TLineSeries(ATool.Series);
@@ -796,17 +871,27 @@ begin
   PopupMenu1.PopUp;
 end;
 
+procedure TApp.ChartToolset1ZoomMouseWheelTool3AfterMouseMove(
+  ATool: TChartTool; APoint: TPoint);
+var MousePosOnChar : Integer;
+begin
+  MousePosOnChar:= Mouse.CursorPos.X - App.Left - 14;
+  if (MousePosOnChar >= 0) And (MousePosOnChar < 54) then begin
+    MouseOnLeftMarks:= True;
+    ChartToolset1ZoomMouseWheelTool3.ZoomFactor:= 1;
+    ChartToolset1ZoomMouseWheelTool3.ZoomRatio:= 1.1;
+  end
+  else begin
+    MouseOnLeftMarks:= False;
+    ChartToolset1ZoomMouseWheelTool3.ZoomFactor:= 1.1;
+    ChartToolset1ZoomMouseWheelTool3.ZoomRatio:=1;
+  end;
+end;
+
 procedure TApp.Chart1DragOver(Sender, Source: TObject; X, Y: Integer;
   State: TDragState; var Accept: Boolean);
 begin
   if Source = ShowChannelForm.ChannelList then Accept:=True;
-end;
-
-procedure TApp.Chart1DrawLegend(ASender: TChart; ADrawer: IChartDrawer;
-  ALegendItems: TChartLegendItems; ALegendItemSize: TPoint;
-  const ALegendRect: TRect; AColCount, ARowCount: Integer);
-begin
-
 end;
 
 procedure TApp.Chart1DragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -850,6 +935,26 @@ begin
     if GetChart(i).Visible then AddConstLineSerie(GetChart(i), nStr, OnHintXPoint)
   end;
 end;
+
+procedure TApp.catUserUserDefinedAxisTransform1AxisToGraph(AX: Double; out
+  AT: Double);
+const
+  R1 = 1000.0;
+  C = 5;
+  R2 = R1 / C;
+var
+  zx: Double;
+begin
+  zx := GetMagLine(GetChart(SelectedChart)).Position;
+  if Abs(AX - zx) > R1 then
+  AT := AX
+  else if AX < zx - R2 then
+  AT := zx - R1
+  else if AX > zx + R2 then
+  AT := zx + R1
+  else AT := (AX - zx + R2) * C + zx - R1;
+end;
+
 
 //procedure TApp.Button1Click(Sender: TObject);
 //var
@@ -918,6 +1023,15 @@ begin
   SetNavigation(NavigationMode);
 end;
 
+procedure TApp.EndPointChange(Sender: TObject);
+  var i: Byte;
+begin
+  for i:=1 to MAX_CHART_NUMBER do ChartEndDateLimit(GetChart(i));
+  RemoveEmptyCharts();
+  FindTimeRange();
+  SetNavigation(NavigationMode);
+end;
+
 procedure TApp.FitXClick(Sender: TObject);
 var i: Byte;
 begin
@@ -957,7 +1071,7 @@ begin
      DTime:= ASender.Distance(cuAxis);
      Days:= DaysBetween(0, DTime);
      DecodeDateTime(DTime, y, mon, d, h, m, s, ms);
-     AText:= 'Distance: Days - ' + IntToStr(Days) + #13#10 + 'h - ' + IntToStr(h) + ', m - ' + IntToStr(m) + ', s - ' + IntToStr(s);
+     AText:= 'Distance: Days - ' + IntToStr(Days) + #13#10 + IntToStr(h) + 'h, ' + IntToStr(m) + 'm, ' + IntToStr(s) + 's';
   end
   else begin
      DTime:= ASender.Distance(cuAxis);
