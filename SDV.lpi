@@ -103,19 +103,6 @@
         <UnitName Value="ParamOptions"/>
       </Unit>
       <Unit>
-        <Filename Value="toolsconfig.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="ToolsConfig"/>
-      </Unit>
-      <Unit>
-        <Filename Value="toolconfiguration.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="ToolConfigForm"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="ToolConfiguration"/>
-      </Unit>
-      <Unit>
         <Filename Value="limitsform.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="LimitForm"/>

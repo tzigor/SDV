@@ -1,10 +1,10 @@
 object App: TApp
-  Left = 1834
-  Height = 790
-  Top = -718
+  Left = 1909
+  Height = 706
+  Top = -738
   Width = 1354
-  Caption = 'Smart Data Viewer v0.2.3'
-  ClientHeight = 790
+  Caption = 'Smart Data Viewer v1.0'
+  ClientHeight = 706
   ClientWidth = 1354
   Color = clWhite
   OnChangeBounds = FormChangeBounds
@@ -17,7 +17,7 @@ object App: TApp
   WindowState = wsMaximized
   object PageControl1: TPageControl
     Left = 0
-    Height = 790
+    Height = 706
     Top = 0
     Width = 1354
     ActivePage = ChartPage
@@ -27,7 +27,7 @@ object App: TApp
     TabOrder = 0
     object ChartPage: TTabSheet
       Caption = 'Chart'
-      ClientHeight = 762
+      ClientHeight = 678
       ClientWidth = 1346
       object CloseApp: TBitBtn
         Left = 1270
@@ -50,7 +50,7 @@ object App: TApp
       object ProcessProgress: TProgressBar
         Left = 96
         Height = 15
-        Top = 746
+        Top = 662
         Width = 320
         Anchors = [akLeft, akBottom]
         TabOrder = 1
@@ -59,7 +59,7 @@ object App: TApp
       object ProcessLabel: TLabel
         Left = 0
         Height = 15
-        Top = 746
+        Top = 662
         Width = 85
         Anchors = [akLeft, akBottom]
         Caption = 'Process channel'
@@ -731,13 +731,13 @@ object App: TApp
       end
       object ChartScrollBox: TScrollBox
         Left = 0
-        Height = 710
+        Height = 626
         Top = 34
         Width = 1345
         HorzScrollBar.Page = 75
         VertScrollBar.Page = 37
         Anchors = [akTop, akLeft, akRight, akBottom]
-        ClientHeight = 706
+        ClientHeight = 622
         ClientWidth = 1341
         Color = clWhite
         ParentBackground = False
@@ -747,7 +747,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 584
+          Top = 511
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -810,7 +810,7 @@ object App: TApp
         object DateTimeLine: TChart
           Left = 0
           Height = 37
-          Top = 669
+          Top = 585
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -874,7 +874,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 498
+          Top = 435
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -937,7 +937,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 411
+          Top = 358
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -1000,7 +1000,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 328
+          Top = 285
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -1063,7 +1063,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 243
+          Top = 210
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -1126,7 +1126,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 157
+          Top = 134
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -1189,7 +1189,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 51
-          Top = 90
+          Top = 76
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -1252,7 +1252,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 59
-          Top = 14
+          Top = 9
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -1661,7 +1661,7 @@ object App: TApp
     end
     object OptionsPage: TTabSheet
       Caption = 'Options'
-      ClientHeight = 762
+      ClientHeight = 678
       ClientWidth = 1346
       object GroupBox1: TGroupBox
         Left = 8
@@ -2249,7 +2249,13 @@ object App: TApp
     end
     object ShowMagnifier: TMenuItem
       Caption = 'Show magnifier'
+      Enabled = False
       OnClick = ShowMagnifierClick
+    end
+    object MoveToTop: TMenuItem
+      Caption = 'Raise to top'
+      Enabled = False
+      OnClick = MoveToTopClick
     end
   end
   object Timer: TTimer

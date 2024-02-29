@@ -11,18 +11,19 @@ uses
   StrUtils, DateTimePicker, channelsform, ChartUtils, LineSerieUtils, Types,
   TADrawUtils, TAChartUtils, TADataTools, TAChartCombos, TANavigation,
   ParamOptions, DateUtils, JSONParser, JSONScanner, fpJSON, FileUtil, Math,
-  ToolConfiguration, LCLIntf, Clipbrd, Calendar, EditBtn, TAChartAxisUtils,
-  TALegend, TALegendPanel, TATransformations, LimitsForm;
+  LCLIntf, Clipbrd, Calendar, EditBtn, TAChartAxisUtils, TALegend,
+  TALegendPanel, TATransformations, LimitsForm;
 
 type
 
   { TApp }
 
   TApp = class(TForm)
+    MoveToTop: TMenuItem;
     SaveImageBtn: TButton;
     catUser: TChartAxisTransformations;
 
-      catUserUserDefinedAxisTransform1: TUserDefinedAxisTransform;
+    catUserUserDefinedAxisTransform1: TUserDefinedAxisTransform;
     ChartToolset1DataPointDragTool1: TDataPointDragTool;
     ChartToolset2: TChartToolset;
     ChartToolset2ZoomMouseWheelTool1: TZoomMouseWheelTool;
@@ -210,6 +211,7 @@ type
     procedure MenuItem4Click(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
     procedure MenuItem6Click(Sender: TObject);
+    procedure MoveToTopClick(Sender: TObject);
     procedure PanOffClick(Sender: TObject);
     procedure SaveImageBtnClick(Sender: TObject);
     procedure ScreenShotClick(Sender: TObject);
@@ -225,15 +227,6 @@ type
   public
 
   end;
-
-  TDataSource = record
-     SourceName       : String;
-     TFFDataChannels  : TTFFDataChannels;
-     FrameRecords     : TFrameRecords;
-     StatusWords      : TStatusWords;
-  end;
-
-  TDataSources = array of TDataSource;
 
 var
   App: TApp;
@@ -498,6 +491,17 @@ procedure TApp.MenuItem6Click(Sender: TObject);
 begin
   OnHintSerie.Delete(OnHintPointIndex);
   App.FitYClick(Sender);
+end;
+
+procedure TApp.MoveToTopClick(Sender: TObject);
+var i: Byte;
+begin
+  if OnHintSerie <> Nil then begin
+    for i:= 1 to MAX_SERIE_NUMBER do GetLineSerie(SelectedChart, i).ZPosition:= 0;
+    OnHintSerie.ZPosition:= 1;
+    //GetChart(SelectedChart).Repaint;
+  end;
+  MoveToTop.Enabled:= False;
 end;
 
 procedure TApp.PanOffClick(Sender: TObject);
@@ -828,6 +832,7 @@ begin
      AddVerticalLine.Enabled:= True;
      AddHorizontalLine.Enabled:= True;
      LimitsItem.Enabled:= True;
+     MoveToTop.Enabled:= True;
      SetNavigation(NAVIGATION_OFF);
      ATool.Enabled:= True;
      ChartToolset1DataPointClickTool4.Enabled:= True;

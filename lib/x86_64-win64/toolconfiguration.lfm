@@ -1,7 +1,7 @@
 object ToolConfigForm: TToolConfigForm
-  Left = 1972
+  Left = 2474
   Height = 294
-  Top = -743
+  Top = -704
   Width = 240
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle

@@ -1,7 +1,7 @@
 object LimitForm: TLimitForm
-  Left = 2584
+  Left = 868
   Height = 182
-  Top = -690
+  Top = 90
   Width = 233
   BorderIcons = []
   BorderStyle = bsSingle

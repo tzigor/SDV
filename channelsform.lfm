@@ -1,7 +1,7 @@
 object ShowChannelForm: TShowChannelForm
-  Left = 2456
+  Left = 776
   Height = 698
-  Top = -670
+  Top = 8
   Width = 240
   Caption = 'Channels'
   ClientHeight = 698

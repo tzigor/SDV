@@ -83,12 +83,13 @@ Type
 
   TFrameRecords = array of TFrameRecord;
 
-  TStatusWord = record
-    Name : String;
-    Bits : TStringList;
+  TDataSource = record
+     SourceName       : String;
+     TFFDataChannels  : TTFFDataChannels;
+     FrameRecords     : TFrameRecords;
   end;
 
-  TStatusWords = array of TStatusWord;
+  TDataSources = array of TDataSource;
 
   TCurveStyle = record
     Parameter        : String;

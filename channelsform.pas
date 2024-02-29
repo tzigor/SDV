@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Buttons,
   LineSerieUtils, ChartUtils, TASeries, LCLType, ComCtrls, IniPropStorage,
-  TAGraph, DateUtils, ToolsConfig, Types, StrUtils;
+  TAGraph, DateUtils, Types, StrUtils;
 
 type
 
