@@ -3,7 +3,7 @@ object App: TApp
   Height = 706
   Top = -738
   Width = 1354
-  Caption = 'Smart Data Viewer v1.0'
+  Caption = 'Smart Data Viewer v1.1'
   ClientHeight = 706
   ClientWidth = 1354
   Color = clWhite

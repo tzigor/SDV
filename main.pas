@@ -422,7 +422,10 @@ end;
 
 procedure TApp.MenuItem1Click(Sender: TObject);
 begin
-  if OnHintSerie <> Nil then OnHintSerie.Clear;
+  if OnHintSerie <> Nil then begin
+    OnHintSerie.Legend.Visible:= False;
+    OnHintSerie.Clear;
+  end;
   MenuItem4.Enabled:= False;
 end;
 

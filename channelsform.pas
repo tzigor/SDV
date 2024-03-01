@@ -173,8 +173,31 @@ end;
 
 procedure TShowChannelForm.FileListKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
+Var i, j, Source  : Byte;
+    Serie         : TLineSeries;
+    SerieSource   : Byte;
+    SerieName     : String;
 begin
   if (Key = 46) Or (Key = 8) then begin
+
+    Source:= FileList.ItemIndex;
+    for i:= 1 to MAX_CHART_NUMBER do
+       for j:= 1 to MAX_SERIE_NUMBER do begin
+          Serie:= GetLineSerie(i, j);
+          SerieSource:= GetSerieSource(Serie.Title);
+          if SerieSource = Source then begin
+            Serie.Legend.Visible:= False;
+            Serie.Clear;
+          end
+          else if SerieSource > Source then begin
+                 Dec(SerieSource);
+                 SerieName:= Serie.Title;
+                 Delete(SerieName, 1, 2);
+                 Serie.Title:= AddLidZeros(IntToStr(SerieSource + 1), 2) + SerieName
+               end;
+       end;
+
+    RemoveEmptyCharts();
     Delete(DataSources, FileList.ItemIndex, 1);
     Dec(SourceCount);
     if SourceCount > 0 then PrepareChannelForm()
