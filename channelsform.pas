@@ -18,6 +18,8 @@ type
     FastLabel: TLabel;
     FastMode: TCheckBox;
     IniPropStorage1: TIniPropStorage;
+    SIBRParamLbl: TLabel;
+    SIBRParamList: TListBox;
     MultiColumns: TCheckBox;
     DrawBtn: TBitBtn;
     CloseList: TBitBtn;
@@ -33,6 +35,7 @@ type
     procedure DockedToMainChange(Sender: TObject);
     procedure DrawBtnClick(Sender: TObject);
     procedure FastModeChange(Sender: TObject);
+    procedure FileListClick(Sender: TObject);
     procedure FileListDrawItem(Control: TWinControl; Index: Integer;
       ARect: TRect; State: TOwnerDrawState);
     procedure FileListKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
@@ -43,6 +46,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure MultiColumnsChange(Sender: TObject);
     procedure RecordsNumberChange(Sender: TObject);
+    procedure SIBRParamListDrawItem(Control: TWinControl; Index: Integer;
+      ARect: TRect; State: TOwnerDrawState);
   private
 
   public
@@ -152,6 +157,11 @@ begin
   SetFastMode(FastMode.Checked);
 end;
 
+procedure TShowChannelForm.FileListClick(Sender: TObject);
+begin
+
+end;
+
 procedure TShowChannelForm.FileListDrawItem(Control: TWinControl;
   Index: Integer; ARect: TRect; State: TOwnerDrawState);
 begin
@@ -210,20 +220,23 @@ procedure TShowChannelForm.FileListSelectionChange(Sender: TObject;
 var i : Byte;
     n : LongWord;
 begin
-  if SourceCount > 1 then begin
+  if (SourceCount > 1) And Not NewFileOpened then begin
     CurrentSource:= FileList.ItemIndex;
-    ChannelList.Clear;
     if Length(DataSources[CurrentSource].FrameRecords) > 50000 then FastMode.Checked:= True
     else FastMode.Checked:= False;
-    for i:=0 to Length(DataSources[CurrentSource].TFFDataChannels) - 1 do begin
-      ShowChannelForm.ChannelList.Items.Add(DataSources[CurrentSource].TFFDataChannels[i].DLIS);
-    end;
+    FillChannelList();
   end;
+  NewFileOpened:= False;
 end;
 
 procedure TShowChannelForm.FormCreate(Sender: TObject);
+var i: Byte;
 begin
   SetFastMode(ShowChannelForm.FastMode.Checked);
+  for i:= 0 to 19 do ShowChannelForm.SIBRParamList.Items.Add(AmplitudesChannels[i]);
+  for i:= 0 to 19 do ShowChannelForm.SIBRParamList.Items.Add(PhaseChannels[i]);
+  for i:= 0 to 15 do  ShowChannelForm.SIBRParamList.Items.Add(CondChannels[i]);
+  for i:= 0 to 11 do ShowChannelForm.SIBRParamList.Items.Add(CondCompChannels[i]);
 end;
 
 procedure TShowChannelForm.FormResize(Sender: TObject);
@@ -249,6 +262,24 @@ procedure TShowChannelForm.RecordsNumberChange(Sender: TObject);
 begin
   RecordCount.Caption:= 'Divide by ' + IntToStr(RecordsNumber.Position);
   FastModeDivider:= RecordsNumber.Position;
+end;
+
+procedure TShowChannelForm.SIBRParamListDrawItem(Control: TWinControl;
+  Index: Integer; ARect: TRect; State: TOwnerDrawState);
+begin
+     with SIBRParamList do begin
+     if Items[Index] in AmplitudesChannels then Canvas.Font.Color:= clBlue
+     else if Items[Index] in CondChannels then Canvas.Font.Color:= RGBToColor(0, 100, 0)
+          else if Items[Index] in CondCompChannels then Canvas.Font.Color:= RGBToColor(255, 0, 0);
+
+     if (odSelected in State) then begin
+       Canvas.Brush.Color:=clBlue;
+       Canvas.Font.Color:=clWhite;
+     end;
+
+     Canvas.FillRect(ARect);
+     Canvas.TextOut(ARect.Left, ARect.Top, Items[Index]);
+    end
 end;
 
 

@@ -1,7 +1,7 @@
 object App: TApp
-  Left = 1909
+  Left = 1863
   Height = 706
-  Top = -738
+  Top = -588
   Width = 1354
   Caption = 'Smart Data Viewer v1.1'
   ClientHeight = 706

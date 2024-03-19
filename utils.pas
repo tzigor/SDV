@@ -105,6 +105,7 @@ begin
       Insert(DataSource, DataSources, DATA_MAX_SIZE);
       if Length(DataSources[CurrentSource].FrameRecords) > 50000 then ShowChannelForm.FastMode.Checked:= True
       else ShowChannelForm.FastMode.Checked:= False;
+      NewFileOpened:= True;
       Inc(SourceCount);
       CurrentSource:= SourceCount - 1;
       OpenChannelForm();

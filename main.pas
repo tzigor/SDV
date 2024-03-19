@@ -257,6 +257,7 @@ var
   LabelSticked       : Boolean;
   MousePosition      : TPoint;
   MouseOnLeftMarks   : Boolean;
+  NewFileOpened      : Boolean = False;
   { Variables are initialized if OnHint event occur  }
   isOnHint           : Boolean = False;
   OnHintSerie        : TLineSeries;
@@ -267,6 +268,9 @@ var
   SavedOnHintSerie   : TLineSeries;
   NewSerieDrawed     : Boolean = False;
 
+  { SIB-R special variables }
+  IsSIBR             : Boolean;
+
   NavigationMode     : Byte;
   SavedDateTimePoint : TDateTime;  { Date/Time point for time synchronization }
   FastModeDivider    : Byte = 1;
@@ -275,6 +279,7 @@ var
 
   procedure OpenChannelForm();
   procedure PrepareChannelForm();
+  procedure FillChannelList();
 
 implementation
 
@@ -336,7 +341,6 @@ begin
   else DistanceTool.Options:= [];
 
   AllowDropFiles:= True;
-
 end;
 
 procedure TApp.FormDropFiles(Sender: TObject; const FileNames: array of string);
@@ -526,20 +530,40 @@ begin
   ScreenShotFlash.Visible:= False;
 end;
 
-procedure PrepareChannelForm();
+procedure FillChannelList();
 var i : Integer;
 begin
   ShowChannelForm.ChannelList.Clear;
+  IsSIBR:= False;
+  for i:=0 to Length(DataSources[CurrentSource].TFFDataChannels) - 1 do begin
+    ShowChannelForm.ChannelList.Items.Add(DataSources[CurrentSource].TFFDataChannels[i].DLIS);
+    if DataSources[CurrentSource].TFFDataChannels[i].DLIS = 'VR1C0F1r' then IsSIBR:= True;
+  end;
+  if IsSIBR then begin
+     if Not ShowChannelForm.SIBRParamList.Visible then
+        ShowChannelForm.ChannelList.Width:= ShowChannelForm.ChannelList.Width - 104;
+     ShowChannelForm.SIBRParamList.Visible:= True;
+     ShowChannelForm.SIBRParamLbl.Visible:= True;
+  end
+  else begin
+     if ShowChannelForm.SIBRParamList.Visible then
+        ShowChannelForm.ChannelList.Width:= ShowChannelForm.ChannelList.Width + 104;
+     ShowChannelForm.SIBRParamList.Visible:= False;
+     ShowChannelForm.SIBRParamLbl.Visible:= False;
+  end;
+end;
+
+procedure PrepareChannelForm();
+var i : Integer;
+begin
   ShowChannelForm.FileList.Clear;
+  CurrentSource:= SourceCount - 1;
   for i:=1 to SourceCount do begin
     ShowChannelForm.FileList.Items.Add(IntToStr(i) + '.' + ExtractFileName(DataSources[i - 1].SourceName));
   end;
-  for i:=0 to Length(DataSources[SourceCount - 1].TFFDataChannels) - 1 do begin
-    ShowChannelForm.ChannelList.Items.Add(DataSources[SourceCount - 1].TFFDataChannels[i].DLIS);
-  end;
-  ShowChannelForm.FileList.ItemIndex:= SourceCount - 1;
+  FillChannelList();
+  ShowChannelForm.FileList.ItemIndex:= CurrentSource;
   ShowChannelForm.ChannelList.ItemIndex:=0;
-  CurrentSource:= SourceCount - 1;
 end;
 
 procedure OpenChannelForm();
