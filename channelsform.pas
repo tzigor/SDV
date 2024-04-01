@@ -7,27 +7,30 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Buttons,
   LineSerieUtils, ChartUtils, TASeries, LCLType, ComCtrls, IniPropStorage,
-  TAGraph, DateUtils, Types, StrUtils;
+  PairSplitter, ExtCtrls, TAGraph, DateUtils, Types, StrUtils;
 
 type
 
   { TShowChannelForm }
 
   TShowChannelForm = class(TForm)
+    ChannelList: TListBox;
     DockedToMain: TCheckBox;
     FastLabel: TLabel;
     FastMode: TCheckBox;
     IniPropStorage1: TIniPropStorage;
+    Label1: TLabel;
     SIBRParamLbl: TLabel;
-    SIBRParamList: TListBox;
     MultiColumns: TCheckBox;
     DrawBtn: TBitBtn;
     CloseList: TBitBtn;
-    ChannelList: TListBox;
     FileList: TListBox;
     RecordCount: TLabel;
     RecordsNumber: TTrackBar;
+    SIBRParamList: TListBox;
     SlowLabel: TLabel;
+    Splitter1: TSplitter;
+    procedure ChannelListClick(Sender: TObject);
     procedure ChannelListDblClick(Sender: TObject);
     procedure ChannelListDrawItem(Control: TWinControl; Index: Integer;
       ARect: TRect; State: TOwnerDrawState);
@@ -46,6 +49,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure MultiColumnsChange(Sender: TObject);
     procedure RecordsNumberChange(Sender: TObject);
+    procedure SIBRParamListClick(Sender: TObject);
+    procedure SIBRParamListDblClick(Sender: TObject);
     procedure SIBRParamListDrawItem(Control: TWinControl; Index: Integer;
       ARect: TRect; State: TOwnerDrawState);
   private
@@ -99,6 +104,11 @@ begin
   DrawBtnClick(Sender);
 end;
 
+procedure TShowChannelForm.ChannelListClick(Sender: TObject);
+begin
+  SIBRParamList.ItemIndex:= -1;
+end;
+
 procedure TShowChannelForm.ChannelListDrawItem(Control: TWinControl;
   Index: Integer; ARect: TRect; State: TOwnerDrawState);
 begin
@@ -119,9 +129,10 @@ begin
 end;
 
 procedure TShowChannelForm.DrawBtnClick(Sender: TObject);
-var Chart, ExChart : TChart;
-    i, ExChartIndx : Byte;
-    nStr, wStr           : String;
+var Chart, ExChart    : TChart;
+    i, ExChartIndx    : Byte;
+    nStr              : String;
+    SelectedParamName : String;
 begin
    if ChartsCount < MAX_CHART_NUMBER then begin
       CurrentChart:= GetFreeChart;
@@ -130,8 +141,13 @@ begin
       CurrentSerie:= GetFreeLineSerie(CurrentChart);
       Chart.Visible:= True;
       Chart.Title.Text[0]:= Chart.Name;
-      ParametersUnits[CurrentChart, CurrentSerie]:= DataSources[CurrentSource].TFFDataChannels[ChannelList.ItemIndex].Units;
-      DrawSerie(GetLineSerie(CurrentChart, CurrentSerie), CurrentSource, ChannelList.ItemIndex, ChannelList.Items[ChannelList.ItemIndex]);
+      ParametersUnits[CurrentChart, CurrentSerie]:= '';
+      if ChannelList.ItemIndex > -1 then begin
+        SelectedParamName:= ChannelList.Items[ChannelList.ItemIndex];
+        ParametersUnits[CurrentChart, CurrentSerie]:= DataSources[CurrentSource].TFFDataChannels[ChannelList.ItemIndex].Units;
+      end;
+      if SIBRParamList.ItemIndex > -1 then SelectedParamName:= SIBRParamList.Items[SIBRParamList.ItemIndex];
+      DrawSerie(GetLineSerie(CurrentChart, CurrentSerie), CurrentSource, ChannelList.ItemIndex, SelectedParamName);
       ChartsPosition();
 
       ExChartIndx:= GetFirstVisibleChart();
@@ -140,7 +156,6 @@ begin
         for i:=MAX_SERIE_NUMBER + 1 to ExChart.SeriesCount do begin
           if i - MAX_SERIE_NUMBER < 10 then nStr:= '0'+ IntToStr(i - MAX_SERIE_NUMBER)
           else nStr:= IntToStr(i - MAX_SERIE_NUMBER);
-          wStr:= ExChart.Series[i - 1].Name;
           if NPos('VerticalLine' + nStr, ExChart.Series[i - 1].Name, 1) > 0 then begin
              AddConstLineSerie(Chart, ExChart.Series[i - 1].Name, TConstantLine(ExChart.Series[i - 1]).Position);
           end;
@@ -254,14 +269,31 @@ end;
 
 procedure TShowChannelForm.MultiColumnsChange(Sender: TObject);
 begin
-  if MultiColumns.Checked then ChannelList.Columns:= 3
-  else ChannelList.Columns:= 0;
+  if MultiColumns.Checked then begin
+    ChannelList.Columns:= 3;
+    SIBRParamList.Columns:= 3;
+  end
+  else begin
+    ChannelList.Columns:= 0;
+    SIBRParamList.Columns:= 0;
+  end;
 end;
 
 procedure TShowChannelForm.RecordsNumberChange(Sender: TObject);
 begin
   RecordCount.Caption:= 'Divide by ' + IntToStr(RecordsNumber.Position);
   FastModeDivider:= RecordsNumber.Position;
+end;
+
+procedure TShowChannelForm.SIBRParamListClick(Sender: TObject);
+begin
+  ChannelList.ItemIndex:= -1;
+end;
+
+procedure TShowChannelForm.SIBRParamListDblClick(Sender: TObject);
+begin
+  if SIBRParamList.ItemIndex = -1 then Exit;
+   DrawBtnClick(Sender);
 end;
 
 procedure TShowChannelForm.SIBRParamListDrawItem(Control: TWinControl;

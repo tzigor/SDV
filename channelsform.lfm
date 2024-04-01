@@ -1,11 +1,11 @@
 object ShowChannelForm: TShowChannelForm
-  Left = 2812
-  Height = 809
-  Top = -679
-  Width = 272
+  Left = 828
+  Height = 706
+  Top = 0
+  Width = 313
   Caption = 'Channels'
-  ClientHeight = 809
-  ClientWidth = 272
+  ClientHeight = 706
+  ClientWidth = 313
   Constraints.MinHeight = 300
   Constraints.MinWidth = 240
   FormStyle = fsStayOnTop
@@ -15,50 +15,36 @@ object ShowChannelForm: TShowChannelForm
   Position = poMainFormCenter
   SessionProperties = 'DockedToMain.Checked;MultiColumns.Checked'
   LCLVersion = '3.0.0.2'
-  object ChannelList: TListBox
-    Left = 8
-    Height = 570
-    Top = 200
-    Width = 151
-    Anchors = [akTop, akLeft, akRight, akBottom]
-    DragMode = dmAutomatic
-    ExtendedSelect = False
-    ItemHeight = 0
-    Style = lbOwnerDrawVariable
-    TabOrder = 0
-    OnDblClick = ChannelListDblClick
-    OnDrawItem = ChannelListDrawItem
-  end
   object CloseList: TBitBtn
-    Left = 189
+    Left = 230
     Height = 25
-    Top = 778
+    Top = 675
     Width = 75
     Anchors = [akRight, akBottom]
     Caption = 'Close'
     OnClick = CloseListClick
-    TabOrder = 1
+    TabOrder = 0
   end
   object DrawBtn: TBitBtn
     Left = 8
     Height = 25
-    Top = 778
+    Top = 675
     Width = 75
     Anchors = [akLeft, akBottom]
     Caption = 'Draw'
     OnClick = DrawBtnClick
-    TabOrder = 2
+    TabOrder = 1
   end
   object FileList: TListBox
     Left = 8
     Height = 96
     Top = 8
-    Width = 256
+    Width = 297
     Anchors = [akTop, akLeft, akRight]
     Color = clWhite
     ItemHeight = 0
     Style = lbOwnerDrawVariable
-    TabOrder = 3
+    TabOrder = 2
     OnClick = FileListClick
     OnDrawItem = FileListDrawItem
     OnKeyDown = FileListKeyDown
@@ -67,10 +53,10 @@ object ShowChannelForm: TShowChannelForm
   object MultiColumns: TCheckBox
     Left = 8
     Height = 19
-    Top = 180
+    Top = 178
     Width = 95
     Caption = 'Multi columns'
-    TabOrder = 4
+    TabOrder = 3
     OnChange = MultiColumnsChange
   end
   object FastMode: TCheckBox
@@ -79,14 +65,14 @@ object ShowChannelForm: TShowChannelForm
     Top = 112
     Width = 73
     Caption = 'Fast mode'
-    TabOrder = 5
+    TabOrder = 4
     OnChange = FastModeChange
   end
   object RecordsNumber: TTrackBar
     Left = 8
     Height = 25
     Top = 136
-    Width = 256
+    Width = 297
     Frequency = 100
     Max = 100
     Min = 2
@@ -94,7 +80,7 @@ object ShowChannelForm: TShowChannelForm
     PageSize = 100
     Position = 10
     Anchors = [akTop, akLeft, akRight]
-    TabOrder = 6
+    TabOrder = 5
   end
   object SlowLabel: TLabel
     Left = 10
@@ -111,7 +97,7 @@ object ShowChannelForm: TShowChannelForm
     ParentFont = False
   end
   object RecordCount: TLabel
-    Left = 104
+    Left = 124
     Height = 13
     Top = 160
     Width = 62
@@ -127,7 +113,7 @@ object ShowChannelForm: TShowChannelForm
     ParentFont = False
   end
   object FastLabel: TLabel
-    Left = 240
+    Left = 281
     Height = 13
     Top = 160
     Width = 21
@@ -147,27 +133,73 @@ object ShowChannelForm: TShowChannelForm
     Top = 112
     Width = 89
     Caption = 'Dock to Main'
-    TabOrder = 7
+    TabOrder = 6
     OnChange = DockedToMainChange
   end
-  object SIBRParamList: TListBox
-    Left = 160
-    Height = 570
-    Top = 200
-    Width = 104
-    Anchors = [akTop, akRight, akBottom]
+  object SIBRParamLbl: TLabel
+    Left = 204
+    Height = 15
+    Top = 199
+    Width = 102
+    Anchors = [akTop, akRight]
+    Caption = 'Computed params:'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clNavy
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object ChannelList: TListBox
+    AnchorSideRight.Control = Splitter1
+    Left = 8
+    Height = 449
+    Top = 216
+    Width = 190
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    DragMode = dmAutomatic
+    ExtendedSelect = False
     ItemHeight = 0
-    Style = lbOwnerDrawVariable
+    Style = lbOwnerDrawFixed
+    TabOrder = 7
+    OnClick = ChannelListClick
+    OnDblClick = ChannelListDblClick
+    OnDrawItem = ChannelListDrawItem
+  end
+  object SIBRParamList: TListBox
+    AnchorSideLeft.Control = Splitter1
+    Left = 204
+    Height = 449
+    Top = 216
+    Width = 101
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 6
+    DragMode = dmAutomatic
+    ExtendedSelect = False
+    ItemHeight = 0
+    Style = lbOwnerDrawFixed
     TabOrder = 8
+    OnClick = SIBRParamListClick
+    OnDblClick = SIBRParamListDblClick
     OnDrawItem = SIBRParamListDrawItem
   end
-  object SIBRParamLbl: TLabel
-    Left = 160
+  object Splitter1: TSplitter
+    Left = 198
+    Height = 552
+    Top = 216
+    Width = 6
+    Align = alNone
+  end
+  object Label1: TLabel
+    Left = 8
     Height = 15
-    Top = 182
-    Width = 93
-    Anchors = [akTop, akRight]
-    Caption = 'SIB-R parameters:'
+    Top = 199
+    Width = 75
+    Caption = 'Raw channels:'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clNavy
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
   end
   object IniPropStorage1: TIniPropStorage
     StoredValues = <    

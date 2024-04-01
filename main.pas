@@ -20,7 +20,6 @@ type
 
   TApp = class(TForm)
     MoveToTop: TMenuItem;
-    SaveImageBtn: TButton;
     catUser: TChartAxisTransformations;
 
     catUserUserDefinedAxisTransform1: TUserDefinedAxisTransform;
@@ -193,6 +192,7 @@ type
     procedure FitXYClick(Sender: TObject);
     procedure FitYClick(Sender: TObject);
     procedure FormChangeBounds(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDropFiles(Sender: TObject; const FileNames: array of string);
     procedure FormResize(Sender: TObject);
@@ -213,8 +213,8 @@ type
     procedure MenuItem6Click(Sender: TObject);
     procedure MoveToTopClick(Sender: TObject);
     procedure PanOffClick(Sender: TObject);
-    procedure SaveImageBtnClick(Sender: TObject);
     procedure ScreenShotClick(Sender: TObject);
+    procedure ScreenShotFlashClick(Sender: TObject);
     procedure ShowLabelClick(Sender: TObject);
     procedure OpenFileClick(Sender: TObject);
     procedure ShowMagnifierClick(Sender: TObject);
@@ -270,6 +270,7 @@ var
 
   { SIB-R special variables }
   IsSIBR             : Boolean;
+  ResParamPosition   : Integer;
 
   NavigationMode     : Byte;
   SavedDateTimePoint : TDateTime;  { Date/Time point for time synchronization }
@@ -491,7 +492,7 @@ end;
 
 procedure TApp.MenuItem5Click(Sender: TObject);
 begin
-  MakeScreenShot(GetChart(SelectedChart).Handle);
+  MakeChartScreenShot(GetChart(SelectedChart));
 end;
 
 procedure TApp.MenuItem6Click(Sender: TObject);
@@ -517,17 +518,17 @@ begin
   SetNavigation(NavigationMode);
 end;
 
-procedure TApp.SaveImageBtnClick(Sender: TObject);
-begin
-  ShowMessage(IntToStr(SizeOf(DataSources)));
-end;
-
 procedure TApp.ScreenShotClick(Sender: TObject);
 begin
   ScreenShotFlash.Visible:= True;
   Application.ProcessMessages;
-  MakeScreenShot(ChartScrollBox.Handle);
+  MakeScreenShot();
   ScreenShotFlash.Visible:= False;
+end;
+
+procedure TApp.ScreenShotFlashClick(Sender: TObject);
+begin
+
 end;
 
 procedure FillChannelList();
@@ -537,19 +538,22 @@ begin
   IsSIBR:= False;
   for i:=0 to Length(DataSources[CurrentSource].TFFDataChannels) - 1 do begin
     ShowChannelForm.ChannelList.Items.Add(DataSources[CurrentSource].TFFDataChannels[i].DLIS);
-    if DataSources[CurrentSource].TFFDataChannels[i].DLIS = 'VR1C0F1r' then IsSIBR:= True;
+    if DataSources[CurrentSource].TFFDataChannels[i].DLIS = 'VR1C0F1r' then begin
+      IsSIBR:= True;
+      ResParamPosition:= i;
+    end;
   end;
   if IsSIBR then begin
-     if Not ShowChannelForm.SIBRParamList.Visible then
-        ShowChannelForm.ChannelList.Width:= ShowChannelForm.ChannelList.Width - 104;
+     ShowChannelForm.ChannelList.Width:= ShowChannelForm.Width Div 2;
      ShowChannelForm.SIBRParamList.Visible:= True;
      ShowChannelForm.SIBRParamLbl.Visible:= True;
+     ShowChannelForm.Splitter1.Visible:= True;
   end
   else begin
-     if ShowChannelForm.SIBRParamList.Visible then
-        ShowChannelForm.ChannelList.Width:= ShowChannelForm.ChannelList.Width + 104;
+     ShowChannelForm.ChannelList.Width:= ShowChannelForm.Width - 16;
      ShowChannelForm.SIBRParamList.Visible:= False;
      ShowChannelForm.SIBRParamLbl.Visible:= False;
+     ShowChannelForm.Splitter1.Visible:= False;
   end;
 end;
 
@@ -623,6 +627,7 @@ end;
 procedure TApp.CloseAppClick(Sender: TObject);
 begin
   App.Close;
+  FreeAndNil(App);
 end;
 
 procedure TApp.CloseChartsClick(Sender: TObject);
@@ -923,13 +928,15 @@ end;
 procedure TApp.Chart1DragOver(Sender, Source: TObject; X, Y: Integer;
   State: TDragState; var Accept: Boolean);
 begin
-  if Source = ShowChannelForm.ChannelList then Accept:=True;
+  if Source = ShowChannelForm.ChannelList then Accept:= True;
+  if Source = ShowChannelForm.SIBRParamList then Accept:= True;
 end;
 
 procedure TApp.Chart1DragDrop(Sender, Source: TObject; X, Y: Integer);
-var Chart       : TChart;
-    Serie       : Byte;
-    ChartNumber : Byte;
+var Chart             : TChart;
+    Serie             : Byte;
+    ChartNumber       : Byte;
+    SelectedParamName : String;
 begin
   Chart:= TChart(Sender);
   ChartNumber:= GetChartNumber(Chart.Name);
@@ -937,10 +944,17 @@ begin
      with Source as TListBox do begin
        Serie:= GetFreeLineSerie(ChartNumber);
        if Serie > 0 then begin
-          DrawSerie(GetLineSerie(ChartNumber, Serie),
-                    CurrentSource,
-                    ShowChannelForm.ChannelList.ItemIndex,
-                    ShowChannelForm.ChannelList.Items[ShowChannelForm.ChannelList.ItemIndex]);
+
+         if ShowChannelForm.ChannelList.ItemIndex > -1 then begin
+            SelectedParamName:= ShowChannelForm.ChannelList.Items[ShowChannelForm.ChannelList.ItemIndex];
+            ParametersUnits[CurrentChart, CurrentSerie]:= DataSources[CurrentSource].TFFDataChannels[ShowChannelForm.ChannelList.ItemIndex].Units;
+         end;
+         if ShowChannelForm.SIBRParamList.ItemIndex > -1 then SelectedParamName:= ShowChannelForm.SIBRParamList.Items[ShowChannelForm.SIBRParamList.ItemIndex];
+
+         DrawSerie(GetLineSerie(ChartNumber, Serie),
+                   CurrentSource,
+                   ShowChannelForm.ChannelList.ItemIndex,
+                   SelectedParamName);
        end;
      end;
 end;
@@ -1085,6 +1099,11 @@ begin
   end;
 end;
 
+procedure TApp.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  FreeAndNil(App);
+end;
+
 procedure TApp.FitXYClick(Sender: TObject);
 begin
   FitXClick(Sender);
@@ -1103,7 +1122,7 @@ begin
      DTime:= ASender.Distance(cuAxis);
      Days:= DaysBetween(0, DTime);
      DecodeDateTime(DTime, y, mon, d, h, m, s, ms);
-     AText:= 'Distance: Days - ' + IntToStr(Days) + #13#10 + IntToStr(h) + 'h, ' + IntToStr(m) + 'm, ' + IntToStr(s) + 's';
+     AText:= IntToStr(Days) + ' days' + #13#10 + IntToStr(h) + 'h, ' + IntToStr(m) + 'm, ' + IntToStr(s) + 's';
   end
   else begin
      DTime:= ASender.Distance(cuAxis);

@@ -1,13 +1,14 @@
 object App: TApp
-  Left = 1863
+  Left = 1840
   Height = 706
-  Top = -588
+  Top = -709
   Width = 1354
-  Caption = 'Smart Data Viewer v1.1'
+  Caption = 'Smart Data Viewer v1.2.2 Portable'
   ClientHeight = 706
   ClientWidth = 1354
   Color = clWhite
   OnChangeBounds = FormChangeBounds
+  OnClose = FormClose
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles
   OnResize = FormResize
@@ -1252,7 +1253,7 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 59
-          Top = 9
+          Top = 8
           Width = 1343
           AllowPanning = False
           AllowZoom = False
@@ -1487,6 +1488,7 @@ object App: TApp
         Top = 4
         Width = 25
         Anchors = [akTop, akRight]
+        OnClick = ScreenShotFlashClick
         Picture.Data = {
           1754506F727461626C654E6574776F726B477261706869630C07000089504E47
           0D0A1A0A0000000D4948445200000019000000190806000000C4E98563000000
@@ -1648,15 +1650,6 @@ object App: TApp
         Checked = True
         State = cbChecked
         TabOrder = 12
-      end
-      object SaveImageBtn: TButton
-        Left = 1072
-        Height = 25
-        Top = 3
-        Width = 75
-        Caption = 'Save image'
-        TabOrder = 13
-        OnClick = SaveImageBtnClick
       end
     end
     object OptionsPage: TTabSheet

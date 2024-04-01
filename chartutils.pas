@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, UserTypes, TASeries, TAGraph, Controls, TATypes, LCLType,
-  TAChartUtils, DateUtils, StrUtils, Forms, Dialogs, Utils;
+  TAChartUtils, DateUtils, StrUtils, Forms, Dialogs, Utils, SIBRParam, uComplex,
+  Math;
 
 procedure DrawSerie(LineSerie: TLineSeries; SelectedSource, SelectedParam: Word; Name: String);
 procedure ChartsVisible(visible: Boolean);
@@ -35,6 +36,7 @@ procedure DeleteChart(Chart: TChart);
 procedure ChartStartDateLimit(Chart: TChart);
 procedure ChartEndDateLimit(Chart: TChart);
 function GetFirstVisibleChart: Byte;
+function GetChannelValue(DataChannels: TTFFDataChannels; Frame: TFrameRecord; Channel: Word; var Value: Double): Boolean;
 
 implementation
 uses Main, LineSerieUtils, channelsform;
@@ -121,6 +123,12 @@ var
   PrevDateTime    : TDateTime = 0;
   Sticker         : String = '';
   nPoins          : LongWord = 0;
+  StartParamPos,
+  Step, numParam  : Integer;
+  RawR, RawX      : Double;
+  isAplitude      : Boolean = False;
+  isPhaseShift    : Boolean = False;
+  ValidValue      : Boolean;
 
 begin
   App.ChartScrollBox.Visible:= False;
@@ -138,17 +146,53 @@ begin
      SetFastMode(ShowChannelForm.FastMode.Checked);
   end;
 
+  if FindPart('AR???F', Name) > 0 then isAplitude:= True;
+  if FindPart('PR???F', Name) > 0 then isPhaseShift:= True;
+
+  if isAplitude Or isPhaseShift then begin
+      numParam:= NameToInt(Name);
+      if numParam >= 1000 then begin
+        StartParamPos:= GetParamPosition('VR1C0F1r');
+        numParam:= numParam - 1000;
+      end
+      else StartParamPos:= GetParamPosition('VR1T0F1r');
+      if (numParam mod 2) = 0 then Step:= (numParam div 2) * 8
+      else Step:= ((numParam div 2) * 8) + 2;
+  end;
+
+  ValidValue:= True;
   for i:=0 to FramesCount - 1 do begin
     if (i Mod FastModeDivider) = 0 then
-      if GetChannelValue(DataSources[SelectedSource].TFFDataChannels,
-                         DataSources[SelectedSource].FrameRecords[i],
-                         SelectedParam,
-                         Value) then
-      begin
+
+      if Name in CondChannels then Value:= GetSonde(SelectedSource, Name, i)
+      else if Name in CondCompChannels then Value:= GetCompSonde(SelectedSource, Name, i)
+           else begin
+              if isAplitude Or isPhaseShift then begin
+                  ValidValue:= GetChannelValue(DataSources[SelectedSource].TFFDataChannels,
+                                 DataSources[SelectedSource].FrameRecords[i],
+                                 StartParamPos + Step,
+                                 RawR);
+                  ValidValue:= GetChannelValue(DataSources[SelectedSource].TFFDataChannels,
+                                 DataSources[SelectedSource].FrameRecords[i],
+                                 StartParamPos + Step + 1,
+                                 RawX) And ValidValue;
+
+                  if isAplitude then Value:= Sqrt(Sqr(RawR)+Sqr(RawX));
+                  if isPhaseShift then
+                    if RawR <> 0 then Value:= Angle(cInit(RawR, RawX)) * 180/Pi;
+              end
+              else ValidValue:= GetChannelValue(DataSources[SelectedSource].TFFDataChannels,
+                                 DataSources[SelectedSource].FrameRecords[i],
+                                 SelectedParam,
+                                 Value);
+           end;
+
+      if ValidValue then begin
         if (DataSources[SelectedSource].FrameRecords[i].DateTime >= App.StartChartsFrom.DateTime) And
            (DataSources[SelectedSource].FrameRecords[i].DateTime <= App.EndPoint.DateTime) then begin
            if (DataSources[SelectedSource].FrameRecords[i].DateTime >= PrevDateTime) Or Not App.RTCBugs.Checked then begin
-              LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, Sticker);
+              if (Value <> +infinity) And (Value <> -infinity) And (Value <> ParameterError)then
+                 LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, Sticker);
               Sticker:= '';
               Inc(nPoins);
            end

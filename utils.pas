@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, DateUtils,
   UserTypes, StrUtils, Buttons, LCLType, TASeries, TADataTools, TATools,
-  LCLIntf, Clipbrd;
+  LCLIntf, Clipbrd, TAGraph;
 
 function GetErrorMessage(error: Byte): PChar;
 procedure LoadByteArray(const AFileName: string);
@@ -26,9 +26,11 @@ procedure StickLabel(ChartLineSerie: TLineSeries);
 procedure SetNavigation(NavMode: Byte);
 procedure SetFastMode(Value: Boolean);
 function Expon2(n: Integer): Integer;
-procedure MakeScreenShot(Handle: HWND);
+procedure MakeScreenShot();
+procedure MakeChartScreenShot(Chart: TChart);
 function AddLidZeros(S: String; N: Byte): String;
 function StrInArray(Value: String; Arr: array of String): Boolean;
+function GetParamPosition(Param: String): Integer;
 
 implementation
 
@@ -282,22 +284,35 @@ begin
   Result:= exp;
 end;
 
-procedure MakeScreenShot(Handle: HWND);
+procedure MakeScreenShot();
 var
-  MyBitmap : TBitmap;
-  ScreenDC : HDC;
+  R: TRect;
+  Bitmap: TBitmap;
 begin
-  MyBitmap:= TBitmap.Create;
+  Bitmap := TBitmap.Create;
   try
-    ScreenDC:= GetDC(Handle);
-    try
-      MyBitmap.LoadFromDevice(ScreenDC);
-    finally
-      ReleaseDC(0,ScreenDC);
-    end;
-    Clipboard.Assign(MyBitmap);
+    R := Rect(0, 0, App.ChartScrollBox.Width, App.ChartScrollBox.Height);
+    Bitmap.SetSize(App.ChartScrollBox.Width, App.ChartScrollBox.Height);
+    Bitmap.Canvas.CopyRect(R, App.ChartScrollBox.Canvas, R);
+    Clipboard.Assign(Bitmap);
   finally
-    FreeAndNil(MyBitmap);
+    Bitmap.Free;
+  end;
+end;
+
+procedure MakeChartScreenShot(Chart: TChart);
+var
+  R: TRect;
+  Bitmap: TBitmap;
+begin
+  Bitmap := TBitmap.Create;
+  try
+    R := Rect(0, 0, Chart.Width, Chart.Height);
+    Bitmap.SetSize(Chart.Width, Chart.Height);
+    Bitmap.Canvas.CopyRect(R, Chart.Canvas, R);
+    Clipboard.Assign(Bitmap);
+  finally
+    Bitmap.Free;
   end;
 end;
 
@@ -311,6 +326,17 @@ begin
        Exit;
     end;
   Result:= False;
+end;
+
+function GetParamPosition(Param: String): Integer;
+var i: Integer;
+begin
+  Result:= -1;
+  for i:=0 to ShowChannelForm.ChannelList.Count - 1 do
+    if ShowChannelForm.ChannelList.Items[i] = Param then begin
+       Result:= i;
+       Exit;
+    end;
 end;
 
 end.

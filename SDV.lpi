@@ -110,6 +110,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="LimitsForm"/>
       </Unit>
+      <Unit>
+        <Filename Value="sibrparam.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SIBRParam"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
