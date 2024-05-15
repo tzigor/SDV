@@ -1,0 +1,222 @@
+object ShowChannelForm: TShowChannelForm
+  Left = 2276
+  Height = 706
+  Top = -707
+  Width = 358
+  Caption = 'Channels'
+  ClientHeight = 706
+  ClientWidth = 358
+  Constraints.MinHeight = 300
+  Constraints.MinWidth = 240
+  FormStyle = fsStayOnTop
+  OnCreate = FormCreate
+  OnResize = FormResize
+  OnShow = FormShow
+  Position = poMainFormCenter
+  SessionProperties = 'DockedToMain.Checked;MultiColumns.Checked'
+  LCLVersion = '3.2.0.0'
+  object CloseList: TBitBtn
+    Left = 275
+    Height = 25
+    Top = 675
+    Width = 75
+    Anchors = [akRight, akBottom]
+    Caption = 'Close'
+    OnClick = CloseListClick
+    TabOrder = 0
+  end
+  object DrawBtn: TBitBtn
+    Left = 8
+    Height = 25
+    Top = 675
+    Width = 67
+    Anchors = [akLeft, akBottom]
+    Caption = 'Draw'
+    OnClick = DrawBtnClick
+    TabOrder = 1
+  end
+  object FileList: TListBox
+    Left = 8
+    Height = 96
+    Top = 8
+    Width = 342
+    Anchors = [akTop, akLeft, akRight]
+    Color = clWhite
+    ItemHeight = 0
+    Style = lbOwnerDrawVariable
+    TabOrder = 2
+    OnClick = FileListClick
+    OnDrawItem = FileListDrawItem
+    OnKeyDown = FileListKeyDown
+    OnSelectionChange = FileListSelectionChange
+  end
+  object MultiColumns: TCheckBox
+    Left = 8
+    Height = 19
+    Top = 178
+    Width = 95
+    Caption = 'Multi columns'
+    TabOrder = 3
+    OnChange = MultiColumnsChange
+  end
+  object FastMode: TCheckBox
+    Left = 8
+    Height = 19
+    Top = 112
+    Width = 73
+    Caption = 'Fast mode'
+    TabOrder = 4
+    OnChange = FastModeChange
+  end
+  object RecordsNumber: TTrackBar
+    Left = 8
+    Height = 25
+    Top = 136
+    Width = 342
+    Frequency = 100
+    Max = 100
+    Min = 2
+    OnChange = RecordsNumberChange
+    PageSize = 100
+    Position = 10
+    Anchors = [akTop, akLeft, akRight]
+    TabOrder = 5
+  end
+  object SlowLabel: TLabel
+    Left = 10
+    Height = 13
+    Top = 160
+    Width = 25
+    Caption = 'Slow'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -11
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentColor = False
+    ParentFont = False
+  end
+  object RecordCount: TLabel
+    Left = 147
+    Height = 13
+    Top = 160
+    Width = 62
+    Alignment = taCenter
+    Anchors = [akTop]
+    Caption = 'Divide by 10'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clMaroon
+    Font.Height = -11
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentColor = False
+    ParentFont = False
+  end
+  object FastLabel: TLabel
+    Left = 326
+    Height = 13
+    Top = 160
+    Width = 21
+    Anchors = [akTop, akRight]
+    Caption = 'Fast'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -11
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentColor = False
+    ParentFont = False
+  end
+  object DockedToMain: TCheckBox
+    Left = 140
+    Height = 19
+    Top = 112
+    Width = 89
+    Caption = 'Dock to Main'
+    TabOrder = 6
+    OnChange = DockedToMainChange
+  end
+  object SIBRParamLbl: TLabel
+    Left = 249
+    Height = 15
+    Top = 199
+    Width = 102
+    Anchors = [akTop, akRight]
+    Caption = 'Computed params:'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clNavy
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object ChannelList: TListBox
+    AnchorSideRight.Control = Splitter1
+    Left = 8
+    Height = 449
+    Top = 216
+    Width = 190
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    DragMode = dmAutomatic
+    ExtendedSelect = False
+    ItemHeight = 0
+    MultiSelect = True
+    Style = lbOwnerDrawFixed
+    TabOrder = 7
+    OnClick = ChannelListClick
+    OnDblClick = ChannelListDblClick
+    OnDrawItem = ChannelListDrawItem
+  end
+  object SIBRParamList: TListBox
+    AnchorSideLeft.Control = Splitter1
+    Left = 204
+    Height = 449
+    Top = 216
+    Width = 147
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 6
+    DragMode = dmAutomatic
+    ExtendedSelect = False
+    ItemHeight = 0
+    MultiSelect = True
+    Style = lbOwnerDrawFixed
+    TabOrder = 8
+    OnClick = SIBRParamListClick
+    OnDblClick = SIBRParamListDblClick
+    OnDrawItem = SIBRParamListDrawItem
+  end
+  object Splitter1: TSplitter
+    Left = 198
+    Height = 552
+    Top = 216
+    Width = 6
+    Align = alNone
+  end
+  object Label1: TLabel
+    Left = 8
+    Height = 15
+    Top = 199
+    Width = 75
+    Caption = 'Raw channels:'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clNavy
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object DrawGroupBtn: TButton
+    Left = 80
+    Height = 25
+    Top = 675
+    Width = 75
+    Caption = 'Draw group'
+    TabOrder = 10
+    OnClick = DrawGroupBtnClick
+  end
+  object IniPropStorage1: TIniPropStorage
+    StoredValues = <    
+      item
+      end>
+    Left = 168
+    Top = 608
+  end
+end

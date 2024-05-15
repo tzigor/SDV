@@ -12,7 +12,7 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, tachartlazaruspkg, tachartaggpas, datetimectrls, Main, UserTypes,
   Utils, TffObjects, ParseBinDb, ChannelsForm, LineSerieUtils, ParamOptions,
-  LimitsForm, SIBRParam
+  LimitsForm, SIBRParam, HorLineOptions
   { you can add units after this };
 
 {$R *.res}
@@ -25,6 +25,7 @@ begin
   Application.CreateForm(TShowChannelForm, ShowChannelForm);
   Application.CreateForm(TParamOptionsForm, ParamOptionsForm);
   Application.CreateForm(TLimitForm, LimitForm);
+  Application.CreateForm(THorLineForm, HorLineForm);
   Application.Run;
 end.
 

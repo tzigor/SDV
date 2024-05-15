@@ -27,12 +27,12 @@
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:zoom="1.8886082"
-     inkscape:cx="367.20162"
-     inkscape:cy="109.86927"
-     inkscape:window-width="1920"
-     inkscape:window-height="1027"
-     inkscape:window-x="1358"
-     inkscape:window-y="-8"
+     inkscape:cx="-12.443026"
+     inkscape:cy="91.866593"
+     inkscape:window-width="1366"
+     inkscape:window-height="715"
+     inkscape:window-x="-8"
+     inkscape:window-y="807"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1">
     <sodipodi:guide
@@ -414,6 +414,28 @@
        inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\DistanceYOn.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#f2f2f2;stroke:#000000;stroke-width:0.0355464"
+       id="rect846-3-3-0"
+       width="6.5933013"
+       height="6.5933247"
+       x="36.840378"
+       y="15.546027"
+       ry="0"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\CutZoneOn.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#ffaaaa;stroke:#000000;stroke-width:0.0189016"
+       id="rect846-3-3-0-4"
+       width="1.8642763"
+       height="6.5933247"
+       x="39.204891"
+       y="15.546027"
+       ry="0"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\CutZoneOn.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <g
        id="g1271"
        transform="matrix(0.90546881,0,0,0.90546881,-15.913359,0.46776196)"
@@ -552,5 +574,43 @@
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Calibri;-inkscape-font-specification:'Calibri Bold';fill:#0000ff;stroke-width:1.66563"
          x="79.912415"
          y="41.356331">V</tspan></text>
+    <g
+       id="g1972-79"
+       transform="matrix(0,0.03750035,-0.03750035,0,44.157393,17.014486)"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\CutZoneOn.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <path
+         style="fill:#0000ff;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 50.1252,132.16091 25.17914,163.05286 H 74.873279 Z"
+         id="path1667-3" />
+      <rect
+         style="fill:#0000ff;stroke:#ff0000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect1771-3"
+         width="15.849865"
+         height="26.350395"
+         x="42.200268"
+         y="163.05548"
+         ry="0" />
+    </g>
+    <g
+       id="g1972-79-1"
+       transform="matrix(0,0.03750035,0.03750035,0,36.138966,17.014478)"
+       inkscape:export-filename="C:\Users\ITsukanov\Documents\Lazarus\SDV\Pics\CutZoneOn.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <path
+         style="fill:#0000ff;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 50.1252,132.16091 25.17914,163.05286 H 74.873279 Z"
+         id="path1667-3-1" />
+      <rect
+         style="fill:#0000ff;stroke:#ff0000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect1771-3-5"
+         width="15.849865"
+         height="26.350395"
+         x="42.200268"
+         y="163.05548"
+         ry="0" />
+    </g>
   </g>
 </svg>

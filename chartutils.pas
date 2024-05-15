@@ -30,6 +30,7 @@ procedure DeleteVerticalLine(Chart: TChart; n: Byte);
 procedure DeleteHorizontalLine(Chart: TChart; n: Byte);
 procedure DeleteVertLines(Chart: TChart);
 procedure DeleteHorLines(Chart: TChart);
+procedure CutChart(Chart: TChart);
 procedure CropChart(Chart: TChart);
 procedure RemoveEmptyCharts();
 procedure DeleteChart(Chart: TChart);
@@ -110,7 +111,7 @@ begin
     App.DateTimeLineLineSerie.AddXY(StartDateTime, 0);
     App.DateTimeLineLineSerie.AddXY(EndDateTime, 0);
     App.DateTimeLine.Visible:= True;
-    Application.ProcessMessages;
+    //Application.ProcessMessages;
     App.DateTimeLine.ZoomFull();
   end;
 end;
@@ -129,6 +130,7 @@ var
   isAplitude      : Boolean = False;
   isPhaseShift    : Boolean = False;
   ValidValue      : Boolean;
+  AddMilliSeconds : Word = 200;
 
 begin
   App.ChartScrollBox.Visible:= False;
@@ -191,8 +193,16 @@ begin
         if (DataSources[SelectedSource].FrameRecords[i].DateTime >= App.StartChartsFrom.DateTime) And
            (DataSources[SelectedSource].FrameRecords[i].DateTime <= App.EndPoint.DateTime) then begin
            if (DataSources[SelectedSource].FrameRecords[i].DateTime >= PrevDateTime) Or Not App.RTCBugs.Checked then begin
-              if (Value <> +infinity) And (Value <> -infinity) And (Value <> ParameterError)then
-                 LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, Sticker);
+              if (Value <> +infinity) And (Value <> -infinity) And (Value <> ParameterError)then begin
+                 if DataSources[SelectedSource].FrameRecords[i].DateTime = PrevDateTime then begin
+                    LineSerie.AddXY(IncMilliSecond(DataSources[SelectedSource].FrameRecords[i].DateTime, AddMilliSeconds), Value, Sticker);
+                    Inc(AddMilliSeconds, 200)
+                 end
+                 else begin
+                    LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, Sticker);
+                    AddMilliSeconds:= 200;
+                 end;
+              end;
               Sticker:= '';
               Inc(nPoins);
            end
@@ -363,9 +373,13 @@ begin
 end;
 
 procedure RepaintAll();
-var i: byte;
+var i     : byte;
+    Chart : TChart;
 begin
-  for i:=1 to MAX_CHART_NUMBER do GetChart(i).Repaint;
+  for i:=1 to MAX_CHART_NUMBER do begin
+    Chart:= GetChart(i);
+    if Chart.Visible then Chart.Repaint;
+  end;
 end;
 
 procedure SetChartsBGColor();
@@ -513,6 +527,15 @@ var i : Byte;
 begin
   if Chart.Visible then begin
     for i:=0 to MAX_SERIE_NUMBER - 1 do CropSerie(TLineSeries(Chart.Series[i]));
+    RemoveEmptyChart(Chart);
+  end;
+end;
+
+procedure CutChart(Chart: TChart);
+var i : Byte;
+begin
+  if Chart.Visible then begin
+    for i:=0 to MAX_SERIE_NUMBER - 1 do CutSerie(TLineSeries(Chart.Series[i]));
     RemoveEmptyChart(Chart);
   end;
 end;

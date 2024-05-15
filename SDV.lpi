@@ -115,7 +115,20 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="SIBRParam"/>
       </Unit>
+      <Unit>
+        <Filename Value="horlineoptions.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="HorLineForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="HorLineOptions"/>
+      </Unit>
     </Units>
+    <Debugger>
+      <ClassConfig Version="1">
+        <Config ConfigName="New" ConfigClass="TGDBMIDebugger" Active="True" UID="{B7AD5897-DE95-4DE3-9FE8-A7BE76A02CC8}"/>
+      </ClassConfig>
+    </Debugger>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>

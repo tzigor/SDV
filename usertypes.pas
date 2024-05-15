@@ -35,11 +35,17 @@ Const
   OUT_OF_BOUNDS          = 5;
 
   { Navigation modes }
-  NAVIGATION_OFF   = 0;
-  ZOOM_MODE        = 1;
-  PAN_MODE         = 2;
-  DISTANCE_MODE_X  = 3;
-  DISTANCE_MODE_Y  = 4;
+  NAVIGATION_OFF     = 0;
+  ZOOM_MODE          = 1;
+  PAN_MODE           = 2;
+  DISTANCE_MODE_X    = 3;
+  DISTANCE_MODE_Y    = 4;
+  ALLOCATE_AREA_MODE = 5;
+
+  ChartSerieLine   = 1;
+  VerticalLine     = 2;
+  HorizontalLine   = 3;
+  MagLine          = 4;
 
   TFF_V20    = 2;
   TFF_V30    = 3;

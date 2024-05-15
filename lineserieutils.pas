@@ -28,6 +28,7 @@ function GetSerieSource(SerieTitle: String): Byte;
 function AddConstLineSerie(AChart: TChart; AName: String; Pos: Double): TConstantLine;
 function GetFreeVerticalLine(): String;
 function GetFreeHorizontalLine(): String;
+procedure CutSerie(Serie: TLineSeries);
 procedure CropSerie(Serie: TLineSeries);
 function AddHorLineSerie(AChart: TChart; AName: String; Pos: Double): TConstantLine;
 procedure SerieStartDateLimit(Serie: TLineSeries);
@@ -75,6 +76,7 @@ begin
 end;
 
 function AddHorLineSerie(AChart: TChart; AName: String; Pos: Double): TConstantLine;
+var i: Byte;
 begin
   Result := TConstantLine.Create(AChart);
   TConstantLine(Result).Name:= AName;
@@ -85,6 +87,10 @@ begin
   TConstantLine(Result).Pen.Style:= App.HorLineStyle.PenStyle;
   TConstantLine(Result).Pen.Width:= App.HorLineWidth.PenWidth;
   TConstantLine(Result).Position:= Pos;
+  if OnHintSerie <> Nil then begin
+    for i:= 1 to MAX_SERIE_NUMBER do GetLineSerie(SelectedChart, i).ZPosition:= 0;
+    TConstantLine(Result).ZPosition:= 1;
+  end;
   AChart.AddSeries(Result);
 end;
 
@@ -318,6 +324,21 @@ begin
        if LastIndex < nToDel then for n:=nToDel downto LastIndex do Serie.Delete(n);
        if FirstIndex < nToDel then for n:=0 to FirstIndex do Serie.Delete(0);
      end;
+  end;
+end;
+
+procedure CutSerie(Serie: TLineSeries);
+var i : Integer;
+begin
+  if Serie.Count > 0 then begin
+    i:= 0;
+    repeat
+       if (Serie.XValue[i] >= StartCutPoint.X) And (Serie.XValue[i] <= EndCutPoint.X) then begin
+         Serie.Delete(i);
+       end
+       else Inc(i);
+    until i = Serie.Count;
+     if Serie.Count = 0 then Serie.Clear;
   end;
 end;
 

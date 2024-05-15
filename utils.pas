@@ -238,6 +238,7 @@ begin
   App.DistanceTool.Enabled:= False;
   App.ChartToolset1DataPointClickTool4.Enabled:= False;
   App.ChartToolset1DataPointHintTool1.Enabled:= False;
+  App.AllocateArea.Shift:= [ssShift,ssCtrl,ssLeft];
   App.ZoomOff.Visible:= True;
   App.ZoomOn.Visible:= False;
   App.PanOff.Visible:= True;
@@ -246,6 +247,8 @@ begin
   App.DistanceXOn.Visible:= False;
   App.DistanceYOff.Visible:= True;
   App.DistanceYOn.Visible:= False;
+  App.CutZoneOff.Visible:= True;
+  App.CutZoneOn.Visible:= False;
   case NavMode of
      ZOOM_MODE:     begin
                        App.ChartToolset1ZoomDragTool1.Enabled:= True;
@@ -272,6 +275,11 @@ begin
                        App.DistanceTool.MeasureMode:= cdmOnlyY;
                        App.DistanceYOff.Visible:= False;
                        App.DistanceYOn.Visible:= True;
+                    end;
+     ALLOCATE_AREA_MODE: begin
+                       App.AllocateArea.Shift:= [ssLeft];
+                       App.CutZoneOff.Visible:= False;
+                       App.CutZoneOn.Visible:= True;
                     end;
   end;
 end;

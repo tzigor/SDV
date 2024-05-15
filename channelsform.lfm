@@ -1,11 +1,11 @@
 object ShowChannelForm: TShowChannelForm
-  Left = 828
+  Left = 2276
   Height = 706
-  Top = 0
-  Width = 313
+  Top = -707
+  Width = 358
   Caption = 'Channels'
   ClientHeight = 706
-  ClientWidth = 313
+  ClientWidth = 358
   Constraints.MinHeight = 300
   Constraints.MinWidth = 240
   FormStyle = fsStayOnTop
@@ -14,9 +14,9 @@ object ShowChannelForm: TShowChannelForm
   OnShow = FormShow
   Position = poMainFormCenter
   SessionProperties = 'DockedToMain.Checked;MultiColumns.Checked'
-  LCLVersion = '3.0.0.2'
+  LCLVersion = '3.2.0.0'
   object CloseList: TBitBtn
-    Left = 230
+    Left = 275
     Height = 25
     Top = 675
     Width = 75
@@ -29,7 +29,7 @@ object ShowChannelForm: TShowChannelForm
     Left = 8
     Height = 25
     Top = 675
-    Width = 75
+    Width = 67
     Anchors = [akLeft, akBottom]
     Caption = 'Draw'
     OnClick = DrawBtnClick
@@ -39,7 +39,7 @@ object ShowChannelForm: TShowChannelForm
     Left = 8
     Height = 96
     Top = 8
-    Width = 297
+    Width = 342
     Anchors = [akTop, akLeft, akRight]
     Color = clWhite
     ItemHeight = 0
@@ -72,7 +72,7 @@ object ShowChannelForm: TShowChannelForm
     Left = 8
     Height = 25
     Top = 136
-    Width = 297
+    Width = 342
     Frequency = 100
     Max = 100
     Min = 2
@@ -97,7 +97,7 @@ object ShowChannelForm: TShowChannelForm
     ParentFont = False
   end
   object RecordCount: TLabel
-    Left = 124
+    Left = 147
     Height = 13
     Top = 160
     Width = 62
@@ -113,7 +113,7 @@ object ShowChannelForm: TShowChannelForm
     ParentFont = False
   end
   object FastLabel: TLabel
-    Left = 281
+    Left = 326
     Height = 13
     Top = 160
     Width = 21
@@ -137,7 +137,7 @@ object ShowChannelForm: TShowChannelForm
     OnChange = DockedToMainChange
   end
   object SIBRParamLbl: TLabel
-    Left = 204
+    Left = 249
     Height = 15
     Top = 199
     Width = 102
@@ -159,6 +159,7 @@ object ShowChannelForm: TShowChannelForm
     DragMode = dmAutomatic
     ExtendedSelect = False
     ItemHeight = 0
+    MultiSelect = True
     Style = lbOwnerDrawFixed
     TabOrder = 7
     OnClick = ChannelListClick
@@ -170,12 +171,13 @@ object ShowChannelForm: TShowChannelForm
     Left = 204
     Height = 449
     Top = 216
-    Width = 101
+    Width = 147
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 6
     DragMode = dmAutomatic
     ExtendedSelect = False
     ItemHeight = 0
+    MultiSelect = True
     Style = lbOwnerDrawFixed
     TabOrder = 8
     OnClick = SIBRParamListClick
@@ -200,6 +202,16 @@ object ShowChannelForm: TShowChannelForm
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     ParentFont = False
+  end
+  object DrawGroupBtn: TButton
+    Left = 80
+    Height = 25
+    Top = 675
+    Width = 75
+    Anchors = [akLeft, akBottom]
+    Caption = 'Draw group'
+    TabOrder = 10
+    OnClick = DrawGroupBtnClick
   end
   object IniPropStorage1: TIniPropStorage
     StoredValues = <    

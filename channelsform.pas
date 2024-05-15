@@ -14,6 +14,7 @@ type
   { TShowChannelForm }
 
   TShowChannelForm = class(TForm)
+    DrawGroupBtn: TButton;
     ChannelList: TListBox;
     DockedToMain: TCheckBox;
     FastLabel: TLabel;
@@ -37,6 +38,7 @@ type
     procedure CloseListClick(Sender: TObject);
     procedure DockedToMainChange(Sender: TObject);
     procedure DrawBtnClick(Sender: TObject);
+    procedure DrawGroupBtnClick(Sender: TObject);
     procedure FastModeChange(Sender: TObject);
     procedure FileListClick(Sender: TObject);
     procedure FileListDrawItem(Control: TWinControl; Index: Integer;
@@ -98,15 +100,10 @@ begin
   DockForm();
 end;
 
-procedure TShowChannelForm.ChannelListDblClick(Sender: TObject);
-begin
-  if ChannelList.ItemIndex = -1 then Exit;
-  DrawBtnClick(Sender);
-end;
-
 procedure TShowChannelForm.ChannelListClick(Sender: TObject);
 begin
   SIBRParamList.ItemIndex:= -1;
+  SIBRParamListActive:= False;
 end;
 
 procedure TShowChannelForm.ChannelListDrawItem(Control: TWinControl;
@@ -128,44 +125,163 @@ begin
     end
 end;
 
-procedure TShowChannelForm.DrawBtnClick(Sender: TObject);
+function DrawChart(SelectedParamName: String; ItemIndex: Integer; NewChart, SIBRParam: Boolean): Integer;
 var Chart, ExChart    : TChart;
     i, ExChartIndx    : Byte;
     nStr              : String;
-    SelectedParamName : String;
 begin
-   if ChartsCount < MAX_CHART_NUMBER then begin
-      CurrentChart:= GetFreeChart;
-      Chart:= GetChart(CurrentChart);
-      Inc(ChartsCount);
-      CurrentSerie:= GetFreeLineSerie(CurrentChart);
-      Chart.Visible:= True;
-      Chart.Title.Text[0]:= Chart.Name;
-      ParametersUnits[CurrentChart, CurrentSerie]:= '';
-      if ChannelList.ItemIndex > -1 then begin
-        SelectedParamName:= ChannelList.Items[ChannelList.ItemIndex];
-        ParametersUnits[CurrentChart, CurrentSerie]:= DataSources[CurrentSource].TFFDataChannels[ChannelList.ItemIndex].Units;
-      end;
-      if SIBRParamList.ItemIndex > -1 then SelectedParamName:= SIBRParamList.Items[SIBRParamList.ItemIndex];
-      DrawSerie(GetLineSerie(CurrentChart, CurrentSerie), CurrentSource, ChannelList.ItemIndex, SelectedParamName);
-      ChartsPosition();
+    if NewChart then begin
+       if ChartsCount < MAX_CHART_NUMBER then begin
+         CurrentChart:= GetFreeChart;
+         Inc(ChartsCount);
+       end
+       else begin
+         Result:= -1; { MAX_CHART_NUMBER limit exceeded }
+         Exit;
+       end;
+    end;
+    Chart:= GetChart(CurrentChart);
+    CurrentSerie:= GetFreeLineSerie(CurrentChart);
+    if CurrentSerie = 0 then begin
+       Result:= -2; { MAX_SERIE_NUMBER limit exceeded }
+       Exit;
+    end;
 
-      ExChartIndx:= GetFirstVisibleChart();
-      if (ExChartIndx > 0) And (CurrentChart <> ExChartIndx) then begin
-        ExChart:= GetChart(ExChartIndx);
-        for i:=MAX_SERIE_NUMBER + 1 to ExChart.SeriesCount do begin
-          if i - MAX_SERIE_NUMBER < 10 then nStr:= '0'+ IntToStr(i - MAX_SERIE_NUMBER)
-          else nStr:= IntToStr(i - MAX_SERIE_NUMBER);
-          if NPos('VerticalLine' + nStr, ExChart.Series[i - 1].Name, 1) > 0 then begin
-             AddConstLineSerie(Chart, ExChart.Series[i - 1].Name, TConstantLine(ExChart.Series[i - 1]).Position);
-          end;
+    Chart.Title.Text[0]:= Chart.Name;
+    ParametersUnits[CurrentChart, CurrentSerie]:= '';
+    if Not SIBRParam then begin
+      ParametersUnits[CurrentChart, CurrentSerie]:= DataSources[CurrentSource].TFFDataChannels[ItemIndex].Units;
+    end;
+    DrawSerie(GetLineSerie(CurrentChart, CurrentSerie), CurrentSource, ItemIndex, SelectedParamName);
+    Chart.Visible:= True;
+    ChartsPosition();
+
+    ExChartIndx:= GetFirstVisibleChart();
+    if (ExChartIndx > 0) And (CurrentChart <> ExChartIndx) then begin
+      ExChart:= GetChart(ExChartIndx);
+      for i:=MAX_SERIE_NUMBER + 1 to ExChart.SeriesCount do begin
+        if i - MAX_SERIE_NUMBER < 10 then nStr:= '0'+ IntToStr(i - MAX_SERIE_NUMBER)
+        else nStr:= IntToStr(i - MAX_SERIE_NUMBER);
+        if (NPos('VerticalLine' + nStr, ExChart.Series[i - 1].Name, 1) > 0) And NewChart then begin
+           AddConstLineSerie(Chart, ExChart.Series[i - 1].Name, TConstantLine(ExChart.Series[i - 1]).Position);
         end;
       end;
-
-   end
-   else Application.MessageBox('Too many charts','Error', MB_ICONERROR + MB_OK);
-   ProgressDone;
+    end;
+    ProgressDone;
 end;
+
+procedure DrawMultiSeries(ToOneChart : Boolean);
+var i, Status  : Integer;
+    Multichart : Boolean = True;
+begin
+    if Not SIBRParamListActive then begin
+      for i:=0 to ShowChannelForm.ChannelList.Count - 1 do begin
+        if ShowChannelForm.ChannelList.Selected[i] then begin
+            Status:= DrawChart(ShowChannelForm.ChannelList.Items[i], i, Multichart, SIBRParamListActive);
+            if ToOneChart then Multichart:= False;
+            if Status = -1 then begin
+               ShowMessage('Too many charts. Limit is ' + IntToStr(MAX_CHART_NUMBER));
+               Exit;
+            end;
+            if Status = -2 then begin
+               ShowMessage('Too many series. Limit is ' + IntToStr(MAX_SERIE_NUMBER));
+               Exit;
+            end;
+        end;
+      end;
+      ShowChannelForm.ChannelList.ClearSelection;
+    end
+    else begin
+      for i:=0 to ShowChannelForm.SIBRParamList.Count - 1 do begin
+        if ShowChannelForm.SIBRParamList.Selected[i] then begin
+            Status:= DrawChart(ShowChannelForm.SIBRParamList.Items[i], i, Multichart, SIBRParamListActive);
+            if ToOneChart then Multichart:= False;
+            if Status = -1 then begin
+               ShowMessage('Too many charts. Limit is ' + IntToStr(MAX_CHART_NUMBER));
+               Exit;
+            end;
+            if Status = -2 then begin
+               ShowMessage('Too many series. Limit is ' + IntToStr(MAX_SERIE_NUMBER));
+               Exit;
+            end;
+        end;
+      end;
+      ShowChannelForm.SIBRParamList.ClearSelection;
+    end;
+end;
+
+procedure TShowChannelForm.DrawBtnClick(Sender: TObject);
+begin
+  DrawMultiSeries(False);
+end;
+
+procedure TShowChannelForm.DrawGroupBtnClick(Sender: TObject);
+begin
+  DrawMultiSeries(True);
+end;
+
+procedure TShowChannelForm.ChannelListDblClick(Sender: TObject);
+var Status  : Integer;
+begin
+  if ChannelList.ItemIndex = -1 then Exit;
+  Status:= DrawChart(ShowChannelForm.ChannelList.Items[ChannelList.ItemIndex], ChannelList.ItemIndex, True, False);
+  ShowChannelForm.ChannelList.ClearSelection;
+  if Status = -1 then begin
+     ShowMessage('Too many charts. Limit is ' + IntToStr(MAX_CHART_NUMBER));
+     Exit;
+  end;
+end;
+
+procedure TShowChannelForm.SIBRParamListDblClick(Sender: TObject);
+var Status  : Integer;
+begin
+  if SIBRParamList.ItemIndex = -1 then Exit;
+  Status:= DrawChart(ShowChannelForm.SIBRParamList.Items[SIBRParamList.ItemIndex], SIBRParamList.ItemIndex, True, False);
+  ShowChannelForm.SIBRParamList.ClearSelection;
+  if Status = -1 then begin
+     ShowMessage('Too many charts. Limit is ' + IntToStr(MAX_CHART_NUMBER));
+     Exit;
+  end;
+end;
+
+//procedure TShowChannelForm.DrawBtnClick(Sender: TObject);
+//var Chart, ExChart    : TChart;
+//    i, ExChartIndx    : Byte;
+//    nStr              : String;
+//    SelectedParamName : String;
+//begin
+//   if ChartsCount < MAX_CHART_NUMBER then begin
+//      CurrentChart:= GetFreeChart;
+//      Chart:= GetChart(CurrentChart);
+//      Inc(ChartsCount);
+//      CurrentSerie:= GetFreeLineSerie(CurrentChart);
+//      Chart.Visible:= True;
+//      Chart.Title.Text[0]:= Chart.Name;
+//      ParametersUnits[CurrentChart, CurrentSerie]:= '';
+//      if ChannelList.ItemIndex > -1 then begin
+//        SelectedParamName:= ChannelList.Items[ChannelList.ItemIndex];
+//        ParametersUnits[CurrentChart, CurrentSerie]:= DataSources[CurrentSource].TFFDataChannels[ChannelList.ItemIndex].Units;
+//      end;
+//      if SIBRParamList.ItemIndex > -1 then SelectedParamName:= SIBRParamList.Items[SIBRParamList.ItemIndex];
+//      DrawSerie(GetLineSerie(CurrentChart, CurrentSerie), CurrentSource, ChannelList.ItemIndex, SelectedParamName);
+//      ChartsPosition();
+//
+//      ExChartIndx:= GetFirstVisibleChart();
+//      if (ExChartIndx > 0) And (CurrentChart <> ExChartIndx) then begin
+//        ExChart:= GetChart(ExChartIndx);
+//        for i:=MAX_SERIE_NUMBER + 1 to ExChart.SeriesCount do begin
+//          if i - MAX_SERIE_NUMBER < 10 then nStr:= '0'+ IntToStr(i - MAX_SERIE_NUMBER)
+//          else nStr:= IntToStr(i - MAX_SERIE_NUMBER);
+//          if NPos('VerticalLine' + nStr, ExChart.Series[i - 1].Name, 1) > 0 then begin
+//             AddConstLineSerie(Chart, ExChart.Series[i - 1].Name, TConstantLine(ExChart.Series[i - 1]).Position);
+//          end;
+//        end;
+//      end;
+//
+//   end
+//   else Application.MessageBox('Too many charts','Error', MB_ICONERROR + MB_OK);
+//   ProgressDone;
+//end;
 
 procedure TShowChannelForm.FastModeChange(Sender: TObject);
 begin
@@ -288,12 +404,7 @@ end;
 procedure TShowChannelForm.SIBRParamListClick(Sender: TObject);
 begin
   ChannelList.ItemIndex:= -1;
-end;
-
-procedure TShowChannelForm.SIBRParamListDblClick(Sender: TObject);
-begin
-  if SIBRParamList.ItemIndex = -1 then Exit;
-   DrawBtnClick(Sender);
+  SIBRParamListActive:= True;
 end;
 
 procedure TShowChannelForm.SIBRParamListDrawItem(Control: TWinControl;
