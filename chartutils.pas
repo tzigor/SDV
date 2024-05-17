@@ -14,6 +14,7 @@ procedure ChartsVisible(visible: Boolean);
 procedure ChartsEnabled(visible: Boolean);
 procedure ResetChartsZoom;
 procedure RepaintAll;
+function GetChartNumberStr(Chart: String): String;
 function GetFreeChart: Byte;
 function GetLastChart: Byte;
 procedure ChartsHeight();
@@ -22,6 +23,7 @@ function GetChartCount: Byte;
 function GetChartNumber(ChartName: String): Byte;
 procedure ZoomChartCurrentExtent(Chart: TChart);
 function GetChart(ChartNubmber: Byte): TChart;
+function GetSplitter(SplitterNubmber: Byte): TSplitter;
 procedure DateTimeLineSerieInit;
 procedure FindTimeRange;
 procedure ChartsNavigation(Value: Boolean);
@@ -246,8 +248,8 @@ begin
                  FirstSerie:= False;
               end
               else begin
-                 if CompareDateTime(LineSerie.MinXValue, StartDateTime) < 0 then StartDateTime:= LineSerie.MinXValue;
-                 if CompareDateTime(LineSerie.MaxXValue, EndDateTime) > 0 then EndDateTime:= LineSerie.MaxXValue;
+                if CompareDateTime(LineSerie.MinXValue, StartDateTime) < 0 then StartDateTime:= LineSerie.MinXValue;
+                if CompareDateTime(LineSerie.MaxXValue, EndDateTime) > 0 then EndDateTime:= LineSerie.MaxXValue;
               end;
            end;
         end;
@@ -259,6 +261,16 @@ end;
 function GetChart(ChartNubmber: Byte): TChart;
 begin
   Result:= TChart(App.FindComponent('Chart' + IntToStr(ChartNubmber)))
+end;
+
+function GetSplitter(SplitterNubmber: Byte): TSplitter;
+begin
+  Result:= TSplitter(App.FindComponent('Splitter' + IntToStr(SplitterNubmber)))
+end;
+
+function GetChartNumberStr(Chart: String): String;
+begin
+  Result:= ReplaceText('Chart', Chart, '');
 end;
 
 function GetChartCount: Byte;
@@ -325,7 +337,10 @@ end;
 procedure ChartsVisible(visible: Boolean);
 var i: byte;
 begin
-  for i:=1 to MAX_CHART_NUMBER do GetChart(i).Visible:= visible;
+  for i:=1 to MAX_CHART_NUMBER do begin
+    GetChart(i).Visible:= visible;
+    GetSplitter(i).Visible:= visible;
+  end;
 end;
 
 procedure ChartsHeight();
@@ -338,52 +353,42 @@ procedure ChartsPosition();
 var i                : Byte;
     Chart, PrevChart : TChart;
     FirstChart       : Byte;
-    Splitter1        : TSplitter;
+    Splitter         : TSplitter;
+    PrevSplitter     : TSplitter;
 begin;
    FirstChart:= GetFirstChart;
    PrevChart:= GetChart(FirstChart);
+   PrevSplitter:= GetSplitter(FirstChart);
+   PrevSplitter.Top:= 0;
    if ChartsCount = 1 then begin
       PrevChart.Height:= App.ChartScrollBox.Height - FooterSize - 2;
    end
    else
        for i:=1 to MAX_CHART_NUMBER do begin
           Chart:= GetChart(i);
+          Splitter:= GetSplitter(i);
           if Chart.Visible then begin
               Chart.Height:= (App.ChartScrollBox.Height - FooterSize - 2) Div ChartsCount;
               if i <> FirstChart then begin
-                 Chart.Top:= ((App.ChartScrollBox.Height - FooterSize) Div ChartsCount) * (i - 1);
-                 Chart.AnchorToCompanion(akTop, 0, PrevChart);
-                 //Splitter1:=TSplitter.Create(App);
-                 //with Splitter1 do begin
-                 //   Name:='Splitter1';
-                 //   AnchorSideLeft.Control:= App.ChartScrollBox;
-                 //   AnchorSideRight.Control:= App.ChartScrollBox;
-                 //   AnchorSideRight.Side:= asrBottom;
-                 //   Cursor:= crVSplit;
-                 //   Left:= 0;
-                 //   Height:= 6;
-                 //   Top:= 589;
-                 //   Width:= 1411;
-                 //   Align:= alNone;
-                 //   Anchors:= [akTop, akLeft, akRight];
-                 //   ParentColor:= False;
-                 //   ResizeAnchor:= akBottom;
-                 //end;
-                 //PrevChart.AnchorSideBottom.Control:= Splitter1;
-                 //Chart.AnchorSideTop.Control:= Splitter1;
+                 Splitter.Top:= ((App.ChartScrollBox.Height - FooterSize) Div ChartsCount) * (i - 1);
+                 PrevChart.AnchorToNeighbour(akBottom, 0, Splitter);
               end;
               Chart.AxisList[1].Marks.Visible:= False;
               PrevChart:= Chart;
+              PrevSplitter:= Splitter;
               Chart.Title.Text[0]:= Chart.Title.Text[0] + ' Top: ' + IntToStr(Chart.Top) + ' F: ' + IntToStr(FirstChart)
           end;
        end;
-   GetChart(FirstChart).Top:= 0;
+   PrevChart.AnchorToNeighbour(akBottom, 0, App.DateTimeLine);
 end;
 
 procedure ChartsEnabled(visible: Boolean);
 var i: byte;
 begin
-  for i:=1 to MAX_CHART_NUMBER do GetChart(i).Visible:= visible;
+  for i:=1 to MAX_CHART_NUMBER do begin
+    GetChart(i).Visible:= visible;
+    GetSplitter(i).Visible:= visible;
+  end;
 end;
 
 procedure ResetChartsZoom();
@@ -453,6 +458,7 @@ begin
   DeleteVertLines(Chart);
   DeleteHorLines(Chart);
   Chart.Visible:= False;
+  GetSplitter(GetChartNumber(Chart.Name)).Visible:= False;
   Dec(ChartsCount);
   FindTimeRange;
   if ChartsCount > 0 then ChartsPosition()

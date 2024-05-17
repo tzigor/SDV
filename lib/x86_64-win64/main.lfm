@@ -1,11 +1,11 @@
 object App: TApp
-  Left = 1759
-  Height = 723
-  Top = -666
-  Width = 1440
-  Caption = 'Smart Data Viewer v1.5.0 Portable'
-  ClientHeight = 723
-  ClientWidth = 1440
+  Left = 1853
+  Height = 782
+  Top = -736
+  Width = 1415
+  Caption = 'Smart Data Viewer v1.6.0 Portable'
+  ClientHeight = 782
+  ClientWidth = 1415
   Color = clWhite
   OnActivate = FormActivate
   OnChangeBounds = FormChangeBounds
@@ -19,9 +19,9 @@ object App: TApp
   WindowState = wsMaximized
   object PageControl1: TPageControl
     Left = 0
-    Height = 723
+    Height = 782
     Top = 0
-    Width = 1440
+    Width = 1415
     ActivePage = ChartPage
     Align = alClient
     DockSite = True
@@ -29,10 +29,10 @@ object App: TApp
     TabOrder = 0
     object ChartPage: TTabSheet
       Caption = 'Chart'
-      ClientHeight = 695
-      ClientWidth = 1432
+      ClientHeight = 754
+      ClientWidth = 1407
       object CloseApp: TBitBtn
-        Left = 1356
+        Left = 1331
         Height = 25
         Top = 2
         Width = 75
@@ -52,7 +52,7 @@ object App: TApp
       object ProcessProgress: TProgressBar
         Left = 96
         Height = 15
-        Top = 679
+        Top = 738
         Width = 320
         Anchors = [akLeft, akBottom]
         TabOrder = 1
@@ -61,7 +61,7 @@ object App: TApp
       object ProcessLabel: TLabel
         Left = 0
         Height = 15
-        Top = 679
+        Top = 738
         Width = 85
         Anchors = [akLeft, akBottom]
         Caption = 'Process channel'
@@ -787,24 +787,25 @@ object App: TApp
       end
       object ChartScrollBox: TScrollBox
         Left = 0
-        Height = 643
+        Height = 701
         Top = 34
-        Width = 1431
+        Width = 1406
         HorzScrollBar.Page = 75
-        VertScrollBar.Page = 37
+        VertScrollBar.Page = 664
         Anchors = [akTop, akLeft, akRight, akBottom]
-        ClientHeight = 639
-        ClientWidth = 1427
+        ClientHeight = 697
+        ClientWidth = 1402
         Color = clWhite
         ParentBackground = False
         ParentColor = False
         TabOrder = 6
         object Chart1: TChart
+          AnchorSideTop.Control = Splitter1
           AnchorSideBottom.Side = asrBottom
           Left = 0
-          Height = 67
-          Top = 528
-          Width = 1429
+          Height = 56
+          Top = 608
+          Width = 1404
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -850,16 +851,21 @@ object App: TApp
           Legend.UseSidebar = False
           Legend.Visible = True
           Margins.Left = 0
+          Margins.Top = 0
           Margins.Right = 0
+          Margins.Bottom = 0
           MarginsExternal.Left = 0
           MarginsExternal.Top = 0
+          MarginsExternal.Right = 0
+          MarginsExternal.Bottom = 0
           Title.Text.Strings = (
             'TAChart'
           )
           Toolset = ChartToolset1
           OnBeforeDrawBackWall = Chart1BeforeDrawBackWall
           OnExtentChanged = DateTimeLineExtentChanged
-          Anchors = [akLeft, akRight]
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Top = 6
           Color = clWhite
           OnClick = Chart1Click
           OnDblClick = Chart1DblClick
@@ -869,8 +875,8 @@ object App: TApp
         object DateTimeLine: TChart
           Left = 0
           Height = 37
-          Top = 602
-          Width = 1429
+          Top = 658
+          Width = 1404
           AllowPanning = False
           AllowZoom = False
           AntialiasingMode = amOff
@@ -930,11 +936,13 @@ object App: TApp
           end
         end
         object Chart2: TChart
+          AnchorSideTop.Control = Splitter2
+          AnchorSideBottom.Control = Splitter2
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 448
-          Width = 1429
+          Top = 505
+          Width = 1404
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -988,7 +996,8 @@ object App: TApp
           Toolset = ChartToolset1
           OnBeforeDrawBackWall = Chart1BeforeDrawBackWall
           OnExtentChanged = DateTimeLineExtentChanged
-          Anchors = [akLeft, akRight]
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Top = 6
           Color = clWhite
           OnClick = Chart1Click
           OnDblClick = Chart1DblClick
@@ -996,11 +1005,12 @@ object App: TApp
           OnDragOver = Chart1DragOver
         end
         object Chart3: TChart
+          AnchorSideTop.Control = Splitter3
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 369
-          Width = 1429
+          Top = 404
+          Width = 1404
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1054,7 +1064,7 @@ object App: TApp
           Toolset = ChartToolset1
           OnBeforeDrawBackWall = Chart1BeforeDrawBackWall
           OnExtentChanged = DateTimeLineExtentChanged
-          Anchors = [akLeft, akRight]
+          Anchors = [akTop, akLeft, akRight]
           Color = clWhite
           OnClick = Chart1Click
           OnDblClick = Chart1DblClick
@@ -1062,11 +1072,12 @@ object App: TApp
           OnDragOver = Chart1DragOver
         end
         object Chart4: TChart
+          AnchorSideTop.Control = Splitter4
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 294
-          Width = 1429
+          Top = 316
+          Width = 1404
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1120,7 +1131,7 @@ object App: TApp
           Toolset = ChartToolset1
           OnBeforeDrawBackWall = Chart1BeforeDrawBackWall
           OnExtentChanged = DateTimeLineExtentChanged
-          Anchors = [akLeft, akRight]
+          Anchors = [akTop, akLeft, akRight]
           Color = clWhite
           OnClick = Chart1Click
           OnDblClick = Chart1DblClick
@@ -1128,11 +1139,12 @@ object App: TApp
           OnDragOver = Chart1DragOver
         end
         object Chart5: TChart
+          AnchorSideTop.Control = Splitter5
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 216
-          Width = 1429
+          Top = 235
+          Width = 1404
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1186,7 +1198,7 @@ object App: TApp
           Toolset = ChartToolset1
           OnBeforeDrawBackWall = Chart1BeforeDrawBackWall
           OnExtentChanged = DateTimeLineExtentChanged
-          Anchors = [akLeft, akRight]
+          Anchors = [akTop, akLeft, akRight]
           Color = clWhite
           OnClick = Chart1Click
           OnDblClick = Chart1DblClick
@@ -1194,11 +1206,12 @@ object App: TApp
           OnDragOver = Chart1DragOver
         end
         object Chart6: TChart
+          AnchorSideTop.Control = Splitter6
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 139
-          Width = 1429
+          Top = 147
+          Width = 1404
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1252,7 +1265,7 @@ object App: TApp
           Toolset = ChartToolset1
           OnBeforeDrawBackWall = Chart1BeforeDrawBackWall
           OnExtentChanged = DateTimeLineExtentChanged
-          Anchors = [akLeft, akRight]
+          Anchors = [akTop, akLeft, akRight]
           Color = clWhite
           OnClick = Chart1Click
           OnDblClick = Chart1DblClick
@@ -1260,11 +1273,12 @@ object App: TApp
           OnDragOver = Chart1DragOver
         end
         object Chart7: TChart
+          AnchorSideTop.Control = Splitter7
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 51
-          Top = 79
-          Width = 1429
+          Top = 80
+          Width = 1404
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1318,7 +1332,7 @@ object App: TApp
           Toolset = ChartToolset1
           OnBeforeDrawBackWall = Chart1BeforeDrawBackWall
           OnExtentChanged = DateTimeLineExtentChanged
-          Anchors = [akLeft, akRight]
+          Anchors = [akTop, akLeft, akRight]
           Color = clWhite
           OnClick = Chart1Click
           OnDblClick = Chart1DblClick
@@ -1326,11 +1340,12 @@ object App: TApp
           OnDragOver = Chart1DragOver
         end
         object Chart8: TChart
+          AnchorSideTop.Control = Splitter8
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 59
-          Top = 8
-          Width = 1429
+          Top = 7
+          Width = 1404
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1385,16 +1400,120 @@ object App: TApp
           Toolset = ChartToolset1
           OnBeforeDrawBackWall = Chart1BeforeDrawBackWall
           OnExtentChanged = DateTimeLineExtentChanged
-          Anchors = [akLeft, akRight]
+          Anchors = [akTop, akLeft, akRight]
           Color = clWhite
           OnClick = Chart1Click
           OnDblClick = Chart1DblClick
           OnDragDrop = Chart1DragDrop
           OnDragOver = Chart1DragOver
         end
+        object Splitter1: TSplitter
+          AnchorSideLeft.Control = ChartScrollBox
+          AnchorSideRight.Control = ChartScrollBox
+          AnchorSideRight.Side = asrBottom
+          Cursor = crVSplit
+          Left = 0
+          Height = 6
+          Top = 602
+          Width = 1402
+          Align = alNone
+          Anchors = [akLeft, akRight]
+          ResizeAnchor = akBottom
+        end
+        object Splitter2: TSplitter
+          AnchorSideLeft.Control = ChartScrollBox
+          AnchorSideRight.Control = ChartScrollBox
+          AnchorSideRight.Side = asrBottom
+          Cursor = crVSplit
+          Left = 0
+          Height = 6
+          Top = 499
+          Width = 1402
+          Align = alNone
+          Anchors = [akLeft, akRight]
+          ResizeAnchor = akBottom
+        end
+        object Splitter3: TSplitter
+          AnchorSideLeft.Control = ChartScrollBox
+          AnchorSideRight.Control = ChartScrollBox
+          AnchorSideRight.Side = asrBottom
+          Cursor = crVSplit
+          Left = 0
+          Height = 6
+          Top = 404
+          Width = 1402
+          Align = alNone
+          Anchors = [akLeft, akRight]
+          ResizeAnchor = akBottom
+        end
+        object Splitter4: TSplitter
+          AnchorSideLeft.Control = ChartScrollBox
+          AnchorSideRight.Control = ChartScrollBox
+          AnchorSideRight.Side = asrBottom
+          Cursor = crVSplit
+          Left = 0
+          Height = 6
+          Top = 316
+          Width = 1402
+          Align = alNone
+          Anchors = [akLeft, akRight]
+          ResizeAnchor = akBottom
+        end
+        object Splitter5: TSplitter
+          AnchorSideLeft.Control = ChartScrollBox
+          AnchorSideRight.Control = ChartScrollBox
+          AnchorSideRight.Side = asrBottom
+          Cursor = crVSplit
+          Left = 0
+          Height = 6
+          Top = 235
+          Width = 1402
+          Align = alNone
+          Anchors = [akLeft, akRight]
+          ResizeAnchor = akBottom
+        end
+        object Splitter6: TSplitter
+          AnchorSideLeft.Control = ChartScrollBox
+          AnchorSideRight.Control = ChartScrollBox
+          AnchorSideRight.Side = asrBottom
+          Cursor = crVSplit
+          Left = 0
+          Height = 6
+          Top = 147
+          Width = 1402
+          Align = alNone
+          Anchors = [akLeft, akRight]
+          ResizeAnchor = akBottom
+        end
+        object Splitter7: TSplitter
+          AnchorSideLeft.Control = ChartScrollBox
+          AnchorSideRight.Control = ChartScrollBox
+          AnchorSideRight.Side = asrBottom
+          Cursor = crVSplit
+          Left = 0
+          Height = 6
+          Top = 80
+          Width = 1402
+          Align = alNone
+          Anchors = [akLeft, akRight]
+          ResizeAnchor = akBottom
+        end
+        object Splitter8: TSplitter
+          AnchorSideLeft.Control = ChartScrollBox
+          AnchorSideRight.Control = ChartScrollBox
+          AnchorSideRight.Side = asrBottom
+          Cursor = crVSplit
+          Left = 0
+          Height = 6
+          Top = 7
+          Width = 1402
+          Align = alNone
+          Anchors = [akLeft, akRight]
+          ResizeAnchor = akBottom
+        end
       end
       object CloseCharts: TImage
-        Left = 1321
+        Left = 1296
         Height = 25
         Hint = 'Close all charts'
         Top = 5
@@ -1500,7 +1619,7 @@ object App: TApp
         TabOrder = 7
       end
       object ScreenShot: TImage
-        Left = 1281
+        Left = 1256
         Height = 25
         Hint = 'Charts to clipboard'
         Top = 4
@@ -1562,7 +1681,7 @@ object App: TApp
         ShowHint = True
       end
       object ScreenShotFlash: TImage
-        Left = 1281
+        Left = 1256
         Height = 25
         Top = 4
         Width = 25
@@ -1742,8 +1861,8 @@ object App: TApp
     end
     object OptionsPage: TTabSheet
       Caption = 'Options'
-      ClientHeight = 695
-      ClientWidth = 1432
+      ClientHeight = 754
+      ClientWidth = 1407
       object GroupBox1: TGroupBox
         Left = 8
         Height = 216

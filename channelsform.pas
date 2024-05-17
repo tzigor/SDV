@@ -154,6 +154,7 @@ begin
     end;
     DrawSerie(GetLineSerie(CurrentChart, CurrentSerie), CurrentSource, ItemIndex, SelectedParamName);
     Chart.Visible:= True;
+    GetSplitter(GetChartNumber(Chart.Name)).Visible:= True;
     ChartsPosition();
 
     ExChartIndx:= GetFirstVisibleChart();

@@ -60,7 +60,14 @@ type
     LimitsItem: TMenuItem;
     ShowMagnifier: TMenuItem;
     ShowBackInTime: TCheckBox;
-    Splitter: TSplitter;
+    Splitter1: TSplitter;
+    Splitter2: TSplitter;
+    Splitter3: TSplitter;
+    Splitter4: TSplitter;
+    Splitter5: TSplitter;
+    Splitter6: TSplitter;
+    Splitter7: TSplitter;
+    Splitter8: TSplitter;
     VertLineColor: TColorBox;
     GLineStyleBox: TChartComboBox;
     HorLineColor: TColorBox;
@@ -330,8 +337,9 @@ implementation
 { TApp }
 
 procedure TApp.FormCreate(Sender: TObject);
-var i, j  : Byte;
-    Chart : TChart;
+var i, j     : Byte;
+    Chart    : TChart;
+    Splitter : TSplitter;
 begin
   DecimalSeparator:= '.';
   SetDefaultLang('en');
@@ -354,13 +362,18 @@ begin
      Chart.Margins.Bottom:= 10;
      Chart.Margins.Left:= 10;
      Chart.Margins.Right:= 10;
-     Chart.MarginsExternal.Bottom:= 6;
-     Chart.MarginsExternal.Top:= 6;
+     Chart.MarginsExternal.Bottom:= 1;
+     Chart.MarginsExternal.Top:= 0;
+     Chart.BorderSpacing.Top:= 4;
      Chart.Legend.Visible:= True;
      Chart.Legend.Frame.Color:= clSilver;
      Chart.Legend.UseSidebar:= False;
      Chart.AxisList[1].Marks.Visible:= False;
      Chart.Foot.Visible:= False;
+     Splitter:= GetSplitter(i);
+     Splitter.ResizeStyle:= rsLine;
+     Splitter.Height:= 4;
+     //Splitter.Visible:= False;
   end;
   DateTimeIntervalChartSource1.DateTimeFormat:='hh:mm:ss'+#13#10+'DD.MM.YY';
 
@@ -1036,58 +1049,78 @@ begin
 end;
 
 procedure TApp.ChartUpClick(Sender: TObject);
-var ChartFrom, ChartTo   : TChart;
-    tempName1, tempName2 : String;
-    tempTop1, tempTop2   : Integer;
+var ChartFrom, ChartTo           : TChart;
+    SplitterFrom, SplitterTo     : TSplitter;
+    tmpName1, tmpName2           : String;
+    tmpSplitName1, tmpSplitName2 : String;
+    tmpSplitTop1, tmpSplitTop2   : Integer;
 begin
   if SelectedChart > 1 then begin
     ChartFrom:= GetChart(SelectedChart);
     ChartTo:= GetChart(SelectedChart - 1);
 
-    ChartFrom.Anchors:= [akLeft,akRight];
-    ChartTo.Anchors:= [akLeft,akRight];
+    SplitterFrom:= GetSplitter(SelectedChart);
+    SplitterTo:= GetSplitter(SelectedChart - 1);
 
-    tempName1:= ChartFrom.Name;
-    tempName2:= ChartTo.Name;
-    tempTop1:= ChartFrom.Top;
-    tempTop2:= ChartTo.Top;
+    tmpName1:= ChartFrom.Name;
+    tmpName2:= ChartTo.Name;
+
+    tmpSplitName1:= SplitterFrom.Name;
+    tmpSplitName2:= SplitterTo.Name;
+    tmpSplitTop1:= SplitterFrom.Top;
+    tmpSplitTop2:= SplitterTo.Top;
 
     ChartTo.Name:= 'TempName1';
     ChartFrom.Name:= 'TempName2';
+    SplitterTo.Name:= 'SplitTempName1';
+    SplitterFrom.Name:= 'SplitTempName2';
 
-    ChartTo.Name:= tempName1;
-    ChartFrom.Name:= tempName2;
-    ChartTo.Top:= tempTop1;
-    ChartFrom.Top:= tempTop2;
+    ChartTo.Name:= tmpName1;
+    ChartFrom.Name:= tmpName2;
+
+    SplitterTo.Name:= tmpSplitName1;
+    SplitterFrom.Name:= tmpSplitName2;
+    SplitterTo.Top:= tmpSplitTop1;
+    SplitterFrom.Top:= tmpSplitTop2;
 
     ChartsPosition();
   end;
 end;
 
 procedure TApp.ChartDownClick(Sender: TObject);
-var ChartFrom, ChartTo   : TChart;
-    tempName1, tempName2 : String;
-    tempTop1, tempTop2   : Integer;
+var ChartFrom, ChartTo           : TChart;
+    SplitterFrom, SplitterTo     : TSplitter;
+    tmpName1, tmpName2           : String;
+    tmpSplitName1, tmpSplitName2 : String;
+    tmpSplitTop1, tmpSplitTop2   : Integer;
 begin
   if SelectedChart < ChartsCount then begin
     ChartFrom:= GetChart(SelectedChart);
     ChartTo:= GetChart(SelectedChart + 1);
 
-    ChartFrom.Anchors:= [akLeft,akRight];
-    ChartTo.Anchors:= [akLeft,akRight];
+    SplitterFrom:= GetSplitter(SelectedChart);
+    SplitterTo:= GetSplitter(SelectedChart + 1);
 
-    tempName1:= ChartFrom.Name;
-    tempName2:= ChartTo.Name;
-    tempTop1:= ChartFrom.Top;
-    tempTop2:= ChartTo.Top;
+    tmpName1:= ChartFrom.Name;
+    tmpName2:= ChartTo.Name;
+
+    tmpSplitName1:= SplitterFrom.Name;
+    tmpSplitName2:= SplitterTo.Name;
+    tmpSplitTop1:= SplitterFrom.Top;
+    tmpSplitTop2:= SplitterTo.Top;
 
     ChartTo.Name:= 'TempName1';
     ChartFrom.Name:= 'TempName2';
+    SplitterTo.Name:= 'SplitTempName1';
+    SplitterFrom.Name:= 'SplitTempName2';
 
-    ChartTo.Name:= tempName1;
-    ChartFrom.Name:= tempName2;
-    ChartTo.Top:= tempTop1;
-    ChartFrom.Top:= tempTop2;
+    ChartTo.Name:= tmpName1;
+    ChartFrom.Name:= tmpName2;
+
+    SplitterTo.Name:= tmpSplitName1;
+    SplitterFrom.Name:= tmpSplitName2;
+    SplitterTo.Top:= tmpSplitTop1;
+    SplitterFrom.Top:= tmpSplitTop2;
 
     ChartsPosition();
   end;
