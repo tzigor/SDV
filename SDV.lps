@@ -20,8 +20,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Main"/>
         <IsVisibleTab Value="True"/>
+<<<<<<< Updated upstream
         <TopLine Value="1042"/>
         <CursorPos X="58" Y="1059"/>
+=======
+        <TopLine Value="1089"/>
+        <CursorPos X="32" Y="1112"/>
+>>>>>>> Stashed changes
         <UsageCount Value="208"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -93,8 +98,13 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ChartUtils"/>
         <EditorIndex Value="7"/>
+<<<<<<< Updated upstream
         <TopLine Value="330"/>
         <CursorPos X="70" Y="353"/>
+=======
+        <TopLine Value="156"/>
+        <CursorPos X="87" Y="167"/>
+>>>>>>> Stashed changes
         <UsageCount Value="211"/>
         <Loaded Value="True"/>
       </Unit>
@@ -154,7 +164,7 @@
         <UnitName Value="ToolsConfig"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="66" Y="42"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="37"/>
       </Unit>
       <Unit>
         <Filename Value="toolconfiguration.pas"/>
@@ -165,14 +175,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="98"/>
         <CursorPos X="33" Y="130"/>
-        <UsageCount Value="44"/>
+        <UsageCount Value="41"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\rtl-extra\src\inc\ucomplex.pp"/>
         <UnitName Value="UComplex"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="400"/>
-        <UsageCount Value="155"/>
+        <UsageCount Value="152"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\clipbrd.pp"/>
@@ -180,14 +190,22 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="202"/>
         <CursorPos X="83" Y="213"/>
+<<<<<<< Updated upstream
         <UsageCount Value="0"/>
+=======
+        <UsageCount Value="7"/>
+>>>>>>> Stashed changes
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\classes\classesh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="474"/>
         <CursorPos X="3" Y="429"/>
+<<<<<<< Updated upstream
         <UsageCount Value="0"/>
+=======
+        <UsageCount Value="7"/>
+>>>>>>> Stashed changes
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\components\tachart\tadatatools.pas"/>
@@ -195,7 +213,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="345"/>
         <CursorPos Y="369"/>
-        <UsageCount Value="53"/>
+        <UsageCount Value="50"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\components\tachart\tatools.pas"/>
@@ -203,7 +221,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="2187"/>
         <CursorPos X="24" Y="2209"/>
-        <UsageCount Value="54"/>
+        <UsageCount Value="51"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\types.pp"/>
@@ -211,7 +229,11 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="73"/>
         <CursorPos X="3" Y="87"/>
+<<<<<<< Updated upstream
         <UsageCount Value="0"/>
+=======
+        <UsageCount Value="7"/>
+>>>>>>> Stashed changes
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\components\tachart\tachartutils.pas"/>
@@ -219,13 +241,18 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="53"/>
         <CursorPos X="3" Y="71"/>
+<<<<<<< Updated upstream
         <UsageCount Value="0"/>
+=======
+        <UsageCount Value="7"/>
+>>>>>>> Stashed changes
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\typshrdh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="44"/>
         <CursorPos X="3" Y="62"/>
+<<<<<<< Updated upstream
         <UsageCount Value="0"/>
       </Unit>
       <Unit>
@@ -235,6 +262,9 @@
         <TopLine Value="204"/>
         <CursorPos X="14" Y="220"/>
         <UsageCount Value="1"/>
+=======
+        <UsageCount Value="7"/>
+>>>>>>> Stashed changes
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\components\tachart\tacustomsource.pas"/>
@@ -242,29 +272,21 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1823"/>
         <CursorPos Y="1841"/>
-        <UsageCount Value="51"/>
-      </Unit>
-      <Unit>
-        <Filename Value="C:\lazarus\lcl\lclmessageglue.pas"/>
-        <UnitName Value="LCLMessageGlue"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="101"/>
-        <CursorPos Y="118"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="48"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\include\control.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="3519"/>
         <CursorPos Y="3537"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="7"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\interfaces\win32\win32callback.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2759"/>
         <CursorPos Y="2776"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="7"/>
       </Unit>
     </Units>
     <Debugger>
@@ -273,6 +295,7 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="main.pas"/>
+<<<<<<< Updated upstream
         <Caret Line="1035" Column="2" TopLine="1004"/>
       </Position>
       <Position>
@@ -282,6 +305,9 @@
       <Position>
         <Filename Value="main.pas"/>
         <Caret Line="1020" TopLine="1004"/>
+=======
+        <Caret Line="1030" Column="59" TopLine="983"/>
+>>>>>>> Stashed changes
       </Position>
       <Position>
         <Filename Value="main.pas"/>
@@ -353,11 +379,15 @@
       </Position>
       <Position>
         <Filename Value="main.pas"/>
+<<<<<<< Updated upstream
         <Caret Line="1021" TopLine="1012"/>
       </Position>
       <Position>
         <Filename Value="main.pas"/>
         <Caret Line="1022" TopLine="1012"/>
+=======
+        <Caret Line="1324" Column="61" TopLine="1306"/>
+>>>>>>> Stashed changes
       </Position>
       <Position>
         <Filename Value="main.pas"/>
@@ -372,10 +402,13 @@
         <Caret Line="117" Column="36" TopLine="122"/>
       </Position>
       <Position>
+<<<<<<< Updated upstream
         <Filename Value="main.pas"/>
         <Caret Line="285" Column="11" TopLine="309"/>
       </Position>
       <Position>
+=======
+>>>>>>> Stashed changes
         <Filename Value="chartutils.pas"/>
         <Caret Line="341" Column="12" TopLine="330"/>
       </Position>
@@ -390,6 +423,22 @@
       <Position>
         <Filename Value="main.pas"/>
         <Caret Line="1046" Column="67" TopLine="994"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="666" Column="47" TopLine="656"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="1095" Column="3" TopLine="1089"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="1112" Column="10" TopLine="1089"/>
+      </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="665" Column="29" TopLine="660"/>
       </Position>
     </JumpHistory>
     <RunParams>

@@ -1100,6 +1100,7 @@ begin
                    CurrentSource,
                    ShowChannelForm.ChannelList.ItemIndex,
                    SelectedParamName);
+         App.FitYClick(Sender);
        end;
      end;
   ShowChannelForm.ChannelList.ClearSelection;
