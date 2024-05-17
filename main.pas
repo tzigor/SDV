@@ -60,6 +60,7 @@ type
     LimitsItem: TMenuItem;
     ShowMagnifier: TMenuItem;
     ShowBackInTime: TCheckBox;
+    Splitter: TSplitter;
     VertLineColor: TColorBox;
     GLineStyleBox: TChartComboBox;
     HorLineColor: TColorBox;
@@ -216,6 +217,7 @@ type
     procedure FitXClick(Sender: TObject);
     procedure FitXYClick(Sender: TObject);
     procedure FitYClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
     procedure FormChangeBounds(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -256,6 +258,8 @@ type
 var
   App: TApp;
 
+  CommandPromptProcessed : Boolean = False;
+
   wCurveStyle        : TCurveStyle; { temporary serie line & pointer style }
 
   ErrorCode          : Byte;
@@ -283,6 +287,7 @@ var
   MousePosition      : TPoint;
   MouseOnLeftMarks   : Boolean;
   NewFileOpened      : Boolean = False;
+  ChartsCurrentExtent: TDoubleRect;
 
   DrawCutAreaBG      : Boolean = False;
   StartCutPoint,
@@ -349,7 +354,8 @@ begin
      Chart.Margins.Bottom:= 10;
      Chart.Margins.Left:= 10;
      Chart.Margins.Right:= 10;
-     Chart.MarginsExternal.Bottom:= 3;
+     Chart.MarginsExternal.Bottom:= 6;
+     Chart.MarginsExternal.Top:= 6;
      Chart.Legend.Visible:= True;
      Chart.Legend.Frame.Color:= clSilver;
      Chart.Legend.UseSidebar:= False;
@@ -380,6 +386,17 @@ begin
   else DistanceTool.Options:= [];
 
   AllowDropFiles:= True;
+end;
+
+procedure TApp.FormActivate(Sender: TObject);
+begin
+  if paramcount=1 then begin
+    if ExtractFileExt(paramstr(1)) = '.bin_db' then
+       if LoadSourceByteArray(paramstr(1), 100) And Not CommandPromptProcessed then begin
+         LoadFile();
+       end;
+  end;
+  CommandPromptProcessed:= True
 end;
 
 procedure TApp.FormDropFiles(Sender: TObject; const FileNames: array of string);
@@ -656,7 +673,12 @@ end;
 
 procedure TApp.TimerStopTimer(Sender: TObject);
 begin
-  App.FitXYClick(Sender);
+  if GetLinesCount = 1 then App.FitXYClick(Sender)
+  else begin
+    SetHorizontalExtent(App.DateTimeLine);
+    //App.FitYClick(Sender);
+  end;
+  //if App.ChartLink.Checked then App.ChartExtentLink1.Enabled:= True;
 end;
 
 procedure TApp.TimerTimer(Sender: TObject);
@@ -674,6 +696,7 @@ procedure TApp.CloseChartsClick(Sender: TObject);
 var i, j: Byte;
 begin
   ChartsVisible(False);
+  App.DateTimeLine.ZoomFull();
   for i:=1 to MAX_CHART_NUMBER do begin
     for j:=1 to MAX_SERIE_NUMBER do SerieReset(GetLineSerie(i, j));
     DeleteVertLines(GetChart(i));
@@ -727,8 +750,8 @@ end;
 
 procedure TApp.DateTimeLineExtentChanged(ASender: TChart);
 begin
-  if NewSerieDrawed then App.DateTimeLine.ZoomFull();
-  NewSerieDrawed:= False;
+  //if NewSerieDrawed then App.DateTimeLine.ZoomFull();
+  //NewSerieDrawed:= False;
 end;
 
 procedure TApp.DelAllHorLinesClick(Sender: TObject);
@@ -1100,6 +1123,7 @@ begin
                    CurrentSource,
                    ShowChannelForm.ChannelList.ItemIndex,
                    SelectedParamName);
+
          App.FitYClick(Sender);
        end;
      end;

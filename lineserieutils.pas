@@ -35,6 +35,7 @@ procedure SerieStartDateLimit(Serie: TLineSeries);
 procedure SerieEndDateLimit(Serie: TLineSeries);
 function AddMagLine(AChart: TChart; Pos: Double): TConstantLine;
 function GetMagLine(Chart: TChart): TConstantLine;
+function GetLinesCount(): Byte;
 
 implementation
 uses Main;
@@ -310,6 +311,16 @@ var i, j: Byte;
 begin
   for i:= 1 to MAX_CHART_NUMBER do
      for j:= 1 to MAX_SERIE_NUMBER do SerieReset(GetLineSerie(i, j));
+end;
+
+function GetLinesCount(): Byte;
+var i, j, n: Byte;
+begin
+  n:= 0;
+  for i:= 1 to MAX_CHART_NUMBER do
+     for j:= 1 to MAX_SERIE_NUMBER do
+        if GetLineSerie(i, j).Count > 0 then Inc(n);
+  Result:= n;
 end;
 
 procedure CropSerie(Serie: TLineSeries);

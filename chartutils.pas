@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, UserTypes, TASeries, TAGraph, Controls, TATypes, LCLType,
   TAChartUtils, DateUtils, StrUtils, Forms, Dialogs, Utils, SIBRParam, uComplex,
-  Math;
+  Math, ExtCtrls, Graphics;
 
 procedure DrawSerie(LineSerie: TLineSeries; SelectedSource, SelectedParam: Word; Name: String);
 procedure ChartsVisible(visible: Boolean);
@@ -38,6 +38,7 @@ procedure ChartStartDateLimit(Chart: TChart);
 procedure ChartEndDateLimit(Chart: TChart);
 function GetFirstVisibleChart: Byte;
 function GetChannelValue(DataChannels: TTFFDataChannels; Frame: TFrameRecord; Channel: Word; var Value: Double): Boolean;
+procedure SetHorizontalExtent(Chart: TChart);
 
 implementation
 uses Main, LineSerieUtils, channelsform;
@@ -112,7 +113,7 @@ begin
     App.DateTimeLineLineSerie.AddXY(EndDateTime, 0);
     App.DateTimeLine.Visible:= True;
     //Application.ProcessMessages;
-    App.DateTimeLine.ZoomFull();
+    //App.DateTimeLine.ZoomFull();
   end;
 end;
 
@@ -133,7 +134,7 @@ var
   AddMilliSeconds : Word = 200;
 
 begin
-  App.ChartScrollBox.Visible:= False;
+  //App.ChartExtentLink1.Enabled:= False;
   LineSerie.Clear;
   LineSerie.Title:= AddLidZeros(IntToStr(SelectedSource + 1), 2) + '.' + Name;
   LineSerie.Legend.Visible:= True;
@@ -141,7 +142,7 @@ begin
   FramesCount:= Length(DataSources[SelectedSource].FrameRecords);
   ProgressInit(100, 'Process channel');
   iPrevPercent:= 0;
-  NewSerieDrawed:= True;
+  //NewSerieDrawed:= True;
 
   if FramesCount < 60000 then begin
      ShowChannelForm.FastMode.Checked:= False;
@@ -222,8 +223,8 @@ begin
   end;
   StartDateTime:= LineSerie.MinXValue;
   EndDateTime:= LineSerie.MaxXValue;
+  ChartsCurrentExtent:= App.DateTimeLine.CurrentExtent;
   FindTimeRange();
-  App.ChartScrollBox.Visible:= True;
   ProgressDone();
 end;
 
@@ -337,6 +338,7 @@ procedure ChartsPosition();
 var i                : Byte;
     Chart, PrevChart : TChart;
     FirstChart       : Byte;
+    Splitter1        : TSplitter;
 begin;
    FirstChart:= GetFirstChart;
    PrevChart:= GetChart(FirstChart);
@@ -351,10 +353,28 @@ begin;
               if i <> FirstChart then begin
                  Chart.Top:= ((App.ChartScrollBox.Height - FooterSize) Div ChartsCount) * (i - 1);
                  Chart.AnchorToCompanion(akTop, 0, PrevChart);
+                 //Splitter1:=TSplitter.Create(App);
+                 //with Splitter1 do begin
+                 //   Name:='Splitter1';
+                 //   AnchorSideLeft.Control:= App.ChartScrollBox;
+                 //   AnchorSideRight.Control:= App.ChartScrollBox;
+                 //   AnchorSideRight.Side:= asrBottom;
+                 //   Cursor:= crVSplit;
+                 //   Left:= 0;
+                 //   Height:= 6;
+                 //   Top:= 589;
+                 //   Width:= 1411;
+                 //   Align:= alNone;
+                 //   Anchors:= [akTop, akLeft, akRight];
+                 //   ParentColor:= False;
+                 //   ResizeAnchor:= akBottom;
+                 //end;
+                 //PrevChart.AnchorSideBottom.Control:= Splitter1;
+                 //Chart.AnchorSideTop.Control:= Splitter1;
               end;
               Chart.AxisList[1].Marks.Visible:= False;
               PrevChart:= Chart;
-              Chart.Title.Text[0]:= Chart.Title.Text[0] + ' Top: ' + IntToStr(Chart.Top) + ' F: ' + IntToStr(FirstChart);
+              Chart.Title.Text[0]:= Chart.Title.Text[0] + ' Top: ' + IntToStr(Chart.Top) + ' F: ' + IntToStr(FirstChart)
           end;
        end;
    GetChart(FirstChart).Top:= 0;
@@ -554,6 +574,15 @@ begin
   if Chart.Visible then begin
     for i:=0 to MAX_SERIE_NUMBER - 1 do SerieEndDateLimit(TLineSeries(Chart.Series[i]));
   end;
+end;
+
+procedure SetHorizontalExtent(Chart: TChart);
+var Ext: TDoubleRect;
+begin
+   Ext := Chart.GetFullExtent;
+   Ext.coords[1]:= ChartsCurrentExtent.coords[1];
+   Ext.coords[3]:= ChartsCurrentExtent.coords[3];
+   Chart.LogicalExtent:= Ext;
 end;
 
 end.
