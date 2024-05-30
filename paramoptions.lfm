@@ -1,7 +1,7 @@
 object ParamOptionsForm: TParamOptionsForm
-  Left = 2657
+  Left = 989
   Height = 431
-  Top = -708
+  Top = 87
   Width = 296
   BorderIcons = []
   BorderStyle = bsDialog

@@ -26,6 +26,15 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="laz.virtualtreeview_package"/>
+      </Item>
+      <Item>
+        <PackageName Value="LazControls"/>
+      </Item>
+      <Item>
+        <PackageName Value="LazControlDsgn"/>
+      </Item>
+      <Item>
         <PackageName Value="TAChartAggPas"/>
       </Item>
       <Item>
@@ -122,6 +131,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="HorLineOptions"/>
+      </Unit>
+      <Unit>
+        <Filename Value="parameterset.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ParamSetFrm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="ParameterSet"/>
       </Unit>
     </Units>
     <Debugger>

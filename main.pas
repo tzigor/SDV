@@ -12,8 +12,8 @@ uses
   TADrawUtils, TAChartUtils, TADataTools, TAChartCombos, TANavigation,
   ParamOptions, DateUtils, JSONParser, JSONScanner, fpJSON, FileUtil, Math,
   LCLIntf, Clipbrd, Calendar, EditBtn, TAChartAxisUtils, TALegend,
-  TALegendPanel, TATransformations, TAStyles, LimitsForm, HorLineOptions,
-  LCLTranslator;
+  TALegendPanel, TATransformations, TAStyles, CheckBoxThemed, ExtendedNotebook,
+  laz.VirtualTrees, LimitsForm, HorLineOptions, LCLTranslator;
 
 type
 
@@ -58,6 +58,7 @@ type
     DelHorizontalLine: TMenuItem;
     DelAllHorLines: TMenuItem;
     LimitsItem: TMenuItem;
+    RemoveLabelsBtn: TImage;
     ShowMagnifier: TMenuItem;
     ShowBackInTime: TCheckBox;
     Splitter1: TSplitter;
@@ -247,6 +248,7 @@ type
     procedure MenuItem6Click(Sender: TObject);
     procedure MoveToTopClick(Sender: TObject);
     procedure PanOffClick(Sender: TObject);
+    procedure RemoveLabelsBtnClick(Sender: TObject);
     procedure ScreenShotClick(Sender: TObject);
     procedure ScreenShotFlashClick(Sender: TObject);
     procedure ShowLabelClick(Sender: TObject);
@@ -301,6 +303,9 @@ var
   EndCutPoint        : TDoublePoint;
   StartCutArea,
   EndCutArea         : TPoint;
+
+  ParamSet           : TParamSet;
+  ParamSetFile       : File of TParamSet;
 
   { Variables are initialized if OnHint event occur  }
   OnHintLineType     : Byte;
@@ -511,6 +516,7 @@ begin
   Chart:= GetChart(SelectedChart);
   for i:=1 to MAX_SERIE_NUMBER do SerieReset(GetLineSerie(SelectedChart, i));
   DeleteChart(Chart);
+  //ChartsPosition();
   MenuItem4.Enabled:= False;
   App.ChartScrollBox.Visible:= True;
   if ChartsCount = 0 then OpenChannelForm();
@@ -586,6 +592,11 @@ procedure TApp.PanOffClick(Sender: TObject);
 begin
   NavigationMode:= PAN_MODE;
   SetNavigation(NavigationMode);
+end;
+
+procedure TApp.RemoveLabelsBtnClick(Sender: TObject);
+begin
+  RemoveAllLabels();
 end;
 
 procedure TApp.ScreenShotClick(Sender: TObject);
@@ -870,7 +881,7 @@ begin
                Inc(n);
              until (n - 1 >= Serie.Count - 1) Or Found;
              if Found then begin
-                Serie.ListSource.Item[n]^.Text:= GetSticker(Serie, OnHintXPoint, Serie.GetYValue(n));
+               Serie.ListSource.Item[n]^.Text:= GetSticker(Serie, OnHintXPoint, Serie.GetYValue(n));
              end;
              LabelSticked:= True;
           end;

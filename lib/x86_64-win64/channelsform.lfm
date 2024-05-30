@@ -1,13 +1,13 @@
 object ShowChannelForm: TShowChannelForm
-  Left = 2865
+  Left = 775
   Height = 706
-  Top = -681
-  Width = 358
+  Top = 12
+  Width = 381
   Caption = 'Channels'
   ClientHeight = 706
-  ClientWidth = 358
+  ClientWidth = 381
   Constraints.MinHeight = 300
-  Constraints.MinWidth = 240
+  Constraints.MinWidth = 305
   FormStyle = fsStayOnTop
   OnCreate = FormCreate
   OnResize = FormResize
@@ -16,7 +16,7 @@ object ShowChannelForm: TShowChannelForm
   SessionProperties = 'DockedToMain.Checked;MultiColumns.Checked'
   LCLVersion = '3.2.0.0'
   object CloseList: TBitBtn
-    Left = 275
+    Left = 298
     Height = 25
     Top = 675
     Width = 75
@@ -36,10 +36,10 @@ object ShowChannelForm: TShowChannelForm
     TabOrder = 1
   end
   object FileList: TListBox
-    Left = 8
+    Left = 9
     Height = 96
     Top = 8
-    Width = 342
+    Width = 365
     Anchors = [akTop, akLeft, akRight]
     Color = clWhite
     ItemHeight = 0
@@ -72,7 +72,7 @@ object ShowChannelForm: TShowChannelForm
     Left = 8
     Height = 25
     Top = 136
-    Width = 342
+    Width = 365
     Frequency = 100
     Max = 100
     Min = 2
@@ -97,7 +97,7 @@ object ShowChannelForm: TShowChannelForm
     ParentFont = False
   end
   object RecordCount: TLabel
-    Left = 147
+    Left = 158
     Height = 13
     Top = 160
     Width = 62
@@ -113,7 +113,7 @@ object ShowChannelForm: TShowChannelForm
     ParentFont = False
   end
   object FastLabel: TLabel
-    Left = 326
+    Left = 349
     Height = 13
     Top = 160
     Width = 21
@@ -137,7 +137,7 @@ object ShowChannelForm: TShowChannelForm
     OnChange = DockedToMainChange
   end
   object SIBRParamLbl: TLabel
-    Left = 249
+    Left = 272
     Height = 15
     Top = 199
     Width = 102
@@ -154,7 +154,7 @@ object ShowChannelForm: TShowChannelForm
     Left = 8
     Height = 449
     Top = 216
-    Width = 190
+    Width = 202
     Anchors = [akTop, akLeft, akRight, akBottom]
     DragMode = dmAutomatic
     ExtendedSelect = False
@@ -165,13 +165,14 @@ object ShowChannelForm: TShowChannelForm
     OnClick = ChannelListClick
     OnDblClick = ChannelListDblClick
     OnDrawItem = ChannelListDrawItem
+    OnResize = ChannelListResize
   end
   object SIBRParamList: TListBox
     AnchorSideLeft.Control = Splitter1
-    Left = 204
+    Left = 216
     Height = 449
     Top = 216
-    Width = 147
+    Width = 157
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 6
     DragMode = dmAutomatic
@@ -185,11 +186,12 @@ object ShowChannelForm: TShowChannelForm
     OnDrawItem = SIBRParamListDrawItem
   end
   object Splitter1: TSplitter
-    Left = 198
-    Height = 552
+    Left = 210
+    Height = 448
     Top = 216
     Width = 6
     Align = alNone
+    Anchors = [akTop, akLeft, akBottom]
   end
   object Label1: TLabel
     Left = 8
@@ -212,6 +214,24 @@ object ShowChannelForm: TShowChannelForm
     Caption = 'Draw group'
     TabOrder = 10
     OnClick = DrawGroupBtnClick
+  end
+  object ToTempBtn: TButton
+    Left = 160
+    Height = 25
+    Top = 675
+    Width = 25
+    Caption = '↓'
+    TabOrder = 11
+    OnClick = ToTempBtnClick
+  end
+  object FromTempBtn: TButton
+    Left = 192
+    Height = 25
+    Top = 675
+    Width = 25
+    Caption = '↑'
+    TabOrder = 12
+    OnClick = FromTempBtnClick
   end
   object IniPropStorage1: TIniPropStorage
     StoredValues = <    

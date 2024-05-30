@@ -36,6 +36,8 @@ procedure SerieEndDateLimit(Serie: TLineSeries);
 function AddMagLine(AChart: TChart; Pos: Double): TConstantLine;
 function GetMagLine(Chart: TChart): TConstantLine;
 function GetLinesCount(): Byte;
+procedure RemoveLineLabels(Serie: TLineSeries);
+function GetSerieName(Serie: TLineSeries): String;
 
 implementation
 uses Main;
@@ -375,6 +377,18 @@ begin
        else Stop:= True;
     until (Serie.Count = 0) Or Stop;
   end;
+end;
+
+procedure RemoveLineLabels(Serie: TLineSeries);
+var i: Integer;
+begin
+  if Serie.Count > 0 then
+    for i:=0 to Serie.Count - 1 do Serie.ListSource.Item[i]^.Text:= ''
+end;
+
+function GetSerieName(Serie: TLineSeries): String;
+begin
+  Result:= ReplaceText(Serie.Title, LeftStr(Serie.Title, 3), '');
 end;
 
 end.

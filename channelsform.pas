@@ -7,13 +7,16 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Buttons,
   LineSerieUtils, ChartUtils, TASeries, LCLType, ComCtrls, IniPropStorage,
-  PairSplitter, ExtCtrls, TAGraph, DateUtils, Types, StrUtils, TAChartUtils;
+  PairSplitter, ExtCtrls, TAGraph, DateUtils, Types, StrUtils, TAChartUtils,
+  ParameterSet;
 
 type
 
   { TShowChannelForm }
 
   TShowChannelForm = class(TForm)
+    FromTempBtn: TButton;
+    ToTempBtn: TButton;
     DrawGroupBtn: TButton;
     ChannelList: TListBox;
     DockedToMain: TCheckBox;
@@ -35,6 +38,7 @@ type
     procedure ChannelListDblClick(Sender: TObject);
     procedure ChannelListDrawItem(Control: TWinControl; Index: Integer;
       ARect: TRect; State: TOwnerDrawState);
+    procedure ChannelListResize(Sender: TObject);
     procedure CloseListClick(Sender: TObject);
     procedure DockedToMainChange(Sender: TObject);
     procedure DrawBtnClick(Sender: TObject);
@@ -49,12 +53,14 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FromTempBtnClick(Sender: TObject);
     procedure MultiColumnsChange(Sender: TObject);
     procedure RecordsNumberChange(Sender: TObject);
     procedure SIBRParamListClick(Sender: TObject);
     procedure SIBRParamListDblClick(Sender: TObject);
     procedure SIBRParamListDrawItem(Control: TWinControl; Index: Integer;
       ARect: TRect; State: TOwnerDrawState);
+    procedure ToTempBtnClick(Sender: TObject);
   private
 
   public
@@ -102,8 +108,8 @@ end;
 
 procedure TShowChannelForm.ChannelListClick(Sender: TObject);
 begin
-  SIBRParamList.ItemIndex:= -1;
-  SIBRParamListActive:= False;
+  //SIBRParamList.ItemIndex:= -1;
+  //SIBRParamListActive:= False;
 end;
 
 procedure TShowChannelForm.ChannelListDrawItem(Control: TWinControl;
@@ -123,6 +129,12 @@ begin
      Canvas.FillRect(ARect);
      Canvas.TextOut(ARect.Left, ARect.Top, Items[Index]);
     end
+end;
+
+procedure TShowChannelForm.ChannelListResize(Sender: TObject);
+begin
+  if ChannelList.Width > 400 then ChannelList.Columns:= 4
+  else  ChannelList.Columns:= 3;
 end;
 
 function DrawChart(SelectedParamName: String; ItemIndex: Integer; NewChart, SIBRParam: Boolean): Integer;
@@ -175,7 +187,7 @@ procedure DrawMultiSeries(ToOneChart : Boolean);
 var i, Status  : Integer;
     Multichart : Boolean = True;
 begin
-    if Not SIBRParamListActive then begin
+    //if Not SIBRParamListActive then begin
       for i:=0 to ShowChannelForm.ChannelList.Count - 1 do begin
         if ShowChannelForm.ChannelList.Selected[i] then begin
             Status:= DrawChart(ShowChannelForm.ChannelList.Items[i], i, Multichart, SIBRParamListActive);
@@ -191,8 +203,8 @@ begin
         end;
       end;
       ShowChannelForm.ChannelList.ClearSelection;
-    end
-    else begin
+    //end
+    //else begin
       for i:=0 to ShowChannelForm.SIBRParamList.Count - 1 do begin
         if ShowChannelForm.SIBRParamList.Selected[i] then begin
             Status:= DrawChart(ShowChannelForm.SIBRParamList.Items[i], i, Multichart, SIBRParamListActive);
@@ -208,7 +220,7 @@ begin
         end;
       end;
       ShowChannelForm.SIBRParamList.ClearSelection;
-    end;
+    //end;
 end;
 
 procedure TShowChannelForm.DrawBtnClick(Sender: TObject);
@@ -349,8 +361,6 @@ end;
 
 procedure TShowChannelForm.FileListSelectionChange(Sender: TObject;
   User: boolean);
-var i : Byte;
-    n : LongWord;
 begin
   if (SourceCount > 1) And Not NewFileOpened then begin
     CurrentSource:= FileList.ItemIndex;
@@ -384,6 +394,11 @@ begin
   DockForm();
 end;
 
+procedure TShowChannelForm.FromTempBtnClick(Sender: TObject);
+begin
+  RestoreParamSet();
+end;
+
 procedure TShowChannelForm.MultiColumnsChange(Sender: TObject);
 begin
   if MultiColumns.Checked then begin
@@ -404,8 +419,8 @@ end;
 
 procedure TShowChannelForm.SIBRParamListClick(Sender: TObject);
 begin
-  ChannelList.ItemIndex:= -1;
-  SIBRParamListActive:= True;
+  //ChannelList.ItemIndex:= -1;
+  //SIBRParamListActive:= True;
 end;
 
 procedure TShowChannelForm.SIBRParamListDrawItem(Control: TWinControl;
@@ -424,6 +439,37 @@ begin
      Canvas.FillRect(ARect);
      Canvas.TextOut(ARect.Left, ARect.Top, Items[Index]);
     end
+end;
+
+procedure TShowChannelForm.ToTempBtnClick(Sender: TObject);
+var i, j: integer;
+    PanelEmpty: boolean;
+    Data: TParamSet;
+begin
+  SaveParamSet();
+  if Not ParamSetEmpty() then begin
+    if FileExists('Paramsets.lib') then begin
+       ParamSetFrm.ParamSetList.Clear;
+       AssignFile(ParamSetFile, 'Paramsets.lib');
+       Reset(ParamSetFile);
+       try
+          while not eof(ParamSetFile) do begin
+             Read(ParamSetFile, Data);
+             if Data.Name <> '' then ParamSetFrm.ParamSetList.Items.Add(Data.Name);
+          end;
+          CloseFile(ParamSetFile);
+       except
+          on E: EInOutError do ShowMessage('File read error: ' + E.Message);
+       end;
+    end
+    else begin
+       AssignFile(ParamSetFile, 'Paramsets.lib');
+       ReWrite(ParamSetFile);
+       CloseFile(ParamSetFile);
+    end;
+    ShowChannelForm.Close;
+    ParamSetFrm.Show;
+  end;
 end;
 
 

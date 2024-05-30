@@ -41,6 +41,7 @@ procedure ChartEndDateLimit(Chart: TChart);
 function GetFirstVisibleChart: Byte;
 function GetChannelValue(DataChannels: TTFFDataChannels; Frame: TFrameRecord; Channel: Word; var Value: Double): Boolean;
 procedure SetHorizontalExtent(Chart: TChart);
+procedure RemoveAllLabels();
 
 implementation
 uses Main, LineSerieUtils, channelsform;
@@ -350,7 +351,7 @@ begin
 end;
 
 procedure ChartsPosition();
-var i                : Byte;
+var i, n             : Byte;
     Chart, PrevChart : TChart;
     FirstChart       : Byte;
     Splitter         : TSplitter;
@@ -360,6 +361,7 @@ begin;
    PrevChart:= GetChart(FirstChart);
    PrevSplitter:= GetSplitter(FirstChart);
    PrevSplitter.Top:= 0;
+   n:= 1;
    if ChartsCount = 1 then begin
       PrevChart.Height:= App.ChartScrollBox.Height - FooterSize - 2;
    end
@@ -370,9 +372,10 @@ begin;
           if Chart.Visible then begin
               Chart.Height:= (App.ChartScrollBox.Height - FooterSize - 2) Div ChartsCount;
               if i <> FirstChart then begin
-                 Splitter.Top:= ((App.ChartScrollBox.Height - FooterSize) Div ChartsCount) * (i - 1);
+                 Splitter.Top:= ((App.ChartScrollBox.Height - FooterSize) Div ChartsCount) * (n - 1);
                  PrevChart.AnchorToNeighbour(akBottom, 0, Splitter);
               end;
+              Inc(n);
               Chart.AxisList[1].Marks.Visible:= False;
               PrevChart:= Chart;
               PrevSplitter:= Splitter;
@@ -454,14 +457,17 @@ begin
 end;
 
 procedure DeleteChart(Chart: TChart);
+var Splitter : TSplitter;
 begin
   DeleteVertLines(Chart);
   DeleteHorLines(Chart);
+  Splitter:= GetSplitter(GetChartNumber(Chart.Name));
   Chart.Visible:= False;
-  GetSplitter(GetChartNumber(Chart.Name)).Visible:= False;
+  Splitter.Visible:= False;
   Dec(ChartsCount);
   FindTimeRange;
-  if ChartsCount > 0 then ChartsPosition()
+  if ChartsCount > 0 then
+    ChartsPosition()
   else begin
      App.DateTimeLineLineSerie.Clear;
      App.DateTimeLine.Visible:= False;
@@ -589,6 +595,20 @@ begin
    Ext.coords[1]:= ChartsCurrentExtent.coords[1];
    Ext.coords[3]:= ChartsCurrentExtent.coords[3];
    Chart.LogicalExtent:= Ext;
+end;
+
+procedure RemoveChartLabels(Chart: TChart);
+var i: Integer;
+begin
+  if Chart.Visible then begin
+    for i:=0 to MAX_SERIE_NUMBER - 1 do RemoveLineLabels(TLineSeries(Chart.Series[i]));
+  end;
+end;
+
+procedure RemoveAllLabels();
+var i: Integer;
+begin
+  for i:=1 to MAX_CHART_NUMBER do RemoveChartLabels(GetChart(i));
 end;
 
 end.

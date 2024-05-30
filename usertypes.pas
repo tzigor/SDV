@@ -66,8 +66,10 @@ Const
   ParameterError = -35535;
 
 Type
-  String4 = String[4];
-  String2 = String[2];
+  String4     = String[4];
+  String2     = String[2];
+  ParamString = String[24];
+  NameString = String[64];
 
   TMinMax = record
     Min : Double;
@@ -110,6 +112,11 @@ Type
     PointStyle       : TSeriesPointerStyle; { Brash color = ChartBGColor for transparent pointer }
     PointSize        : Byte;
     TransperentPoint : Boolean;
+  end;
+
+  TParamSet = record
+    Name: NameString;
+    ParamSet: array[1..8, 1..8] of ParamString;
   end;
 
   Const SWLo: array of String = (

@@ -23,19 +23,8 @@ uses Utils, ChartUtils, Main, UserTypes;
 var SondeError: Boolean;
 
 function angle(q: Complex): Double;
-var a: Double;
 begin
-  if q.re = 0 then begin
-    if q.im > 0 then a:= Pi/2
-    else a:= -Pi/2;
-  end
-  else begin
-    if q.re > 0 then a:= Arctan(q.im/q.re)
-    else a:= Pi-Arctan(-q.im/q.re);
-  end;
-  if a > 1.75*pi then a:= a - 2 * pi
-  else if a < -0.25*pi then a:= a + 2 * pi;
-  angle:= a;
+  Result:= ArcTan2(q.im, q.re);
 end;
 
 function NameToInt(name: String): Integer;
@@ -191,12 +180,12 @@ begin
      'A22H': GetCompSonde:= Abs(GetSonde(SelectedSource, 'A16H_UNC' ,n)*a[2,1]+GetSonde(SelectedSource, 'A22H_UNC', n)*a[2,2]+GetSonde(SelectedSource, 'A34H_UNC', n)*a[2,3]);
      'A34H': GetCompSonde:= Abs(GetSonde(SelectedSource, 'A16H_UNC' ,n)*a[3,1]+GetSonde(SelectedSource, 'A22H_UNC', n)*a[3,2]+GetSonde(SelectedSource, 'A34H_UNC', n)*a[3,3]);
 
-     'P16L': GetCompSonde:= Abs(GetSonde(SelectedSource, 'P16L_UNC' ,n)*a[1,1]+GetSonde(SelectedSource, 'P22L_UNC', n)*a[1,2]+GetSonde(SelectedSource, 'P34L_UNC', n)*a[1,3])*180/Pi;
-     'P22L': GetCompSonde:= Abs(GetSonde(SelectedSource, 'P16L_UNC' ,n)*a[2,1]+GetSonde(SelectedSource, 'P22L_UNC', n)*a[2,2]+GetSonde(SelectedSource, 'P34L_UNC', n)*a[2,3])*180/Pi;
-     'P34L': GetCompSonde:= Abs(GetSonde(SelectedSource, 'P16L_UNC' ,n)*a[3,1]+GetSonde(SelectedSource, 'P22L_UNC', n)*a[3,2]+GetSonde(SelectedSource, 'P34L_UNC', n)*a[3,3])*180/Pi;
-     'P16H': GetCompSonde:= Abs(GetSonde(SelectedSource, 'P16H_UNC' ,n)*a[1,1]+GetSonde(SelectedSource, 'P22H_UNC', n)*a[1,2]+GetSonde(SelectedSource, 'P34H_UNC', n)*a[1,3])*180/Pi;
-     'P22H': GetCompSonde:= Abs(GetSonde(SelectedSource, 'P16H_UNC' ,n)*a[2,1]+GetSonde(SelectedSource, 'P22H_UNC', n)*a[2,2]+GetSonde(SelectedSource, 'P34H_UNC', n)*a[2,3])*180/Pi;
-     'P34H': GetCompSonde:= Abs(GetSonde(SelectedSource, 'P16H_UNC' ,n)*a[3,1]+GetSonde(SelectedSource, 'P22H_UNC', n)*a[1,2]+GetSonde(SelectedSource, 'P34H_UNC', n)*a[3,3])*180/Pi;
+     'P16L': GetCompSonde:= (GetSonde(SelectedSource, 'P16L_UNC' ,n)*a[1,1]+GetSonde(SelectedSource, 'P22L_UNC', n)*a[1,2]+GetSonde(SelectedSource, 'P34L_UNC', n)*a[1,3])*180/Pi;
+     'P22L': GetCompSonde:= (GetSonde(SelectedSource, 'P16L_UNC' ,n)*a[2,1]+GetSonde(SelectedSource, 'P22L_UNC', n)*a[2,2]+GetSonde(SelectedSource, 'P34L_UNC', n)*a[2,3])*180/Pi;
+     'P34L': GetCompSonde:= (GetSonde(SelectedSource, 'P16L_UNC' ,n)*a[3,1]+GetSonde(SelectedSource, 'P22L_UNC', n)*a[3,2]+GetSonde(SelectedSource, 'P34L_UNC', n)*a[3,3])*180/Pi;
+     'P16H': GetCompSonde:= (GetSonde(SelectedSource, 'P16H_UNC' ,n)*a[1,1]+GetSonde(SelectedSource, 'P22H_UNC', n)*a[1,2]+GetSonde(SelectedSource, 'P34H_UNC', n)*a[1,3])*180/Pi;
+     'P22H': GetCompSonde:= (GetSonde(SelectedSource, 'P16H_UNC' ,n)*a[2,1]+GetSonde(SelectedSource, 'P22H_UNC', n)*a[2,2]+GetSonde(SelectedSource, 'P34H_UNC', n)*a[2,3])*180/Pi;
+     'P34H': GetCompSonde:= (GetSonde(SelectedSource, 'P16H_UNC' ,n)*a[3,1]+GetSonde(SelectedSource, 'P22H_UNC', n)*a[1,2]+GetSonde(SelectedSource, 'P34H_UNC', n)*a[3,3])*180/Pi;
    end;
    if SondeError then GetCompSonde:= ParameterError
 end;

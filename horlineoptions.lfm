@@ -1,7 +1,7 @@
 object HorLineForm: THorLineForm
-  Left = 2234
+  Left = 865
   Height = 186
-  Top = -704
+  Top = 83
   Width = 298
   BorderIcons = [biSystemMenu]
   Caption = 'Horizontal Line Options'
@@ -89,7 +89,7 @@ object HorLineForm: THorLineForm
     end
     object SerieColorBox: TColorBox
       Left = 72
-      Height = 24
+      Height = 22
       Top = 3
       Width = 200
       Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor]

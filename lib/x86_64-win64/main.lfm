@@ -1,11 +1,11 @@
 object App: TApp
-  Left = 1853
-  Height = 782
-  Top = -736
-  Width = 1415
+  Left = 1815
+  Height = 720
+  Top = -655
+  Width = 1344
   Caption = 'Smart Data Viewer v1.6.0 Portable'
-  ClientHeight = 782
-  ClientWidth = 1415
+  ClientHeight = 720
+  ClientWidth = 1344
   Color = clWhite
   OnActivate = FormActivate
   OnChangeBounds = FormChangeBounds
@@ -19,9 +19,9 @@ object App: TApp
   WindowState = wsMaximized
   object PageControl1: TPageControl
     Left = 0
-    Height = 782
+    Height = 720
     Top = 0
-    Width = 1415
+    Width = 1344
     ActivePage = ChartPage
     Align = alClient
     DockSite = True
@@ -29,14 +29,14 @@ object App: TApp
     TabOrder = 0
     object ChartPage: TTabSheet
       Caption = 'Chart'
-      ClientHeight = 754
-      ClientWidth = 1407
+      ClientHeight = 692
+      ClientWidth = 1336
       object CloseApp: TBitBtn
-        Left = 1331
+        Left = 1260
         Height = 25
-        Top = 2
+        Top = 666
         Width = 75
-        Anchors = [akTop, akRight]
+        Anchors = [akRight, akBottom]
         Caption = 'Close'
         Font.CharSet = ANSI_CHARSET
         Font.Color = clMaroon
@@ -52,7 +52,7 @@ object App: TApp
       object ProcessProgress: TProgressBar
         Left = 96
         Height = 15
-        Top = 738
+        Top = 676
         Width = 320
         Anchors = [akLeft, akBottom]
         TabOrder = 1
@@ -61,7 +61,7 @@ object App: TApp
       object ProcessLabel: TLabel
         Left = 0
         Height = 15
-        Top = 738
+        Top = 676
         Width = 85
         Anchors = [akLeft, akBottom]
         Caption = 'Process channel'
@@ -71,7 +71,7 @@ object App: TApp
       object HideLabel: TImage
         Left = 344
         Height = 25
-        Hint = 'Remove labels'
+        Hint = 'Hide labels'
         Top = 3
         Width = 25
         OnClick = HideLabelClick
@@ -126,9 +126,9 @@ object App: TApp
         ShowHint = True
       end
       object ChartPoints: TCheckBox
-        Left = 384
+        Left = 416
         Height = 19
-        Top = -1
+        Top = -3
         Width = 83
         Caption = 'Chart points'
         Checked = True
@@ -137,9 +137,9 @@ object App: TApp
         OnChange = ChartPointsChange
       end
       object ChartLink: TCheckBox
-        Left = 384
+        Left = 416
         Height = 19
-        Top = 15
+        Top = 13
         Width = 69
         Caption = 'Chart link'
         Checked = True
@@ -776,9 +776,9 @@ object App: TApp
         ShowHint = True
       end
       object ExtHint: TCheckBox
-        Left = 480
+        Left = 512
         Height = 19
-        Top = -1
+        Top = -3
         Width = 122
         Caption = 'Extended point info'
         Checked = True
@@ -787,14 +787,14 @@ object App: TApp
       end
       object ChartScrollBox: TScrollBox
         Left = 0
-        Height = 701
-        Top = 34
-        Width = 1406
+        Height = 631
+        Top = 32
+        Width = 1335
         HorzScrollBar.Page = 75
-        VertScrollBar.Page = 664
+        VertScrollBar.Page = 587
         Anchors = [akTop, akLeft, akRight, akBottom]
-        ClientHeight = 697
-        ClientWidth = 1402
+        ClientHeight = 627
+        ClientWidth = 1331
         Color = clWhite
         ParentBackground = False
         ParentColor = False
@@ -804,8 +804,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 56
-          Top = 608
-          Width = 1404
+          Top = 531
+          Width = 1333
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -822,9 +822,8 @@ object App: TApp
             end          
             item
               Grid.Color = clSilver
-              Intervals.Count = 20
-              Intervals.MinLength = 20
-              Intervals.NiceSteps = '0.2|0.25|0.4|0.5|1.0'
+              Intervals.MaxLength = 100
+              Intervals.MinLength = 50
               Intervals.Options = [aipGraphCoords, aipUseCount, aipUseMaxLength, aipUseMinLength, aipUseNiceSteps]
               Alignment = calBottom
               MarginsForMarks = False
@@ -875,8 +874,8 @@ object App: TApp
         object DateTimeLine: TChart
           Left = 0
           Height = 37
-          Top = 658
-          Width = 1404
+          Top = 588
+          Width = 1333
           AllowPanning = False
           AllowZoom = False
           AntialiasingMode = amOff
@@ -941,8 +940,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 505
-          Width = 1404
+          Top = 454
+          Width = 1333
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1009,8 +1008,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 404
-          Width = 1404
+          Top = 364
+          Width = 1333
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1076,8 +1075,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 316
-          Width = 1404
+          Top = 284
+          Width = 1333
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1143,8 +1142,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 235
-          Width = 1404
+          Top = 211
+          Width = 1333
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1210,8 +1209,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 67
-          Top = 147
-          Width = 1404
+          Top = 132
+          Width = 1333
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1277,8 +1276,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 51
-          Top = 80
-          Width = 1404
+          Top = 72
+          Width = 1333
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1344,8 +1343,8 @@ object App: TApp
           AnchorSideBottom.Side = asrBottom
           Left = 0
           Height = 59
-          Top = 7
-          Width = 1404
+          Top = 6
+          Width = 1333
           AllowPanning = False
           AllowZoom = False
           AxisList = <          
@@ -1414,8 +1413,8 @@ object App: TApp
           Cursor = crVSplit
           Left = 0
           Height = 6
-          Top = 602
-          Width = 1402
+          Top = 525
+          Width = 1331
           Align = alNone
           Anchors = [akLeft, akRight]
           ResizeAnchor = akBottom
@@ -1427,8 +1426,8 @@ object App: TApp
           Cursor = crVSplit
           Left = 0
           Height = 6
-          Top = 499
-          Width = 1402
+          Top = 448
+          Width = 1331
           Align = alNone
           Anchors = [akLeft, akRight]
           ResizeAnchor = akBottom
@@ -1440,8 +1439,8 @@ object App: TApp
           Cursor = crVSplit
           Left = 0
           Height = 6
-          Top = 404
-          Width = 1402
+          Top = 364
+          Width = 1331
           Align = alNone
           Anchors = [akLeft, akRight]
           ResizeAnchor = akBottom
@@ -1453,8 +1452,8 @@ object App: TApp
           Cursor = crVSplit
           Left = 0
           Height = 6
-          Top = 316
-          Width = 1402
+          Top = 284
+          Width = 1331
           Align = alNone
           Anchors = [akLeft, akRight]
           ResizeAnchor = akBottom
@@ -1466,8 +1465,8 @@ object App: TApp
           Cursor = crVSplit
           Left = 0
           Height = 6
-          Top = 235
-          Width = 1402
+          Top = 211
+          Width = 1331
           Align = alNone
           Anchors = [akLeft, akRight]
           ResizeAnchor = akBottom
@@ -1479,8 +1478,8 @@ object App: TApp
           Cursor = crVSplit
           Left = 0
           Height = 6
-          Top = 147
-          Width = 1402
+          Top = 132
+          Width = 1331
           Align = alNone
           Anchors = [akLeft, akRight]
           ResizeAnchor = akBottom
@@ -1492,8 +1491,8 @@ object App: TApp
           Cursor = crVSplit
           Left = 0
           Height = 6
-          Top = 80
-          Width = 1402
+          Top = 72
+          Width = 1331
           Align = alNone
           Anchors = [akLeft, akRight]
           ResizeAnchor = akBottom
@@ -1505,20 +1504,19 @@ object App: TApp
           Cursor = crVSplit
           Left = 0
           Height = 6
-          Top = 7
-          Width = 1402
+          Top = 6
+          Width = 1331
           Align = alNone
           Anchors = [akLeft, akRight]
           ResizeAnchor = akBottom
         end
       end
       object CloseCharts: TImage
-        Left = 1296
+        Left = 1304
         Height = 25
         Hint = 'Close all charts'
-        Top = 5
+        Top = 2
         Width = 25
-        Anchors = [akTop, akRight]
         OnClick = CloseChartsClick
         ParentShowHint = False
         Picture.Data = {
@@ -1609,9 +1607,9 @@ object App: TApp
         ShowHint = True
       end
       object RTCBugs: TCheckBox
-        Left = 480
+        Left = 512
         Height = 19
-        Top = 15
+        Top = 13
         Width = 117
         Caption = 'Remove time bugs'
         Checked = True
@@ -1619,12 +1617,11 @@ object App: TApp
         TabOrder = 7
       end
       object ScreenShot: TImage
-        Left = 1256
+        Left = 1272
         Height = 25
         Hint = 'Charts to clipboard'
-        Top = 4
+        Top = 3
         Width = 25
-        Anchors = [akTop, akRight]
         OnClick = ScreenShotClick
         ParentShowHint = False
         Picture.Data = {
@@ -1681,11 +1678,10 @@ object App: TApp
         ShowHint = True
       end
       object ScreenShotFlash: TImage
-        Left = 1256
+        Left = 1272
         Height = 25
-        Top = 4
+        Top = 3
         Width = 25
-        Anchors = [akTop, akRight]
         OnClick = ScreenShotFlashClick
         Picture.Data = {
           1754506F727461626C654E6574776F726B477261706869630C07000089504E47
@@ -1750,9 +1746,9 @@ object App: TApp
         Visible = False
       end
       object Label1: TLabel
-        Left = 616
+        Left = 643
         Height = 15
-        Top = 11
+        Top = 9
         Width = 56
         Caption = 'Start from:'
         Font.CharSet = ANSI_CHARSET
@@ -1762,9 +1758,9 @@ object App: TApp
         ParentFont = False
       end
       object StartChartsFrom: TDateTimePicker
-        Left = 680
+        Left = 707
         Height = 23
-        Top = 5
+        Top = 3
         Width = 83
         CenturyFrom = 1941
         DateDisplayOrder = ddoDMY
@@ -1786,9 +1782,9 @@ object App: TApp
         OnChange = StartChartsFromChange
       end
       object Label7: TLabel
-        Left = 768
+        Left = 795
         Height = 15
-        Top = 10
+        Top = 8
         Width = 54
         Caption = 'End point:'
         Font.CharSet = ANSI_CHARSET
@@ -1798,9 +1794,9 @@ object App: TApp
         ParentFont = False
       end
       object EndPoint: TDateTimePicker
-        Left = 827
+        Left = 854
         Height = 23
-        Top = 6
+        Top = 4
         Width = 83
         CenturyFrom = 1941
         DateDisplayOrder = ddoDMY
@@ -1822,27 +1818,27 @@ object App: TApp
         OnChange = EndPointChange
       end
       object KeepDistance: TCheckBox
-        Left = 928
+        Left = 955
         Height = 19
-        Top = -1
+        Top = -3
         Width = 91
         Caption = 'Keep distance'
         TabOrder = 10
         OnChange = KeepDistanceChange
       end
       object CropBtn: TButton
-        Left = 1040
+        Left = 1067
         Height = 25
-        Top = 3
+        Top = 1
         Width = 40
         Caption = 'Crop'
         TabOrder = 11
         OnClick = CropBtnClick
       end
       object LinkToolCurves: TCheckBox
-        Left = 928
+        Left = 955
         Height = 19
-        Top = 15
+        Top = 13
         Width = 101
         Caption = 'Link tool curves'
         Checked = True
@@ -1850,23 +1846,72 @@ object App: TApp
         TabOrder = 12
       end
       object CutBtn: TButton
-        Left = 1088
+        Left = 1115
         Height = 25
-        Top = 3
+        Top = 1
         Width = 40
         Caption = 'Cut'
         TabOrder = 13
         OnClick = CutBtnClick
       end
+      object RemoveLabelsBtn: TImage
+        Left = 376
+        Height = 25
+        Hint = 'Remove labels'
+        Top = 3
+        Width = 25
+        OnClick = RemoveLabelsBtnClick
+        ParentShowHint = False
+        Picture.Data = {
+          1754506F727461626C654E6574776F726B477261706869637B04000089504E47
+          0D0A1A0A0000000D49484452000000190000001908020000004B8B1234000000
+          097048597300000EC400000EC401952B0E1B000004064944415478DAADD56D4C
+          5B551807F0FFB9ED4526B6E365914DDC32A79911B3E98281390359A6C1319660
+          32053340CD64D3E05BC75C8156CBDBB6500A94926DC20756E6A0319D23B40C14
+          8799890C1243B22046B768044610015DD786377BDB7B3CB7ED041BDA7DD0F3E9
+          E69E9BDF799EE73EE71CA2D3E9A2A2A2388EC37F18A228CECFCF13BD5E9F9595
+          A5542AEFF9351B412F39DF600F2E97CB66B31183C1909B9B1B1313134AF17ABD
+          FDFDFD9D9D9D33333341530A85222D2D8D85E276BBDBDBDBEF61793C1EA69C39
+          5BB2277D322E2E785610D0DB73FFBEBDE5070FE65A2C9670165BCD6AB5B6983F
+          FAB074FAC50CC864FE30B1B888C848C8E5A0147D5FA1C994D6D8D8C2960C69F9
+          C26EBBD0A6D396FFB97B0F381FF4DB24CE3692E1EBFC93DB84C2F7E9C64D18F9
+          1E159A9406E3A776BB7D758B41E7CFB75A2F96979D743CFB1CFC3FD9ED86E638
+          E7987DF9C081ECEEEE2EF97D6D8606EF8D1B612D06B5B69A1954597D67E72E10
+          12787FFB36F25E89AE28B32527270F0D0D1597EC6FBFE49CFE3DB4E583584465
+          55FA3B293B4156B4DDD2120A0BE41B1F52E5E4BC6AB7DB7EBC59DD744EF8E5E7
+          10D6D2D292D96CB6D9AB586A41102B333CF86904FA1A7E663A267E83B348FDD7
+          B6A742D46B6161A1A9E993DE2B3555D5AE6792415863DE0271836E05589AF3E0
+          9A0139E6F231E7669D85C83552FAC3D751A14D3135ACB02222221A1B4DDF5EAB
+          3F6598DFFEB4AF46B7C0BF0E4412A195622D64A721AF84B80B8205885D0EF6F3
+          CF70D1F282C9D4DCD1D12159D9D9D966F3B9C1EF0C276B169E48BC5B6C17F86C
+          705789A7944201F909423753A10574872F4C695761F01ACA3531870B8CE9E9E9
+          81BE4F4A4AD268F38D672603110516057701FC5B84E50511341E420BA5BB0310
+          EBD86FBEC6A98A75F979952C2DB6B103566262A2A136CF6C71C4AFFF77BFCE80
+          7F8970832C5308A7A9F80670B7F57B7B5057BDFECD4327584E3CCF3B1C8E8095
+          9999A9D3956CDA7259AD1597CF0B0A3200FE35427E9508EF61EAD1034A09FAE2
+          328C3509EF144A078C9C6D2560D962413A9D4EB5FA832D5BAF947E4C956B2508
+          37A5DA734384C681FC01ACA1422D8443E8EE91A0A2A3F52C02997F8B0659D1D1
+          D1A3A3A3C5C5AA471FEF933805646AC88D1077C053065E47C83015F6C29683FA
+          2606D56566EEFF070AB6587F514AC7C6C68A4B548F3CD657AA15636B20B34268
+          067D1E5C2FE800BA4418AF3EAC52D5AD8C6875CBD72F747C7CBC54736C43C297
+          DA77C5B839D0ED000FAF806E3B8CB5C1A985B3FCDCC4C484567B5C19DBADABF4
+          3E182F15BBAB130D86846345AB43212D3F373535A5D3694472A9E06DCFC830AC
+          96CD4755868C8C8C55A170969F9B9D9D35991A467E18503CB0EEC891F7525353
+          C3DC55012BCC3DC40EFBC5C545D68A91EC480E3B02F7D0FF783FFE0D53854997
+          F78E02550000001B74455874536F667477617265004172747765617665722046
+          72656520372E30B0E96D7E0000000049454E44AE426082
+        }
+        ShowHint = True
+      end
     end
     object OptionsPage: TTabSheet
       Caption = 'Options'
-      ClientHeight = 754
-      ClientWidth = 1407
+      ClientHeight = 692
+      ClientWidth = 1336
       object GroupBox1: TGroupBox
-        Left = 8
+        Left = 2
         Height = 216
-        Top = 16
+        Top = 8
         Width = 312
         Caption = 'Charts parameters'
         ClientHeight = 196
@@ -2021,9 +2066,9 @@ object App: TApp
         end
       end
       object GroupBox2: TGroupBox
-        Left = 8
+        Left = 0
         Height = 128
-        Top = 240
+        Top = 232
         Width = 313
         Caption = 'Vertical line parameters'
         ClientHeight = 108
@@ -2110,9 +2155,9 @@ object App: TApp
         end
       end
       object GroupBox3: TGroupBox
-        Left = 8
+        Left = 1
         Height = 128
-        Top = 376
+        Top = 368
         Width = 313
         Caption = 'Horizontal line parameters'
         ClientHeight = 108
@@ -2200,9 +2245,9 @@ object App: TApp
         end
       end
       object GroupBox4: TGroupBox
-        Left = 336
+        Left = 329
         Height = 217
-        Top = 16
+        Top = 8
         Width = 312
         Caption = 'Sticker options'
         ClientHeight = 197
