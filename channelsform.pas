@@ -394,11 +394,6 @@ begin
   DockForm();
 end;
 
-procedure TShowChannelForm.FromTempBtnClick(Sender: TObject);
-begin
-  RestoreParamSet();
-end;
-
 procedure TShowChannelForm.MultiColumnsChange(Sender: TObject);
 begin
   if MultiColumns.Checked then begin
@@ -442,36 +437,20 @@ begin
 end;
 
 procedure TShowChannelForm.ToTempBtnClick(Sender: TObject);
-var i, j: integer;
-    PanelEmpty: boolean;
-    Data: TParamSet;
+var Data: TParamSet;
 begin
+  ParamSetFrm.SaveSet.Visible:= True;
+  ParamSetFrm.LoadSet.Visible:= False;
   SaveParamSet();
-  if Not ParamSetEmpty() then begin
-    if FileExists('Paramsets.lib') then begin
-       ParamSetFrm.ParamSetList.Clear;
-       AssignFile(ParamSetFile, 'Paramsets.lib');
-       Reset(ParamSetFile);
-       try
-          while not eof(ParamSetFile) do begin
-             Read(ParamSetFile, Data);
-             if Data.Name <> '' then ParamSetFrm.ParamSetList.Items.Add(Data.Name);
-          end;
-          CloseFile(ParamSetFile);
-       except
-          on E: EInOutError do ShowMessage('File read error: ' + E.Message);
-       end;
-    end
-    else begin
-       AssignFile(ParamSetFile, 'Paramsets.lib');
-       ReWrite(ParamSetFile);
-       CloseFile(ParamSetFile);
-    end;
-    ShowChannelForm.Close;
-    ParamSetFrm.Show;
-  end;
+  if Not ParamSetEmpty() then FillSetList();
 end;
 
+procedure TShowChannelForm.FromTempBtnClick(Sender: TObject);
+begin
+  ParamSetFrm.SaveSet.Visible:= False;
+  ParamSetFrm.LoadSet.Visible:= True;
+  FillSetList();
+end;
 
 end.
 

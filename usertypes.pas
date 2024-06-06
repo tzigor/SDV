@@ -24,7 +24,10 @@ Const
   MAX_CHART_NUMBER     = 8;
   MAX_SERIE_NUMBER     = 8;
   MAX_VERTLINE_NUMBER  = 99;
-  MAX_HORLINE_NUMBER  = 99;
+  MAX_HORLINE_NUMBER   = 99;
+
+  BIN_DB_TYPE          = 1;
+  CSV_TYPE             = 2;
 
   { Error codes }
   NO_ERROR               = 0;
@@ -33,6 +36,7 @@ Const
   UNEXPECTED_END_OF_FILE = 3;
   TERMINATED             = 4;
   OUT_OF_BOUNDS          = 5;
+  WRONG_DATE_FORMAT      = 6;
 
   { Navigation modes }
   NAVIGATION_OFF     = 0;

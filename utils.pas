@@ -7,14 +7,14 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, DateUtils,
   UserTypes, StrUtils, Buttons, LCLType, TASeries, TADataTools, TATools,
-  LCLIntf, Clipbrd, TAGraph;
+  LCLIntf, Clipbrd, TAGraph, ParseCSV;
 
 function GetErrorMessage(error: Byte): PChar;
 procedure LoadByteArray(const AFileName: string);
 procedure SaveByteArray(AByteArray: TBytes; const AFileName: string);
 function LoadSourceFile(FileExt: String; MinFileSize: LongWord): Boolean;
 function LoadSourceByteArray(FileName: String; MinFileSize: LongWord): Boolean;
-procedure LoadFile();
+procedure LoadFile(FileType: Byte);
 function ReadCurrentByte(): Byte;
 function isEndOfFile(): Boolean;
 procedure IncDataOffset(n: LongWord);
@@ -31,6 +31,7 @@ procedure MakeChartScreenShot(Chart: TChart);
 function AddLidZeros(S: String; N: Byte): String;
 function StrInArray(Value: String; Arr: array of String): Boolean;
 function GetParamPosition(Param: String): Integer;
+function SmartStrToDateTime(Str: String; var DateTime: TDateTime): Boolean;
 
 implementation
 
@@ -48,6 +49,7 @@ begin
      1: Result:= 'FILE_NOT_FOUND';
      2: Result:= 'WRONG_FILE_FORMAT';
      3: Result:= 'UNEXPECTED_END_OF_FILE';
+     6: Result:= 'WRONG DATE FORMAT';
   end;
 end;
 
@@ -95,12 +97,13 @@ begin
   if App.OpenDialog.Execute then Result:= LoadSourceByteArray(App.OpenDialog.FileName, MinFileSize);
 end;
 
-procedure LoadFile();
+procedure LoadFile(FileType: Byte);
 var DataSource  : TDataSource;
 begin
    SetNavigation(NAVIGATION_OFF);
    DataSource.SourceName:= CurrentOpenedFile;
-   DataSource.FrameRecords:= BinDbParser(3);
+   if FileType = BIN_DB_TYPE then DataSource.FrameRecords:= BinDbParser(3);
+   if FileType = CSV_TYPE then DataSource.FrameRecords:= CSVParser(4);
    DataSource.TFFDataChannels:= TffStructure.GetTFFDataChannels;
    TffStructure.Done;
    if ErrorCode = NO_ERROR then begin
@@ -345,6 +348,40 @@ begin
        Result:= i;
        Exit;
     end;
+end;
+
+function TryScanDateTime(DTStr, DTFormat: String; var DateTime: TDateTime): Boolean;
+begin
+ try
+   DateTime:= ScanDateTime(DTFormat, DTStr);
+   Result:= True;
+ except
+   on E: EConvertError do begin
+     Result:= False;
+   end;
+ end;
+end;
+
+function SmartStrToDateTime(Str: String; var DateTime: TDateTime): Boolean;
+var UnixDateTime : LongInt;
+begin
+  Result:= True;
+  if Not TryStrToDateTime(Str, DateTime) then
+    if Not TryScanDateTime(Str, 'hh:mm:ss dd-mmm-yy', DateTime) then
+       if Not TryScanDateTime(Str, 'hh:mm:ss dd-mmm-yyyy', DateTime) then
+          if Not TryScanDateTime(Str, 'dd/mm/yy hh:mm:ss', DateTime) then
+             if Not TryScanDateTime(Str, 'dd/mm/yyyy hh:mm:ss', DateTime) then
+                if Not TryScanDateTime(Str, App.DateTimeFormat.Text, DateTime) then begin
+                   try
+                     TryStrToInt(Str, UnixDateTime);
+                     DateTime:= UnixToDateTime(UnixDateTime);
+                   except
+                     on E: EConvertError do begin
+                        DateTime:= 0;
+                        Result:= False;
+                     end;
+                   end;
+                end;
 end;
 
 end.

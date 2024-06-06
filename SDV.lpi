@@ -136,8 +136,14 @@
         <Filename Value="parameterset.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ParamSetFrm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ParameterSet"/>
+      </Unit>
+      <Unit>
+        <Filename Value="parsecsv.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ParseCSV"/>
       </Unit>
     </Units>
     <Debugger>

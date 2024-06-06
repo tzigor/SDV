@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Buttons,
-  LineSerieUtils, TASeries, TAGraph, ChartUtils, UserTypes, LCLType;
+  LineSerieUtils, TASeries, TAGraph, ChartUtils, UserTypes, LCLType, StrUtils;
 
 type
 
@@ -21,7 +21,9 @@ type
     Label1: TLabel;
     ParamSetList: TListBox;
     procedure CloseBtnClick(Sender: TObject);
+    procedure DeleteSetClick(Sender: TObject);
     procedure LoadSetClick(Sender: TObject);
+    procedure ParamSetListClick(Sender: TObject);
     procedure SaveSetClick(Sender: TObject);
   private
 
@@ -35,10 +37,12 @@ var
   procedure SaveParamSet();
   procedure RestoreParamSet();
   function ParamSetEmpty(): Boolean;
+  procedure ParamSetClear();
+  procedure FillSetList();
 
 implementation
 
-uses Main;
+uses Main, channelsform;
 
 function GetSetIndex(Name: String; var RecordExist: Boolean): Integer;
 var FilePos : Integer;
@@ -84,6 +88,13 @@ begin
       end;
 end;
 
+procedure ParamSetClear();
+var i, j : Byte;
+begin
+  for i:=1 to 8 do
+    for j:=1 to 8 do ParamSet.ParamSet[i, j]:= '';
+end;
+
 procedure SaveParamSet();
 var i, j  : Byte;
     Serie : TLineSeries;
@@ -98,36 +109,67 @@ begin
 end;
 
 procedure GetParamPosition(name: String; var Source: Integer; var Channel: Integer);
-var i, j : Integer;
+var i, j      : Integer;
+    SIBRParam : Boolean = False;
 begin
   Source:= -1;
   Channel:= -1;
+  if (FindPart('AR???F', Name) > 0) Or (FindPart('PR???F', Name) > 0) Or (Name in CondChannels) Or (Name in CondCompChannels) then SIBRParam:= True;
   for i:= 0 to Length(DataSources)-1 do
-    for j:= 0 to Length(DataSources[CurrentSource].TFFDataChannels) - 1 do begin
+    for j:= 0 to Length(DataSources[i].TFFDataChannels) - 1 do begin
        if DataSources[i].TFFDataChannels[j].DLIS = name then begin
           Source:= i;
           Channel:= j;
           Exit;
-       end;
+       end
+       else if (DataSources[i].TFFDataChannels[j].DLIS = 'VR1T0F1r') And SIBRParam then begin
+               Source:= i;
+               Channel:= 32767;
+               Exit;
+            end;
     end;
+end;
+
+procedure FillSetList();
+var Data: TParamSet;
+begin
+  if FileExists('Paramsets.lib') then begin
+     ParamSetFrm.ParamSetList.Clear;
+     AssignFile(ParamSetFile, 'Paramsets.lib');
+     Reset(ParamSetFile);
+     try
+        while not eof(ParamSetFile) do begin
+           Read(ParamSetFile, Data);
+           if Data.Name <> '' then ParamSetFrm.ParamSetList.Items.Add(Data.Name);
+        end;
+        CloseFile(ParamSetFile);
+     except
+        on E: EInOutError do ShowMessage('File read error: ' + E.Message);
+     end;
+  end
+  else begin
+     AssignFile(ParamSetFile, 'Paramsets.lib');
+     ReWrite(ParamSetFile);
+     CloseFile(ParamSetFile);
+  end;
+  ShowChannelForm.Close;
+  ParamSetFrm.Show;
 end;
 
 procedure RestoreParamSet();
 var i, j, n  : Byte;
-    Serie    : TLineSeries;
     NewChart : Boolean;
     Source, Channel : Integer;
     Chart    : TChart;
-    Objct    : TObject;
 begin
-  App.CloseChartsClick(Objct);
+  App.CloseChartsClick(Nil);
   for i:=1 to 8 do begin
     NewChart:= True;
     n:= 1;
     for j:=1 to 8 do begin
       if ParamSet.ParamSet[i, j] <> '' then begin
          GetParamPosition(ParamSet.ParamSet[i, j], Source, Channel);
-         if (Source > -1) Or (Channel > -1) then begin
+         if (Source > -1) And (Channel > -1) then begin
             if NewChart then begin
                CurrentChart:= GetFreeChart;
                Inc(ChartsCount);
@@ -168,6 +210,7 @@ begin
       if WriteAccept then begin
          Seek(ParamSetFile, FilePos);
          Write(ParamSetFile, ParamSet);
+         ParamSetClear();
       end;
       CloseFile(ParamSetFile);
     except
@@ -179,37 +222,18 @@ begin
 end;
 
 procedure TParamSetFrm.LoadSetClick(Sender: TObject);
-var i, j, n: Byte;
-    LastPane, TitleUp: String;
-    RecordExist: Boolean;
+var RecordExist: Boolean;
 begin
-  if PanelList.Items.Count > 0 then
-    if FileExists(LibFileName) then begin
+  if ParamSetList.ItemIndex > -1 then
+    if FileExists('Paramsets.lib') then begin
        AssignFile(ParamSetFile, 'Paramsets.lib');
        Reset(ParamSetFile);
        try
          Seek(ParamSetFile, GetSetIndex(ParamSetList.Items[ParamSetList.ItemIndex], RecordExist));
          Read(ParamSetFile, ParamSet);
          CloseFile(ParamSetFile);
-
-         n:=0 ;
-         for i:= 1 to 10 do
-           for j:= 1 to 4 do
-             if CurvesPanel.PaneSet.Panes[i-1].Curves[j-1].Parameter <> '' then n:= n + 1;
-         LoadProgress.Max:= n;
-         LoadProgress.Position:= 0;
-         for i:= 1 to 10 do
-           for j:= 1 to 4 do begin
-             if CurvesPanel.PaneSet.Panes[i-1].Curves[j-1].Parameter <> '' then begin
-                TChart(CSV.FindComponent('Pane' + IntToStr(i))).Left:= 10000;
-                TChart(CSV.FindComponent('Pane' + IntToStr(i))).Visible:= true;
-                DrawCurveFromPane(TLineSeries(CSV.FindComponent('Pane' + IntToStr(i) + 'Curve' + IntToStr(j))), CurvesPanel.PaneSet.Panes[i-1], i-1, j-1);
-                LastPane:= 'Pane' + IntToStr(i);
-             end;
-             LoadProgress.Position:= LoadProgress.Position + 1;
-           end;
-         if CSV.ShowDateTime.Checked then TChart(CSV.FindComponent(LastPane)).AxisList[0].Marks.Visible:= True;
-         CSV.PanelTitle.Caption:= PanelList.Items[PanelList.ItemIndex];
+         RestoreParamSet();
+         ParamSetClear();
        except
          on E: EInOutError do ShowMessage('File read error: ' + E.Message);
        end;
@@ -218,10 +242,37 @@ begin
     ParamSetFrm.Close;
 end;
 
+procedure TParamSetFrm.DeleteSetClick(Sender: TObject);
+var FilePos: Integer;
+  RecordExist: Boolean;
+begin
+  if ParamSetList.ItemIndex > -1 then
+    if Application.MessageBox('Are you sure?','Warning', MB_ICONQUESTION + MB_YESNO) = IDYES then begin
+       AssignFile(ParamSetFile, 'Paramsets.lib');
+       try
+          ParamSet.Name:= '';
+          Reset(ParamSetFile);
+          FilePos:= GetSetIndex(ParamSetList.Items[ParamSetList.ItemIndex], RecordExist);
+          Seek(ParamSetFile, FilePos);
+          Write(ParamSetFile, ParamSet);
+          CloseFile(ParamSetFile);
+       except
+         on E: EInOutError do ShowMessage('File write error: ' + E.ClassName + '/' + E.Message)
+       end;
+       Close;
+    end;
+end;
+
+procedure TParamSetFrm.ParamSetListClick(Sender: TObject);
+begin
+  ParamSetName.Text:= ParamSetList.Items[ParamSetList.ItemIndex];
+end;
+
 procedure TParamSetFrm.CloseBtnClick(Sender: TObject);
 begin
   Close;
 end;
+
 
 end.
 

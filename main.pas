@@ -26,6 +26,8 @@ type
     CutZoneOn: TImage;
     ChartUp: TMenuItem;
     ChartDown: TMenuItem;
+    DateTimeFormat: TEdit;
+    GroupBox5: TGroupBox;
     MoveToTop: TMenuItem;
     catUser: TChartAxisTransformations;
 
@@ -69,6 +71,7 @@ type
     Splitter6: TSplitter;
     Splitter7: TSplitter;
     Splitter8: TSplitter;
+    TimeHead: TLabel;
     VertLineColor: TColorBox;
     GLineStyleBox: TChartComboBox;
     HorLineColor: TColorBox;
@@ -409,10 +412,12 @@ end;
 procedure TApp.FormActivate(Sender: TObject);
 begin
   if paramcount=1 then begin
-    if ExtractFileExt(paramstr(1)) = '.bin_db' then
+    CurrentOpenedFile:= paramstr(1);
+    if ExtractFileExt(CurrentOpenedFile) = '.bin_db' then
        if LoadSourceByteArray(paramstr(1), 100) And Not CommandPromptProcessed then begin
-         LoadFile();
+         LoadFile(BIN_DB_TYPE);
        end;
+    if (ExtractFileExt(CurrentOpenedFile) = '.csv') And Not CommandPromptProcessed then LoadFile(CSV_TYPE);
   end;
   CommandPromptProcessed:= True
 end;
@@ -422,8 +427,10 @@ var  n: Integer;
 begin
   for n := Low(FileNames) to High(FileNames) do
   begin
+    CurrentOpenedFile:= FileNames[n];
     if ExtractFileExt(FileNames[n]) = '.bin_db' then
-       if LoadSourceByteArray(FileNames[n], 100) then LoadFile();
+       if LoadSourceByteArray(FileNames[n], 100) then LoadFile(BIN_DB_TYPE);
+    if ExtractFileExt(FileNames[n]) = '.csv' then LoadFile(CSV_TYPE);
   end;
 end;
 
@@ -659,9 +666,19 @@ end;
 
 procedure Bin_DbToBin_Db();
 begin
-  if LoadSourceFile('bin_db', 100) then begin
-     LoadFile();
+
+  App.OpenDialog.Filter:= 'bin files|*.bin_db;*.csv|all files|*.*|';
+  App.OpenDialog.DefaultExt:= '.bin_db|.csv';
+  if App.OpenDialog.Execute then begin
+    CurrentOpenedFile:= App.OpenDialog.FileName;
+    if ExtractFileExt(CurrentOpenedFile) = '.bin_db' then
+       if LoadSourceByteArray(CurrentOpenedFile, 100) then LoadFile(BIN_DB_TYPE);
+    if ExtractFileExt(CurrentOpenedFile) = '.csv' then LoadFile(CSV_TYPE);
   end;
+
+  //if LoadSourceFile('bin_db', 100) then begin
+  //   LoadFile(BIN_DB_TYPE);
+  //end;
 end;
 
 procedure TApp.OpenFileClick(Sender: TObject);
@@ -699,8 +716,8 @@ procedure TApp.TimerStopTimer(Sender: TObject);
 begin
   if GetLinesCount = 1 then App.FitXYClick(Sender)
   else begin
+    App.FitYClick(Sender);
     SetHorizontalExtent(App.DateTimeLine);
-    //App.FitYClick(Sender);
   end;
   //if App.ChartLink.Checked then App.ChartExtentLink1.Enabled:= True;
 end;

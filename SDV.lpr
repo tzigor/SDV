@@ -12,7 +12,7 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, tachartlazaruspkg, tachartaggpas, datetimectrls, lazcontrols, Main,
   UserTypes, Utils, TffObjects, ParseBinDb, ChannelsForm, LineSerieUtils,
-  ParamOptions, LimitsForm, SIBRParam, HorLineOptions, ParameterSet
+  ParamOptions, LimitsForm, SIBRParam, HorLineOptions, ParameterSet, ParseCSV
   { you can add units after this };
 
 {$R *.res}

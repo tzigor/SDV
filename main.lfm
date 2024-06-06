@@ -1,9 +1,9 @@
 object App: TApp
-  Left = 1815
+  Left = 1796
   Height = 720
-  Top = -655
+  Top = -711
   Width = 1344
-  Caption = 'Smart Data Viewer v1.6.0 Portable'
+  Caption = 'Smart Data Viewer v2.0.0 Portable'
   ClientHeight = 720
   ClientWidth = 1344
   Color = clWhite
@@ -14,7 +14,7 @@ object App: TApp
   OnDropFiles = FormDropFiles
   OnResize = FormResize
   OnShow = FormShow
-  SessionProperties = 'GChartBGColor.Selected;GLineStyleBox.PenStyle;GLineWidthBox.PenWidth;GPointerStyleBox.PointerStyle;GPointSizeBox.ItemIndex;HorLineColor.Selected;HorLineStyle.PenStyle;HorLineWidth.PenWidth;StartChartsFrom.Date;VertLineColor.Selected;VertLineStyle.PenStyle;VertLineWidth.PenWidth;LabelColor.Selected;ExtHint.Checked'
+  SessionProperties = 'ExtHint.Checked;GChartBGColor.Selected;GLineStyleBox.PenStyle;GLineWidthBox.PenWidth;GPointerStyleBox.PointerStyle;GPointSizeBox.ItemIndex;HorLineColor.Selected;HorLineStyle.PenStyle;HorLineWidth.PenWidth;LabelColor.Selected;StartChartsFrom.Date;VertLineColor.Selected;VertLineStyle.PenStyle;VertLineWidth.PenWidth;DateTimeFormat.Text'
   LCLVersion = '3.2.0.0'
   WindowState = wsMaximized
   object PageControl1: TPageControl
@@ -151,7 +151,7 @@ object App: TApp
         Left = 8
         Height = 20
         Hint = 'Open file'
-        Top = 5
+        Top = 2
         Width = 23
         OnClick = OpenFileClick
         ParentShowHint = False
@@ -2245,12 +2245,12 @@ object App: TApp
         end
       end
       object GroupBox4: TGroupBox
-        Left = 329
-        Height = 217
-        Top = 8
+        Left = 2
+        Height = 121
+        Top = 504
         Width = 312
         Caption = 'Sticker options'
-        ClientHeight = 197
+        ClientHeight = 101
         ClientWidth = 308
         ParentBackground = False
         TabOrder = 3
@@ -2287,6 +2287,40 @@ object App: TApp
           ItemHeight = 16
           OnChange = GChartBGColorChange
           TabOrder = 1
+        end
+      end
+      object GroupBox5: TGroupBox
+        Left = 328
+        Height = 105
+        Top = 8
+        Width = 257
+        Caption = 'CSV Parameters'
+        ClientHeight = 85
+        ClientWidth = 253
+        ParentBackground = False
+        TabOrder = 4
+        object TimeHead: TLabel
+          Left = 16
+          Height = 15
+          Top = 0
+          Width = 69
+          Caption = 'Time format:'
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clMaroon
+          Font.Name = 'Segoe UI Semibold'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentColor = False
+          ParentFont = False
+        end
+        object DateTimeFormat: TEdit
+          Left = 7
+          Height = 23
+          Top = 28
+          Width = 219
+          TabOrder = 0
+          Text = 'DateTime Format'
         end
       end
     end
