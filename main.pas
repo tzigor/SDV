@@ -60,6 +60,8 @@ type
     DelHorizontalLine: TMenuItem;
     DelAllHorLines: TMenuItem;
     LimitsItem: TMenuItem;
+    ByTymeCh: TRadioButton;
+    ByDotsCh: TRadioButton;
     RemoveLabelsBtn: TImage;
     ShowMagnifier: TMenuItem;
     ShowBackInTime: TCheckBox;
@@ -214,7 +216,6 @@ type
     procedure CropChartMenuItemClick(Sender: TObject);
     procedure CutBtnClick(Sender: TObject);
     procedure CutZoneOffClick(Sender: TObject);
-    procedure DateTimeLineExtentChanged(ASender: TChart);
     procedure DelAllHorLinesClick(Sender: TObject);
     procedure DelAllVertLinesClick(Sender: TObject);
     procedure DeleteVertLineClick(Sender: TObject);
@@ -253,7 +254,6 @@ type
     procedure PanOffClick(Sender: TObject);
     procedure RemoveLabelsBtnClick(Sender: TObject);
     procedure ScreenShotClick(Sender: TObject);
-    procedure ScreenShotFlashClick(Sender: TObject);
     procedure ShowLabelClick(Sender: TObject);
     procedure OpenFileClick(Sender: TObject);
     procedure ShowMagnifierClick(Sender: TObject);
@@ -309,6 +309,8 @@ var
 
   ParamSet           : TParamSet;
   ParamSetFile       : File of TParamSet;
+  ParamSetFileName   : String = 'Paramsets.lib';
+  LibMode            : Byte; { 1 - Save, 2 - Load, 3 - Import }
 
   { Variables are initialized if OnHint event occur  }
   OnHintLineType     : Byte;
@@ -327,6 +329,7 @@ var
   { SIB-R special variables }
   IsSIBR             : Boolean;
   ResParamPosition   : Integer;
+  BHTPosition        : Integer;
 
   NavigationMode     : Byte;
   SavedDateTimePoint : TDateTime;  { Date/Time point for time synchronization }
@@ -614,11 +617,6 @@ begin
   ScreenShotFlash.Visible:= False;
 end;
 
-procedure TApp.ScreenShotFlashClick(Sender: TObject);
-begin
-
-end;
-
 procedure FillChannelList();
 var i : Integer;
 begin
@@ -630,6 +628,7 @@ begin
       IsSIBR:= True;
       ResParamPosition:= i;
     end;
+    if DataSources[CurrentSource].TFFDataChannels[i].DLIS = 'BHT' then BHTPosition:= i;
   end;
   if IsSIBR then begin
      ShowChannelForm.ChannelList.Width:= ShowChannelForm.Width Div 2;
@@ -787,12 +786,6 @@ procedure TApp.CutZoneOffClick(Sender: TObject);
 begin
   NavigationMode:= ALLOCATE_AREA_MODE;
   SetNavigation(NavigationMode);
-end;
-
-procedure TApp.DateTimeLineExtentChanged(ASender: TChart);
-begin
-  //if NewSerieDrawed then App.DateTimeLine.ZoomFull();
-  //NewSerieDrawed:= False;
 end;
 
 procedure TApp.DelAllHorLinesClick(Sender: TObject);
@@ -1323,7 +1316,7 @@ end;
 
 procedure TApp.Chart1DblClick(Sender: TObject);
 begin
-    if OnHintLineType = HorizontalLine then begin
+  if OnHintLineType = HorizontalLine then begin
     wCurveStyle.LineColor:= OnHintHorLine.SeriesColor;
     wCurveStyle.LineStyle:= OnHintHorLine.Pen.Style;
     wCurveStyle.LineWidth:= OnHintHorLine.Pen.Width;
@@ -1331,6 +1324,7 @@ begin
     HorLineForm.SerieColorBox.Selected:= wCurveStyle.LineColor;
     HorLineForm.LineStyleBox.PenStyle:= wCurveStyle.LineStyle;
     HorLineForm.LineWidthBox.PenWidth:= wCurveStyle.LineWidth;
+    HorLineForm.HorLineValue.Value:= OnHintHorLine.Position;
 
     ChartToolset1DataPointHintTool1.Enabled:= False;
     HorLineForm.Show;
@@ -1372,7 +1366,8 @@ end;
 procedure TApp.FitXClick(Sender: TObject);
 var i: Byte;
 begin
-  App.DateTimeLine.ZoomFull();
+  if ByTymeCh.Checked then App.DateTimeLine.ZoomFull()
+  else ZoomFullAll();
 end;
 
 procedure TApp.FitYClick(Sender: TObject);

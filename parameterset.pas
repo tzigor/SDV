@@ -24,6 +24,7 @@ type
     procedure DeleteSetClick(Sender: TObject);
     procedure LoadSetClick(Sender: TObject);
     procedure ParamSetListClick(Sender: TObject);
+    procedure ParamSetListDblClick(Sender: TObject);
     procedure SaveSetClick(Sender: TObject);
   private
 
@@ -133,9 +134,9 @@ end;
 procedure FillSetList();
 var Data: TParamSet;
 begin
-  if FileExists('Paramsets.lib') then begin
+  if FileExists(ParamSetFileName) then begin
      ParamSetFrm.ParamSetList.Clear;
-     AssignFile(ParamSetFile, 'Paramsets.lib');
+     AssignFile(ParamSetFile, ParamSetFileName);
      Reset(ParamSetFile);
      try
         while not eof(ParamSetFile) do begin
@@ -148,7 +149,7 @@ begin
      end;
   end
   else begin
-     AssignFile(ParamSetFile, 'Paramsets.lib');
+     AssignFile(ParamSetFile, ParamSetFileName);
      ReWrite(ParamSetFile);
      CloseFile(ParamSetFile);
   end;
@@ -196,7 +197,7 @@ var FilePos: Integer;
     WriteAccept, RecordExist: Boolean;
 begin
   if ParamSetName.Text <> '' then begin
-    AssignFile(ParamSetFile, 'Paramsets.lib');
+    AssignFile(ParamSetFile, ParamSetFileName);
     try
       WriteAccept:= true;
       Reset(ParamSetFile);
@@ -225,8 +226,8 @@ procedure TParamSetFrm.LoadSetClick(Sender: TObject);
 var RecordExist: Boolean;
 begin
   if ParamSetList.ItemIndex > -1 then
-    if FileExists('Paramsets.lib') then begin
-       AssignFile(ParamSetFile, 'Paramsets.lib');
+    if FileExists(ParamSetFileName) then begin
+       AssignFile(ParamSetFile, ParamSetFileName);
        Reset(ParamSetFile);
        try
          Seek(ParamSetFile, GetSetIndex(ParamSetList.Items[ParamSetList.ItemIndex], RecordExist));
@@ -248,7 +249,7 @@ var FilePos: Integer;
 begin
   if ParamSetList.ItemIndex > -1 then
     if Application.MessageBox('Are you sure?','Warning', MB_ICONQUESTION + MB_YESNO) = IDYES then begin
-       AssignFile(ParamSetFile, 'Paramsets.lib');
+       AssignFile(ParamSetFile, ParamSetFileName);
        try
           ParamSet.Name:= '';
           Reset(ParamSetFile);
@@ -266,6 +267,12 @@ end;
 procedure TParamSetFrm.ParamSetListClick(Sender: TObject);
 begin
   ParamSetName.Text:= ParamSetList.Items[ParamSetList.ItemIndex];
+end;
+
+procedure TParamSetFrm.ParamSetListDblClick(Sender: TObject);
+var Objct: TObject;
+begin
+  if (LibMode = 2) Or (LibMode = 3) then ParamSetFrm.LoadSetClick(Objct);
 end;
 
 procedure TParamSetFrm.CloseBtnClick(Sender: TObject);

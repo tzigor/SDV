@@ -15,8 +15,9 @@ type
   { TShowChannelForm }
 
   TShowChannelForm = class(TForm)
-    FromTempBtn: TButton;
-    ToTempBtn: TButton;
+    Image1: TImage;
+    Image2: TImage;
+    Image3: TImage;
     DrawGroupBtn: TButton;
     ChannelList: TListBox;
     DockedToMain: TCheckBox;
@@ -38,7 +39,6 @@ type
     procedure ChannelListDblClick(Sender: TObject);
     procedure ChannelListDrawItem(Control: TWinControl; Index: Integer;
       ARect: TRect; State: TOwnerDrawState);
-    procedure ChannelListResize(Sender: TObject);
     procedure CloseListClick(Sender: TObject);
     procedure DockedToMainChange(Sender: TObject);
     procedure DrawBtnClick(Sender: TObject);
@@ -54,13 +54,16 @@ type
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FromTempBtnClick(Sender: TObject);
+    procedure Image1Click(Sender: TObject);
+    procedure Image2Click(Sender: TObject);
+    procedure Image3Click(Sender: TObject);
+    procedure ImportBtnClick(Sender: TObject);
     procedure MultiColumnsChange(Sender: TObject);
     procedure RecordsNumberChange(Sender: TObject);
     procedure SIBRParamListClick(Sender: TObject);
     procedure SIBRParamListDblClick(Sender: TObject);
     procedure SIBRParamListDrawItem(Control: TWinControl; Index: Integer;
       ARect: TRect; State: TOwnerDrawState);
-    procedure ToTempBtnClick(Sender: TObject);
   private
 
   public
@@ -129,12 +132,6 @@ begin
      Canvas.FillRect(ARect);
      Canvas.TextOut(ARect.Left, ARect.Top, Items[Index]);
     end
-end;
-
-procedure TShowChannelForm.ChannelListResize(Sender: TObject);
-begin
-  if ChannelList.Width > 400 then ChannelList.Columns:= 4
-  else  ChannelList.Columns:= 3;
 end;
 
 function DrawChart(SelectedParamName: String; ItemIndex: Integer; NewChart, SIBRParam: Boolean): Integer;
@@ -394,6 +391,11 @@ begin
   DockForm();
 end;
 
+procedure TShowChannelForm.FromTempBtnClick(Sender: TObject);
+begin
+
+end;
+
 procedure TShowChannelForm.MultiColumnsChange(Sender: TObject);
 begin
   if MultiColumns.Checked then begin
@@ -414,8 +416,7 @@ end;
 
 procedure TShowChannelForm.SIBRParamListClick(Sender: TObject);
 begin
-  //ChannelList.ItemIndex:= -1;
-  //SIBRParamListActive:= True;
+
 end;
 
 procedure TShowChannelForm.SIBRParamListDrawItem(Control: TWinControl;
@@ -436,20 +437,41 @@ begin
     end
 end;
 
-procedure TShowChannelForm.ToTempBtnClick(Sender: TObject);
-var Data: TParamSet;
+procedure TShowChannelForm.Image1Click(Sender: TObject);
 begin
+  ParamSetFileName:= 'Paramsets.lib';
+  LibMode:= 1; { Save }
   ParamSetFrm.SaveSet.Visible:= True;
   ParamSetFrm.LoadSet.Visible:= False;
   SaveParamSet();
   if Not ParamSetEmpty() then FillSetList();
 end;
 
-procedure TShowChannelForm.FromTempBtnClick(Sender: TObject);
+procedure TShowChannelForm.Image2Click(Sender: TObject);
 begin
+  ParamSetFileName:= 'Paramsets.lib';
+  LibMode:= 2; { Load }
   ParamSetFrm.SaveSet.Visible:= False;
   ParamSetFrm.LoadSet.Visible:= True;
   FillSetList();
+end;
+
+procedure TShowChannelForm.Image3Click(Sender: TObject);
+begin
+  LibMode:= 3; { Import }
+  App.OpenDialog.Filter:= 'lib files|*.lib|all files|*.*|';
+  App.OpenDialog.DefaultExt:= '.lib';
+  if App.OpenDialog.Execute then begin
+     ParamSetFileName:= App.OpenDialog.FileName;
+     ParamSetFrm.SaveSet.Visible:= False;
+     ParamSetFrm.LoadSet.Visible:= True;
+     FillSetList();
+  end;
+end;
+
+procedure TShowChannelForm.ImportBtnClick(Sender: TObject);
+begin
+
 end;
 
 end.

@@ -22,6 +22,7 @@ procedure ChartsPosition();
 function GetChartCount: Byte;
 function GetChartNumber(ChartName: String): Byte;
 procedure ZoomChartCurrentExtent(Chart: TChart);
+procedure ZoomFullAll();
 function GetChart(ChartNubmber: Byte): TChart;
 function GetSplitter(SplitterNubmber: Byte): TSplitter;
 procedure DateTimeLineSerieInit;
@@ -108,9 +109,10 @@ begin
 end;
 
 procedure DateTimeLineSerieInit;
+var LastChart: TChart;
 begin
-  if ChartsCount > 0 then begin
-    App.DateTimeLine.Visible:= False;
+  App.DateTimeLine.Visible:= False;
+  if (ChartsCount > 0) And App.ByTymeCh.Checked then begin
     App.DateTimeLineLineSerie.Clear;
     App.DateTimeLineLineSerie.AddXY(StartDateTime, 0);
     App.DateTimeLineLineSerie.AddXY(EndDateTime, 0);
@@ -123,7 +125,8 @@ end;
 procedure DrawSerie(LineSerie: TLineSeries; SelectedSource, SelectedParam: Word; Name: String);
 var
   FramesCount, i  : LongWord;
-  Value           : Double;
+  DotNumber       : LongWord = 0;
+  Value, BHTValue : Double;
   iPrevPercent, n : Integer;
   PrevDateTime    : TDateTime = 0;
   Sticker         : String = '';
@@ -194,27 +197,33 @@ begin
            end;
 
       if ValidValue then begin
-        if (DataSources[SelectedSource].FrameRecords[i].DateTime >= App.StartChartsFrom.DateTime) And
-           (DataSources[SelectedSource].FrameRecords[i].DateTime <= App.EndPoint.DateTime) then begin
-           if (DataSources[SelectedSource].FrameRecords[i].DateTime >= PrevDateTime) Or Not App.RTCBugs.Checked then begin
-              if (Value <> +infinity) And (Value <> -infinity) And (Value <> ParameterError)then begin
-                 if DataSources[SelectedSource].FrameRecords[i].DateTime = PrevDateTime then begin
-                    LineSerie.AddXY(IncMilliSecond(DataSources[SelectedSource].FrameRecords[i].DateTime, AddMilliSeconds), Value, Sticker);
-                    Inc(AddMilliSeconds, 200)
-                 end
-                 else begin
-                    LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, Sticker);
-                    AddMilliSeconds:= 200;
-                 end;
-              end;
-              Sticker:= '';
-              Inc(nPoins);
-           end
-           else begin
-              if App.ShowBackInTime.Checked then Sticker:= 'Shift back in time';
-           end;
-           PrevDateTime:= DataSources[SelectedSource].FrameRecords[i].DateTime;
-        end;
+             if App.ByTymeCh.Checked then begin
+                if (DataSources[SelectedSource].FrameRecords[i].DateTime >= App.StartChartsFrom.DateTime) And
+                   (DataSources[SelectedSource].FrameRecords[i].DateTime <= App.EndPoint.DateTime) then begin
+                   if (DataSources[SelectedSource].FrameRecords[i].DateTime >= PrevDateTime) Or Not App.RTCBugs.Checked then begin
+                      if (Value <> +infinity) And (Value <> -infinity) And (Value <> ParameterError)then begin
+                         if DataSources[SelectedSource].FrameRecords[i].DateTime = PrevDateTime then begin
+                            LineSerie.AddXY(IncMilliSecond(DataSources[SelectedSource].FrameRecords[i].DateTime, AddMilliSeconds), Value, Sticker);
+                            Inc(AddMilliSeconds, 200)
+                         end
+                         else begin
+                            LineSerie.AddXY(DataSources[SelectedSource].FrameRecords[i].DateTime, Value, Sticker);
+                            AddMilliSeconds:= 200;
+                         end;
+                      end;
+                      Sticker:= '';
+                      Inc(nPoins);
+                   end
+                   else begin
+                      if App.ShowBackInTime.Checked then Sticker:= 'Shift back in time';
+                   end;
+                   PrevDateTime:= DataSources[SelectedSource].FrameRecords[i].DateTime;
+                end;
+             end
+             else begin
+                LineSerie.AddXY(DotNumber, Value);
+                Inc(DotNumber);
+             end;
       end;
 
     n:= Trunc(i * 100 / FramesCount);
@@ -285,13 +294,16 @@ begin
 end;
 
 function GetLastChart: Byte;
-var i: Byte;
-    MaxTop: Integer;
+var i      : Byte;
+    MaxTop : Integer;
+    Chart  : TChart;
 begin
   MaxTop:= 0;
+  Result:= 0;
   for i:=1 to MAX_CHART_NUMBER do begin
-     if GetChart(i).Visible AND (GetChart(i).Top >= MaxTop) then begin
-        MaxTop:= GetChart(i).Top;
+     Chart:= GetChart(i);
+     if Chart.Visible AND (Chart.Top >= MaxTop) then begin
+        MaxTop:= Chart.Top;
         Result:= i;
      end;
   end;
@@ -453,6 +465,16 @@ begin
     dr.a.Y:= MinMax.Min;
     dr.b.Y:= MinMax.Max;
     Chart.LogicalExtent:= dr;
+  end;
+end;
+
+procedure ZoomFullAll();
+var i     : byte;
+    Chart : TChart;
+begin
+  for i:=1 to MAX_CHART_NUMBER do begin
+    Chart:= GetChart(i);
+    if Chart.Visible then Chart.ZoomFull();
   end;
 end;
 

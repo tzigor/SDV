@@ -1,15 +1,15 @@
 object HorLineForm: THorLineForm
-  Left = 865
-  Height = 186
-  Top = 83
+  Left = 2405
+  Height = 216
+  Top = -735
   Width = 298
   BorderIcons = [biSystemMenu]
   Caption = 'Horizontal Line Options'
-  ClientHeight = 186
+  ClientHeight = 216
   ClientWidth = 298
-  Constraints.MaxHeight = 186
+  Constraints.MaxHeight = 216
   Constraints.MaxWidth = 298
-  Constraints.MinHeight = 186
+  Constraints.MinHeight = 216
   Constraints.MinWidth = 298
   OnHide = FormHide
   Position = poMainFormCenter
@@ -103,7 +103,7 @@ object HorLineForm: THorLineForm
   object CancelBtn: TButton
     Left = 128
     Height = 25
-    Top = 152
+    Top = 184
     Width = 75
     Caption = 'Cancel'
     TabOrder = 1
@@ -112,11 +112,32 @@ object HorLineForm: THorLineForm
   object OkBtn: TButton
     Left = 213
     Height = 25
-    Top = 152
+    Top = 184
     Width = 75
     Caption = 'Ok'
     TabOrder = 2
     OnClick = OkBtnClick
+  end
+  object Label4: TLabel
+    Left = 16
+    Height = 15
+    Top = 146
+    Width = 31
+    Caption = 'Value:'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clNavy
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentColor = False
+    ParentFont = False
+  end
+  object HorLineValue: TFloatSpinEdit
+    Left = 56
+    Height = 23
+    Top = 142
+    Width = 114
+    OnChange = HorLineValueChange
+    TabOrder = 3
   end
   object ColorDialog1: TColorDialog
     Color = clBlack
@@ -142,7 +163,7 @@ object HorLineForm: THorLineForm
       'ColorS=F0FBFF'
       'ColorT=A4A0A0'
     )
-    Left = 24
-    Top = 136
+    Left = 16
+    Top = 176
   end
 end

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  TAChartCombos, ColorBox;
+  TAChartCombos, ColorBox, Spin;
 
 type
 
@@ -14,6 +14,8 @@ type
 
   THorLineForm = class(TForm)
     CancelBtn: TButton;
+    HorLineValue: TFloatSpinEdit;
+    Label4: TLabel;
     SerieColorBox: TColorBox;
     ColorDialog1: TColorDialog;
     GroupBox1: TGroupBox;
@@ -25,6 +27,7 @@ type
     OkBtn: TButton;
     procedure CancelBtnClick(Sender: TObject);
     procedure FormHide(Sender: TObject);
+    procedure HorLineValueChange(Sender: TObject);
     procedure SerieColorBoxChange(Sender: TObject);
     procedure LineStyleBoxChange(Sender: TObject);
     procedure LineWidthBoxChange(Sender: TObject);
@@ -66,6 +69,12 @@ begin
   App.ChartToolset1DataPointHintTool1.Enabled:= True;
 end;
 
+procedure THorLineForm.HorLineValueChange(Sender: TObject);
+begin
+  OnHintHorLine.Position:= HorLineValue.Value;
+  SetHorLineStyleParameters();
+end;
+
 procedure THorLineForm.SerieColorBoxChange(Sender: TObject);
 begin
   LineStyleBox.PenColor:= SerieColorBox.Selected;
@@ -85,6 +94,7 @@ end;
 
 procedure THorLineForm.OkBtnClick(Sender: TObject);
 begin
+  OnHintHorLine.Position:= HorLineValue.Value;
   HorLineForm.Close;
 end;
 

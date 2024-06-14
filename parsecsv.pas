@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, DateUtils,
-  UserTypes, StrUtils;
+  UserTypes;
 
 function CSVParser(Tff_Ver: Byte): TFrameRecords;
 
@@ -50,13 +50,11 @@ var
   ParameterCount, j : Word;
   SubStr, Title     : String;
   FrameOffset       : Word;
-  UnixDateTime      : LongInt;
   TimePos, nPos     : Word;
   RTCmsPos          : Word = 0;
   n, PrevPercent    : Word;
   wStr              : String;
   MSecs             : LongInt;
-  SIBR              : Boolean = False;
 
 begin
   SubStr:= '';
@@ -80,7 +78,6 @@ begin
             if AnsiUpperCase(Trim(SubStr)) = 'RTCS' then begin
                SubStr:= 'TIME';
                TimePos:= nPos;
-               SIBR:= True;
             end;
             if AnsiUpperCase(Trim(SubStr)) = 'TIME' then begin
               Title:= '100S';
