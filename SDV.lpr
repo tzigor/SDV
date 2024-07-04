@@ -12,7 +12,8 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, tachartlazaruspkg, tachartaggpas, datetimectrls, lazcontrols, Main,
   UserTypes, Utils, TffObjects, ParseBinDb, ChannelsForm, LineSerieUtils,
-  ParamOptions, LimitsForm, SIBRParam, HorLineOptions, ParameterSet, ParseCSV
+  ParamOptions, LimitsForm, SIBRParam, HorLineOptions, ParameterSet, ParseCSV,
+  ChartOptions
   { you can add units after this };
 
 {$R *.res}
@@ -27,6 +28,7 @@ begin
   Application.CreateForm(TLimitForm, LimitForm);
   Application.CreateForm(THorLineForm, HorLineForm);
   Application.CreateForm(TParamSetFrm, ParamSetFrm);
+  Application.CreateForm(TChartOptionsForm, ChartOptionsForm);
   Application.Run;
 end.
 

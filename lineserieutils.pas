@@ -48,7 +48,8 @@ begin
   with TLineSeries(Result) do
   begin
     Name:= AChart.Name + AName;
-    AxisIndexY:= 1;
+    //AxisIndexY:= 1;
+    AxisIndexY:= 0;
     Pointer.Style := App.GPointerStyleBox.PointerStyle;
     Pointer.VertSize:= App.GPointSizeBox.ItemIndex + 2;
     Pointer.HorizSize:= App.GPointSizeBox.ItemIndex + 2;
@@ -178,8 +179,8 @@ begin
 end;
 
 function GetMinMaxForCurrentExtent(Chart1LineSeries: TLineSeries): TMinMax;
-var dr              : TDoubleRect;
-    Max, Min        : Double;
+var dr       : TDoubleRect;
+    Max, Min : Double;
 begin
  if Chart1LineSeries.Count > 0 then begin
    dr:= Chart1LineSeries.ParentChart.CurrentExtent;

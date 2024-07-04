@@ -253,6 +253,7 @@ begin
   App.DistanceYOn.Visible:= False;
   App.CutZoneOff.Visible:= True;
   App.CutZoneOn.Visible:= False;
+  App.CropBtn.Caption:= 'Crop';
   case NavMode of
      ZOOM_MODE:     begin
                        App.ChartToolset1ZoomDragTool1.Enabled:= True;
@@ -284,6 +285,7 @@ begin
                        App.AllocateArea.Shift:= [ssLeft];
                        App.CutZoneOff.Visible:= False;
                        App.CutZoneOn.Visible:= True;
+                       App.CropBtn.Caption:= 'Cut';
                     end;
   end;
 end;

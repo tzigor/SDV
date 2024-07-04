@@ -9,29 +9,42 @@ uses
   Buttons, TffObjects, Utils, UserTypes, ParseBinDb, LCLType, ExtCtrls, Menus,
   ColorBox, TAGraph, TAIntervalSources, TATools, TAChartExtentLink, TASeries,
   StrUtils, DateTimePicker, channelsform, ChartUtils, LineSerieUtils, Types,
-  TADrawUtils, TAChartUtils, TADataTools, TAChartCombos, TANavigation,
-  ParamOptions, DateUtils, JSONParser, JSONScanner, fpJSON, FileUtil, Math,
-  LCLIntf, Clipbrd, Calendar, EditBtn, TAChartAxisUtils, TALegend,
-  TALegendPanel, TATransformations, TAStyles, CheckBoxThemed, ExtendedNotebook,
-  laz.VirtualTrees, LimitsForm, HorLineOptions, LCLTranslator;
+  TAChartUtils, TADataTools, TAChartCombos, ParamOptions, DateUtils, JSONParser,
+  JSONScanner, fpJSON, FileUtil, LCLIntf, Clipbrd, TAChartAxisUtils, TALegend,
+  TATransformations, TAStyles, laz.VirtualTrees, LimitsForm, HorLineOptions,
+  LCLTranslator, ChartOptions, TACustomSource;
 
 type
 
   { TApp }
 
   TApp = class(TForm)
-    CutBtn: TButton;
     AllocateArea: TDataPointDistanceTool;
+    catUser1LogarithmAxisTransform1: TLogarithmAxisTransform;
+    catUser2: TChartAxisTransformations;
+    catUser2LogarithmAxisTransform1: TLogarithmAxisTransform;
+    catUser3: TChartAxisTransformations;
+    catUser3LogarithmAxisTransform1: TLogarithmAxisTransform;
+    catUser4: TChartAxisTransformations;
+    catUser4LogarithmAxisTransform1: TLogarithmAxisTransform;
+    catUser5: TChartAxisTransformations;
+    catUser5LogarithmAxisTransform1: TLogarithmAxisTransform;
+    catUser6: TChartAxisTransformations;
+    catUser6LogarithmAxisTransform1: TLogarithmAxisTransform;
+    catUser7: TChartAxisTransformations;
+    catUser7LogarithmAxisTransform1: TLogarithmAxisTransform;
+    catUser8: TChartAxisTransformations;
+    catUser8LogarithmAxisTransform1: TLogarithmAxisTransform;
     CutZoneOff: TImage;
     CutZoneOn: TImage;
     ChartUp: TMenuItem;
     ChartDown: TMenuItem;
     DateTimeFormat: TEdit;
     GroupBox5: TGroupBox;
+    ChartOptionsItem: TMenuItem;
     MoveToTop: TMenuItem;
-    catUser: TChartAxisTransformations;
+    catUser1: TChartAxisTransformations;
 
-    catUserUserDefinedAxisTransform1: TUserDefinedAxisTransform;
     ChartToolset1DataPointDragTool1: TDataPointDragTool;
     ChartToolset2: TChartToolset;
     ChartToolset2ZoomMouseWheelTool1: TZoomMouseWheelTool;
@@ -63,7 +76,6 @@ type
     ByTymeCh: TRadioButton;
     ByDotsCh: TRadioButton;
     RemoveLabelsBtn: TImage;
-    ShowMagnifier: TMenuItem;
     ShowBackInTime: TCheckBox;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
@@ -175,6 +187,7 @@ type
       State: TDragState; var Accept: Boolean);
     procedure ChartDownClick(Sender: TObject);
     procedure ChartLinkChange(Sender: TObject);
+    procedure ChartOptionsItemClick(Sender: TObject);
     procedure ChartPointsChange(Sender: TObject);
     procedure ChartStyles1AddStyleToLegend(AStyle: TChartStyle;
       ASeries: TObject; var AddToLegend: Boolean);
@@ -214,8 +227,8 @@ type
     procedure ColorsSyncChange(Sender: TObject);
     procedure CropBtnClick(Sender: TObject);
     procedure CropChartMenuItemClick(Sender: TObject);
-    procedure CutBtnClick(Sender: TObject);
     procedure CutZoneOffClick(Sender: TObject);
+    procedure CutZoneOnClick(Sender: TObject);
     procedure DelAllHorLinesClick(Sender: TObject);
     procedure DelAllVertLinesClick(Sender: TObject);
     procedure DeleteVertLineClick(Sender: TObject);
@@ -256,7 +269,6 @@ type
     procedure ScreenShotClick(Sender: TObject);
     procedure ShowLabelClick(Sender: TObject);
     procedure OpenFileClick(Sender: TObject);
-    procedure ShowMagnifierClick(Sender: TObject);
     procedure StartChartsFromChange(Sender: TObject);
     procedure TimerStopTimer(Sender: TObject);
     procedure TimerTimer(Sender: TObject);
@@ -529,7 +541,10 @@ begin
   //ChartsPosition();
   MenuItem4.Enabled:= False;
   App.ChartScrollBox.Visible:= True;
-  if ChartsCount = 0 then OpenChannelForm();
+  if ChartsCount = 0 then begin
+    ChartLink.Checked:= True;
+    OpenChannelForm();
+  end;
 end;
 
 procedure TApp.MenuItem3Click(Sender: TObject);
@@ -685,23 +700,6 @@ begin
   Bin_DbToBin_Db();
 end;
 
-procedure TApp.ShowMagnifierClick(Sender: TObject);
-var dr    : TDoubleRect;
-    Chart : TChart;
-    Delta : Double;
-begin
-  Chart:= GetChart(SelectedChart);
-  dr:= Chart.CurrentExtent;
-  Delta:= dr.b.x - dr.a.x;
-  AddMagLine(Chart, dr.a.x + Delta / 2 );
-  //T := TChartAxisTransformations.Create(self);
-  //Chart.AxisList[1].Transformations := T;
-  //transf := TAutoscaleAxisTransform.Create(T);
-  //transf.Transformations := T;
-  //Chart.AxisList[1].Transformations:= catUser;
-  catUserUserDefinedAxisTransform1.Enabled:= True;
-end;
-
 procedure TApp.StartChartsFromChange(Sender: TObject);
 var i: Byte;
 begin
@@ -746,6 +744,7 @@ begin
   DateTimeLineLineSerie.Clear;
   DateTimeLine.Visible:= False;
   MenuItem4.Enabled:= False;
+  ChartLink.Checked:= True;
   OpenChannelForm();
 end;
 
@@ -757,11 +756,22 @@ end;
 procedure TApp.CropBtnClick(Sender: TObject);
 var i: Byte;
 begin
-  for i:=1 to MAX_CHART_NUMBER do CropChart(GetChart(i));
-  RemoveEmptyCharts();
-  FindTimeRange();
-  NavigationMode:= PAN_MODE;
-  SetNavigation(NavigationMode);
+  if NavigationMode = ALLOCATE_AREA_MODE then begin
+    DrawCutAreaBG:= False;
+    for i:=1 to MAX_CHART_NUMBER do CutChart(GetChart(i));
+    RemoveEmptyCharts();
+    FindTimeRange();
+    NavigationMode:= PAN_MODE;
+    SetNavigation(NavigationMode);
+    RepaintAll();
+  end
+  else begin
+    for i:=1 to MAX_CHART_NUMBER do CropChart(GetChart(i));
+    RemoveEmptyCharts();
+    FindTimeRange();
+    NavigationMode:= PAN_MODE;
+    SetNavigation(NavigationMode);
+  end;
 end;
 
 procedure TApp.CropChartMenuItemClick(Sender: TObject);
@@ -770,22 +780,15 @@ begin
   FindTimeRange();
 end;
 
-procedure TApp.CutBtnClick(Sender: TObject);
-var i: Byte;
-begin
-  DrawCutAreaBG:= False;
-  for i:=1 to MAX_CHART_NUMBER do CutChart(GetChart(i));
-  RemoveEmptyCharts();
-  FindTimeRange();
-  NavigationMode:= PAN_MODE;
-  SetNavigation(NavigationMode);
-  RepaintAll();
-end;
-
 procedure TApp.CutZoneOffClick(Sender: TObject);
 begin
   NavigationMode:= ALLOCATE_AREA_MODE;
   SetNavigation(NavigationMode);
+end;
+
+procedure TApp.CutZoneOnClick(Sender: TObject);
+begin
+
 end;
 
 procedure TApp.DelAllHorLinesClick(Sender: TObject);
@@ -825,6 +828,25 @@ procedure TApp.ChartLinkChange(Sender: TObject);
 begin
   if ChartLink.Checked then ChartExtentLink1.Enabled:= True
   else ChartExtentLink1.Enabled:= False;
+end;
+
+procedure TApp.ChartOptionsItemClick(Sender: TObject);
+var Chart  : TChart;
+begin
+  Chart:= GetChart(SelectedChart);
+  ChartOptionsForm.LogarithmicChk.Checked:= GetLogarithmTransform(SelectedChart).Enabled;
+
+  ChartOptionsForm.UseRangeChk.Checked:= Chart.AxisList[0].Range.UseMin Or Chart.AxisList[0].Range.UseMax;
+  ChartOptionsForm.RangeMin.Enabled:= ChartOptionsForm.UseRangeChk.Checked;
+  ChartOptionsForm.RangeMax.Enabled:= ChartOptionsForm.UseRangeChk.Checked;
+  ChartOptionsForm.RangeMin.Value:= Chart.AxisList[0].Range.Min;
+  ChartOptionsForm.RangeMax.Value:= Chart.AxisList[0].Range.Max;
+  ChartOptionsForm.IntervalCount.Enabled:= ChartOptionsForm.UseRangeChk.Checked;
+  ChartOptionsForm.IntervalCount.Value:= Chart.AxisList[0].Intervals.Count;
+
+  ChartOptionsForm.YInvertedChk.Checked:= Chart.AxisList[0].Inverted;
+
+  ChartOptionsForm.Show;
 end;
 
 procedure TApp.ChartPointsChange(Sender: TObject);

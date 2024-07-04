@@ -1,7 +1,7 @@
 object ParamSetFrm: TParamSetFrm
-  Left = 2272
+  Left = 2308
   Height = 407
-  Top = -717
+  Top = -546
   Width = 194
   BorderIcons = [biSystemMenu]
   Caption = 'Parameter set'

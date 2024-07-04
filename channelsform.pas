@@ -150,6 +150,7 @@ begin
        end;
     end;
     Chart:= GetChart(CurrentChart);
+    ChartDefaultSettings(Chart);
     CurrentSerie:= GetFreeLineSerie(CurrentChart);
     if CurrentSerie = 0 then begin
        Result:= -2; { MAX_SERIE_NUMBER limit exceeded }

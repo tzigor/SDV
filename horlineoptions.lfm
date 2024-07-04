@@ -1,7 +1,7 @@
 object HorLineForm: THorLineForm
-  Left = 2405
+  Left = 1958
   Height = 216
-  Top = -735
+  Top = -471
   Width = 298
   BorderIcons = [biSystemMenu]
   Caption = 'Horizontal Line Options'

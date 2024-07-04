@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, UserTypes, TASeries, TAGraph, Controls, TATypes, LCLType,
   TAChartUtils, DateUtils, StrUtils, Forms, Dialogs, Utils, SIBRParam, uComplex,
-  Math, ExtCtrls, Graphics;
+  Math, ExtCtrls, Graphics, TAChartAxis, TACustomSource, ChartOptions,
+  TATransformations;
 
 procedure DrawSerie(LineSerie: TLineSeries; SelectedSource, SelectedParam: Word; Name: String);
 procedure ChartsVisible(visible: Boolean);
@@ -43,6 +44,8 @@ function GetFirstVisibleChart: Byte;
 function GetChannelValue(DataChannels: TTFFDataChannels; Frame: TFrameRecord; Channel: Word; var Value: Double): Boolean;
 procedure SetHorizontalExtent(Chart: TChart);
 procedure RemoveAllLabels();
+procedure ChartDefaultSettings(Chart: TChart);
+function GetLogarithmTransform(ChartNubmber: Byte): TLogarithmAxisTransform;
 
 implementation
 uses Main, LineSerieUtils, channelsform;
@@ -273,6 +276,21 @@ begin
   Result:= TChart(App.FindComponent('Chart' + IntToStr(ChartNubmber)))
 end;
 
+procedure ChartDefaultSettings(Chart: TChart);
+begin
+  Chart.AxisList[0].Intervals.Count:= 5;
+  Chart.AxisList[0].Intervals.MinLength:= 10;
+  Chart.AxisList[0].Intervals.MaxLength:= 50;
+  Chart.AxisList[0].Intervals.Options:= [aipUseMaxLength, aipUseMinLength, aipUseNiceSteps];
+  Chart.AxisList[0].Marks.AtDataOnly:= True;
+  Chart.AxisList[0].Range.Min:= 0;
+  Chart.AxisList[0].Range.Max:= 0;
+  Chart.AxisList[0].Range.UseMin:= False;
+  Chart.AxisList[0].Range.UseMax:= False;
+  Chart.AxisList[0].Inverted:= False;
+  GetLogarithmTransform(GetChartNumber(Chart.Name)).Enabled:= False;
+end;
+
 function GetSplitter(SplitterNubmber: Byte): TSplitter;
 begin
   Result:= TSplitter(App.FindComponent('Splitter' + IntToStr(SplitterNubmber)))
@@ -450,7 +468,7 @@ var MinMax, wMinMax    : TMinMax;
     i                  : Byte;
     Serie              : TLineSeries;
 begin
-  if Chart.Visible then begin
+  if Chart.Visible And Not GetLogarithmTransform(GetChartNumber(Chart.Name)).Enabled then begin
     MinMax.Min:= 1.7E308;
     MinMax.Max:= 2.0E-324;
     for i:=0 to MAX_SERIE_NUMBER - 1 do begin
@@ -631,6 +649,11 @@ procedure RemoveAllLabels();
 var i: Integer;
 begin
   for i:=1 to MAX_CHART_NUMBER do RemoveChartLabels(GetChart(i));
+end;
+
+function GetLogarithmTransform(ChartNubmber: Byte): TLogarithmAxisTransform;
+begin
+  Result:= TLogarithmAxisTransform(App.FindComponent('catUser' + IntToStr(ChartNubmber) + 'LogarithmAxisTransform1'))
 end;
 
 end.

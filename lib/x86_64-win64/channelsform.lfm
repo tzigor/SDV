@@ -1,7 +1,7 @@
 object ShowChannelForm: TShowChannelForm
-  Left = 2172
+  Left = 2569
   Height = 706
-  Top = -723
+  Top = -640
   Width = 387
   Caption = 'Channels'
   ClientHeight = 706
@@ -37,7 +37,7 @@ object ShowChannelForm: TShowChannelForm
     TabOrder = 1
   end
   object FileList: TListBox
-    Left = 9
+    Left = 8
     Height = 96
     Top = 8
     Width = 371
@@ -134,7 +134,9 @@ object ShowChannelForm: TShowChannelForm
     Top = 112
     Width = 89
     Caption = 'Dock to Main'
+    Enabled = False
     TabOrder = 6
+    Visible = False
     OnChange = DockedToMainChange
   end
   object SIBRParamLbl: TLabel

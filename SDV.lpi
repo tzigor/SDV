@@ -145,6 +145,13 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ParseCSV"/>
       </Unit>
+      <Unit>
+        <Filename Value="chartoptions.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ChartOptionsForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="ChartOptions"/>
+      </Unit>
     </Units>
     <Debugger>
       <ClassConfig Version="1">
